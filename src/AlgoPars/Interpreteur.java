@@ -21,39 +21,48 @@ public class Interpreteur {
 	}
 	
 	public void declarerConstante(String constante) {
-		String[] tempString = constante.split(" ", 3);
-		for(int i = 0; i < tempString.length; i++)
+		String[] tempString = constante.split("-->");
+		if(tempString[1] != null)
 		{
-			if(tempString[i].equals("-->"))
+			if(tempString[1].charAt(0) >= '0' && tempString[1].charAt(0) <= '9')
 			{
-				i++;
-				if(tempString[i].charAt(0) >= '0' && tempString[i].charAt(0) <= '9')
+				String[] valeur = tempString[1].split(".", 2);
+				if(valeur[1] == null)
 				{
-					String[] valeur = tempString[i].split(".");
-					if(valeur[1] == null)
-					{
-						constantes.add(new Constante(tempString[i-2], Integer.parseInt(tempString[i])));
-					}
-					else
-						constantes.add(new Constante(tempString[i-2], Double.parseDouble(tempString[i])));
+					constantes.add(new Constante(tempString[0], Integer.parseInt(tempString[1])));
 				}
 				else
-				{
-					if(tempString[i].charAt(0) == '"')
-					{
-						constantes.add(new Constante(tempString[i-2], tempString[i]));
-					}
-					else if(tempString[i].charAt(0) == '"')
-					{
-						constantes.add(new Constante(tempString[i-2], tempString[i]));
-					}
-					else
-						console.add("Erreur de déclaration de constante");
-				}
+					constantes.add(new Constante(tempString[0], Double.parseDouble(tempString[1])));
 			}
 			else
-				console.add("Erreur, la constante n'est pas affecté");
+			{
+				if(tempString[1].charAt(0) == '\'')
+				{
+					constantes.add(new Constante(tempString[0], tempString[1]));
+				}
+				else if(tempString[1].charAt(0) == '"')
+				{
+					constantes.add(new Constante(tempString[0], tempString[1]));
+				}
+				else
+					console.add("Erreur de déclaration de constante");
+			}
 		}
+		else
+			console.add("Erreur de déclaration de constante");
+	}
+	
+	public Constante chercher (String nom)
+	{
+		for(int i=0; i < constantes.size();i++)
+		{
+			if(nom.equals(constantes.get(i).getNom()))
+			{
+				return constantes.get(i);
+			};
+		}
+		console.add("La constante spécifié n'existe pas");
+		return null;
 	}
 	
 	public Interpreteur (ArrayList<String> pseudoCode)
@@ -86,6 +95,7 @@ public class Interpreteur {
 							}
 							else
 							{
+								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								//Méthode pour ajouter la constante
 								declarerConstante(ligneTemp);
 								console.add("Constante ajouté");
@@ -153,7 +163,7 @@ public class Interpreteur {
 									else if (ligneTemp[2].charAt(0) <= 'A' && ligneTemp[2].charAt(0) <= 'Z')
 									{
 										//Cherche dans l'arraylist de constante
-										console.add(ligneTemp[1]);
+										console.add(chercher(ligneTemp[1]));
 									}
 								}
 							}

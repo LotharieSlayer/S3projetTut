@@ -47,4 +47,11 @@ public class Constante {
 	public char getCaractere() { return Constante.valeurChar; }
 	
 	public String getChaine() { return Constante.valeurString; }
+	
+	/*public String getValeur() { 
+		switch(Constante.type)
+		{
+			
+		}
+	}*/
 }
