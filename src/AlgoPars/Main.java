@@ -30,3 +30,4 @@ public class Main {
 		new Main();
 	}
 }
+//Je suis actuellement en train de coder (des trucs pas oufs mais tkrl)
