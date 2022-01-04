@@ -163,7 +163,7 @@ public class Interpreteur {
 									else if (ligneTemp[2].charAt(0) <= 'A' && ligneTemp[2].charAt(0) <= 'Z')
 									{
 										//Cherche dans l'arraylist de constante
-										console.add(chercher(ligneTemp[1]));
+										// console.add(chercher(ligneTemp[1]));
 									}
 								}
 							}

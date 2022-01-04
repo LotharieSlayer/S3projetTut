@@ -1,0 +1,44 @@
+Algorithme Exemple
+Constante :
+ TAUX_CORR --> 0.9
+Variable :
+ long, larg : entier
+ aire : entier
+DEBUT
+lire ( long, larg )
+
+ aire --> long x larg
+écrire ( aire )
+ aire --> TAUX_CORR x aire
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+écr
+oui
