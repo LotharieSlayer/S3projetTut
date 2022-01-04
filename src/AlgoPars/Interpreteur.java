@@ -63,9 +63,6 @@ public class Interpreteur {
 		}
 		else
 			console.add("Erreur de déclaration de constante");
-		
-			// for ( Constante constant : constantes )
-			// console.add(constant.getNom() + " : " + constant.getType());
 	}
 	
 	public Constante chercher (String nom)

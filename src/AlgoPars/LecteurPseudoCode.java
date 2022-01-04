@@ -19,31 +19,34 @@ public class LecteurPseudoCode {
 	
 	public LecteurPseudoCode() throws IOException
 	{
-		 System.out.println("Veuillez indiquer le fichier a ouvrir : ");
-			Scanner reader = new Scanner(System.in);
-			String fichier = reader.next();
-			reader.close();
-			
-		    try
-		    {
-		      // Le fichier d'entrée
-		      File file = new File(fichier);    
-		      // Créer l'objet File Reader
-		      FileInputStream fis = new FileInputStream(file);
-			  // Encoder en UTF8
-			  InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-		      // Créer l'objet BufferedReader        
-		      BufferedReader br = new BufferedReader(isr);   
-		      String line;
-		      while((line = br.readLine()) != null)
-		      {
-		    	pseudoCode.add(line);
-		      }
-		      fis.close();    
-		    }
-		    catch(IOException e)
-		    {
-		      e.printStackTrace();
-		    }
+		System.out.println("Veuillez indiquer le fichier a ouvrir : ");
+		// Scanner reader = new Scanner(System.in);
+		String fichier = "Exemple2.algo";//reader.next();
+		// reader.close();
+		
+		try (Scanner sc = new Scanner(new FileInputStream(fichier)))
+		{
+			while (sc.hasNext())
+				pseudoCode.add(sc.nextLine());
+
+		//   // Le fichier d'entrée
+		//   File file = new File(fichier);    
+		//   // Créer l'objet File Reader
+		//   FileInputStream fis = new FileInputStream(file);
+		//   // Encoder en UTF8
+		//   InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+		//   // Créer l'objet BufferedReader        
+		//   BufferedReader br = new BufferedReader(isr);   
+		//   String line;
+		//   while((line = br.readLine()) != null)
+		//   {
+		// 	pseudoCode.add(line);
+		//   }
+		//   fis.close();    
+		}
+		catch(IOException e)
+		{
+		  e.printStackTrace();
+		}
 	}
 }

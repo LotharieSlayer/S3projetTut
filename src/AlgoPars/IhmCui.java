@@ -80,7 +80,7 @@ public class IhmCui {
 		}
 		System.out.println("--------------------------------------------------------------------------------------");
 		
-		//getUserInput();
+		getUserInput();
 
 		
 	}
@@ -91,11 +91,10 @@ public class IhmCui {
 		System.out.println("B + Entrée  (reculer ligne par ligne)");
 		System.out.println("LX + Entrée (aller à la ligne X)");
 
-		Scanner reader = new Scanner(System.in);
-		System.out.println(reader);
-		String input = reader.next();
+		Console console = System.console();
+		String ligne = console.readLine();
 
-		switch(input){
+		switch(ligne){
 			case "" :
 				System.out.println("Entrée");
 				nextLine();
@@ -104,8 +103,11 @@ public class IhmCui {
 				System.out.println("B + Entrée");
 				previousLine();
 				break;
+			case "Q" :
+				System.out.println("Q + Entrée");
+				// finDuProgramme = true;
+				break;
 		}
-
 	}
 
 	private void previousLine() {
