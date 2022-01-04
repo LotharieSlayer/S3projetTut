@@ -7,6 +7,7 @@ public class Variable {
 	int valeurInt;
 	char valeurChar;
 	double valeurDouble;
+	boolean valeurBoolean;
 
 	public Variable(String nom, String type)
 	{
@@ -43,11 +44,34 @@ public class Variable {
 	
 	public String getType() { return this.type; }
 	
-	public int getEntier() { return this.valeurInt; }
-	
-	public double getReel() { return this.valeurDouble; }
-	
-	public char getCaractere() { return this.valeurChar; }
-	
-	public String getChaine() { return this.valeurString; }
+	public String getValue() {
+		String valeur;
+		switch (this.type) {
+			case "entier":
+				valeur = String.valueOf(this.valeurInt);
+				break;
+
+			case "chaine de caractères":
+				valeur = this.valeurString;
+				break;
+
+			case "caractère":
+				valeur = "" + this.valeurChar;
+				break;
+
+			case "réel":
+				valeur = String.valueOf(this.valeurDouble);
+				break;
+
+			case "booléen":
+				if (this.valeurBoolean) valeur = "vrai";
+				else { valeur = "faux"; }
+				break;
+		
+			default:
+				valeur = "Erreur";
+				break;
+		}
+		return valeur;
+	}
 }

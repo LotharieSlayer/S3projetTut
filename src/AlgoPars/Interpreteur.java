@@ -66,7 +66,6 @@ public class Interpreteur {
 		
 			// for ( Constante constant : constantes )
 			// console.add(constant.getNom() + " : " + constant.getType());
-			// System.out.println(constantes.get(1));
 	}
 	
 	public Constante chercher (String nom)
@@ -227,11 +226,17 @@ public class Interpreteur {
 		else
 			console.add("Erreur : La classe n'est pas déclaré");
 
-		/*
 		for ( Constante constante : constantes )
 		console.add(constante.getNom() + " : " + constante.getType());
-		*/
 		for ( Variable variable : variables )
 		console.add(variable.nom + " : " + variable.type);
+	}
+
+	public static ArrayList<Constante> getConstantes(){
+		return constantes;
+	}
+
+	public static ArrayList<Variable> getVariables(){
+		return variables;
 	}
 }

@@ -1,6 +1,7 @@
 Algorithme Exemple
 Constante :
  TAUX_CORR --> 0.9
+ REPONSE --> vrai
 Variable :
  long, larg : entier
  aire : entier

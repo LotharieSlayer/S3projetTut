@@ -1,65 +1,81 @@
 package AlgoPars;
 
 public class Constante {
-	static String nom;
-	static String valeurString;
-	static String type;
-	static int valeurInt;
-	static char valeurChar;
-	static double valeurDouble;
-	static boolean valeurBoolean;
+	String nom;
+	String valeurString;
+	String type;
+	int valeurInt;
+	char valeurChar;
+	double valeurDouble;
+	boolean valeurBoolean;
 	
 	public Constante(String nom, int valeurInt)
 	{
-        Constante.nom            = nom   ;
-        Constante.valeurInt 		= valeurInt;
-        Constante.type = "entier";
+        this.nom            = nom   ;
+        this.valeurInt 		= valeurInt;
+        this.type = "entier";
 	}
 	
 	public Constante(String nom, String valeurString )
 	{
-        Constante.nom            = nom   	  ;
-        Constante.valeurString 	= valeurString;
-        Constante.type = "chaine";
+        this.nom            = nom   	  ;
+        this.valeurString 	= valeurString;
+        this.type = "chaine de caractères";
 	}
 	
 	public Constante(String nom, char valeurChar )
 	{
-        Constante.nom            = nom   	  ;
-        Constante.valeurChar 	= valeurChar;
-        Constante.type = "caractere";
+        this.nom            = nom   	  ;
+        this.valeurChar 	= valeurChar;
+        this.type = "caractere";
 	}
 	
 	public Constante(String nom, double valeurDouble )
 	{
-        Constante.nom            = nom   	  ;
-        Constante.valeurDouble 	= valeurDouble;
-        Constante.type = "reel";
+        this.nom            = nom   	  ;
+        this.valeurDouble 	= valeurDouble;
+        this.type = "réel";
 	}
 
 	public Constante(String nom, boolean valeurBoolean )
 	{
-        Constante.nom            = nom   	  ;
-        Constante.valeurBoolean 	= valeurBoolean;
-        Constante.type = "booléen";
+        this.nom            = nom   	  ;
+        this.valeurBoolean 	= valeurBoolean;
+        this.type = "booléen";
 	}
 	
-	public String getNom() { return Constante.nom; }
+	public String getNom() { return this.nom; }
 	
-	public String getType() { return Constante.type; }
+	public String getType() { return this.type; }
 	
-	public int getEntier() { return Constante.valeurInt; }
-	
-	public double getReel() { return Constante.valeurDouble; }
-	
-	public char getCaractere() { return Constante.valeurChar; }
-	
-	public String getChaine() { return Constante.valeurString; }
-	
-	/*public String getValeur() { 
-		switch(Constante.type)
-		{
-			
+	public String getValue() {
+		String valeur;
+		switch (this.type) {
+			case "entier":
+				valeur = String.valueOf(this.valeurInt);
+				break;
+
+			case "chaine de caractères":
+				valeur = this.valeurString;
+				break;
+
+			case "caractère":
+				valeur = "" + this.valeurChar;
+				break;
+
+			case "réel":
+				valeur = String.valueOf(this.valeurDouble);
+				break;
+
+			case "booléen":
+				if (this.valeurBoolean) valeur = "vrai";
+				else { valeur = "faux"; }
+				break;
+		
+			default:
+				valeur = "Erreur";
+				break;
 		}
-	}*/
+		return valeur;
+	}
 }
