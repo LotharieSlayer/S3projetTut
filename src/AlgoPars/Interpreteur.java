@@ -34,15 +34,28 @@ public class Interpreteur {
 				else
 					constantes.add(new Constante(tempString[0], Double.parseDouble(tempString[1])));
 			}
+			else if (tempString[1].equals("vrai"))
+			{
+				constantes.add(new Constante(tempString[0], true));
+			}
+			else if (tempString[1].equals("faux"))
+			{
+				constantes.add(new Constante(tempString[0], false));
+			}
 			else
 			{
 				if(tempString[1].charAt(0) == '\'')
 				{
-					constantes.add(new Constante(tempString[0], tempString[1]));
+					if(tempString[1].charAt(tempString[1].length() - 1) == '\'')
+						constantes.add(new Constante(tempString[0], tempString[1]));
+					else { console.add("Erreur de déclaration de constante"); }
 				}
+
 				else if(tempString[1].charAt(0) == '"')
 				{
-					constantes.add(new Constante(tempString[0], tempString[1]));
+					if(tempString[1].charAt(tempString[1].length() - 1) == '\"')
+						constantes.add(new Constante(tempString[0], tempString[1]));
+					else { console.add("Erreur de déclaration de constante"); }
 				}
 				else
 					console.add("Erreur de déclaration de constante");
@@ -50,6 +63,10 @@ public class Interpreteur {
 		}
 		else
 			console.add("Erreur de déclaration de constante");
+		
+			// for ( Constante constant : constantes )
+			// console.add(constant.getNom() + " : " + constant.getType());
+			// System.out.println(constantes.get(1));
 	}
 	
 	public Constante chercher (String nom)
@@ -65,6 +82,39 @@ public class Interpreteur {
 		return null;
 	}
 	
+	public void declarerVariable(String variable) {
+		String[] tempStringType = variable.split(":");
+		String[] tempStringVariables = tempStringType[0].replaceAll(" ", "").split(",");
+		
+		boucle1 :
+		for ( int i = 0 ; i < tempStringVariables.length ; i++)
+		switch (tempStringType[1]) {
+			case "entier":
+				variables.add(new Variable(tempStringVariables[i], "entier"));
+				break;
+
+			case "double":
+				variables.add(new Variable(tempStringVariables[i], "double"));
+				break;
+
+			case "chainedecaractères":
+				variables.add(new Variable(tempStringVariables[i], "chaine de caractères"));
+				break;
+		
+			case "char":
+				variables.add(new Variable(tempStringVariables[i], "char"));
+				break;
+
+			case "booléen":
+				variables.add(new Variable(tempStringVariables[i], "booléen"));
+				break;
+		
+			default:
+				console.add("Type de base non reconnu");
+				break boucle1;
+		}
+	}
+
 	public Interpreteur (ArrayList<String> pseudoCode)
 	{
 		//Vérifie le Algorithme Nom de Classe
@@ -85,39 +135,38 @@ public class Interpreteur {
 				switch(ligneTemp)
 				{
 					case "Constante:" :
-						boolean finConstante = false;
 						numLigne++;
-						while(finConstante == false)
+						boucle1 :
+						while(true)
 						{
-							if(pseudoCode.get(numLigne).equals("Variable :") || pseudoCode.get(numLigne).equals("DEBUT"))
-							{
-								finConstante = true;
-							}
-							else
-							{
+							if(!pseudoCode.get(numLigne).replaceAll(" ", "").equals("")){
+								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
+								if(pseudoCode.get(numLigne).equals("Variable :") || pseudoCode.get(numLigne).equals("DEBUT"))
+									break boucle1;
+
 								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								//Méthode pour ajouter la constante
 								declarerConstante(ligneTemp);
 								console.add("Constante ajouté");
-								numLigne++;
 							}
+							numLigne++;
 						}
 						break;
 					case "Variable:" :
-						boolean finVariable = false;
 						numLigne++;
-						while(finVariable == false)
+						boucle1 :
+						while(true)
 						{
-							if(pseudoCode.get(numLigne).equals("Constante :") || pseudoCode.get(numLigne).equals("DEBUT"))
-							{
-								finVariable = true;
-							}
-							else
-							{
+							if(!pseudoCode.get(numLigne).replaceAll(" ", "").equals("")){
+								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
+								if(pseudoCode.get(numLigne).equals("Constante :") || pseudoCode.get(numLigne).equals("DEBUT"))
+									break boucle1;
+
 								//Méthode pour ajouter la variable
+								declarerVariable(ligneTemp);
 								console.add("Variable ajouté");
-								numLigne++;
 							}
+							numLigne++;
 						}
 						break;
 					case "DEBUT" : 
@@ -177,5 +226,12 @@ public class Interpreteur {
 		}
 		else
 			console.add("Erreur : La classe n'est pas déclaré");
+
+		/*
+		for ( Constante constante : constantes )
+		console.add(constante.getNom() + " : " + constante.getType());
+		*/
+		for ( Variable variable : variables )
+		console.add(variable.nom + " : " + variable.type);
 	}
 }

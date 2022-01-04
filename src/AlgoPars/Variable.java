@@ -7,33 +7,36 @@ public class Variable {
 	int valeurInt;
 	char valeurChar;
 	double valeurDouble;
-	
-	public Variable(String nom, int valeurInt)
+
+	public Variable(String nom, String type)
 	{
-        this.nom            = nom   ;
-        this.valeurInt 		= valeurInt;
-        this.type = "entier";
-	}
-	
-	public Variable(String nom, String valeurString )
-	{
-        this.nom            = nom   	  ;
-        this.valeurString 	= valeurString;
-        this.type = "chaine";
-	}
-	
-	public Variable(String nom, char valeurChar )
-	{
-        this.nom            = nom   	  ;
-        this.valeurChar 	= valeurChar;
-        this.type = "caractere";
-	}
-	
-	public Variable(String nom, float valeurDouble )
-	{
-        this.nom            = nom   	  ;
-        this.valeurDouble 	= valeurDouble;
-        this.type = "reel";
+		this.nom = nom;
+
+		switch (type) {
+			case "entier":
+				this.type = "entier";
+				break;
+
+			case "double":
+				this.type = "double";
+				break;
+
+			case "char":
+				this.type = "char";
+				break;
+
+			case "chaine de caractères":
+				this.type = "chaine de caractères";
+				break;
+		
+			case "booléen":
+				this.type = "booléen";
+				break;
+		
+			default:
+				this.type = "erreur de type";
+				break;
+		}
 	}
 	
 	public String getNom() { return this.nom; }

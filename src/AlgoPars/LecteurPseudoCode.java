@@ -2,8 +2,11 @@ package AlgoPars;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -23,18 +26,20 @@ public class LecteurPseudoCode {
 			
 		    try
 		    {
-		      // Le fichier d'entrée
+		      // Le fichier d'entrÃ©e
 		      File file = new File(fichier);    
-		      // Créer l'objet File Reader
-		      FileReader fr = new FileReader(file);  
-		      // Créer l'objet BufferedReader        
-		      BufferedReader br = new BufferedReader(fr);   
+		      // CrÃ©er l'objet File Reader
+		      FileInputStream fis = new FileInputStream(file);
+			  // Encoder en UTF8
+			  InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+		      // CrÃ©er l'objet BufferedReader        
+		      BufferedReader br = new BufferedReader(isr);   
 		      String line;
 		      while((line = br.readLine()) != null)
 		      {
 		    	pseudoCode.add(line);
 		      }
-		      fr.close();    
+		      fis.close();    
 		    }
 		    catch(IOException e)
 		    {

@@ -7,6 +7,7 @@ public class Constante {
 	static int valeurInt;
 	static char valeurChar;
 	static double valeurDouble;
+	static boolean valeurBoolean;
 	
 	public Constante(String nom, int valeurInt)
 	{
@@ -34,6 +35,13 @@ public class Constante {
         Constante.nom            = nom   	  ;
         Constante.valeurDouble 	= valeurDouble;
         Constante.type = "reel";
+	}
+
+	public Constante(String nom, boolean valeurBoolean )
+	{
+        Constante.nom            = nom   	  ;
+        Constante.valeurBoolean 	= valeurBoolean;
+        Constante.type = "booléen";
 	}
 	
 	public String getNom() { return Constante.nom; }
