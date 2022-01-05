@@ -14,7 +14,7 @@ public class Main {
 		instance = this;
 		this.lecteur = new LecteurPseudoCode();
 		this.metier = new Interpreteur(this.lecteur.getPseudoCode());
-		this.ihm = new IhmCui(this.lecteur.getPseudoCode(), 0);
+		this.ihm = new IhmCui(this.lecteur.getPseudoCode());
 	}
 	
 	public static Main getInstance() {

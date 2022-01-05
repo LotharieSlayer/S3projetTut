@@ -6,13 +6,19 @@ import java.util.Scanner;
 
 public class IhmCui {
 
+	static int futureLine;
+	static ArrayList<String> code;
 
 	/**
-	 * 
 	 * @param pseudoCode	Le pseudo-code en entrée pour l'afficher
 	 */
-	public IhmCui(ArrayList<String> pseudoCode, int indexConsole) {
+	public IhmCui(ArrayList<String> pseudoCode) {
+		code = pseudoCode;
+		sortie(code);
+		
+	}
 
+	public void sortie(ArrayList<String> pseudoCode){
 		// Première partie code deuxième partie données
 		System.out.println(  "------------"
 		                   + String.format ( "%84s", "-----------"));
@@ -28,11 +34,19 @@ public class IhmCui {
 		{
 			// Partie code
 
+			// Faut revoir pourquoi le bleu va sur 3 ligne (je ne sais pas moi meme au pire il faudrait faire une condition UwU)
+
+			if(futureLine == i)
+				System.out.println("\033[44m");
+
 			// Si plus de 80 caractères
 			if (pseudoCode.get(i).length() > 80)
 				System.out.print(  "|" + String.format ( "%-2d", i ) + " " +  String.format ( "%-76.75s", pseudoCode.get(i) ) + " ... |");
 
             else { System.out.print("|" + String.format ( "%-2d", i ) + " " +  String.format ( "%-80s", pseudoCode.get(i) ) + " " + "|"); }
+
+			if(futureLine == i)
+				System.out.println("\033[40m");
 
 			// Si plus de 40 lignes
             if ( i >= 40 ){
@@ -43,6 +57,10 @@ public class IhmCui {
 
 
 			// Partie données
+
+			// Et du coup faut tout refaire pcq genre ça regarde pas la ligne, là on est sur du :
+			// si la ligne est 0 donc elle est plus petite que la size de l'arraylist constantes donc j'imprime les constantes
+			// et puis pareil pour les variables genre c'est impossible à implémenter. 
 
 			// Première ligne
 			if ( i == 0 ) System.out.println( String.format( "%20s", "NOM         ") + String.format("%-10s", "|") + String.format("%7s", "VALEUR") + "        |" );
@@ -70,19 +88,19 @@ public class IhmCui {
 		
 		System.out.println("\n");
 		
-		System.out.println("--------------");
+		System.out.println("---------------");
 		System.out.println("|   CONSOLE   |");
 		System.out.println("--------------------------------------------------------------------------------------");
 		ArrayList<String> console = Main.getInstance().getConsole();
-		for(int i = 0; i < console.size(); i++)
+		for(int i = 0; i < futureLine; i++)
 		{
+			if(console.size() < futureLine) break;
 			System.out.println("|" + String.format ( "%-83s", console.get(i) ) + " " + "|");
 		}
 		System.out.println("--------------------------------------------------------------------------------------");
 		
 		getUserInput();
 
-		
 	}
 
 	public void getUserInput() {
@@ -97,24 +115,26 @@ public class IhmCui {
 		switch(ligne){
 			case "" :
 				System.out.println("Entrée");
-				nextLine();
+				futureLine += 1;
+				sortie(code);
 				break;
 			case "B" :
 				System.out.println("B + Entrée");
-				previousLine();
+				futureLine -= 1;
+				sortie(code);
 				break;
+			// case "L" +  : en fait la faut vérifier l'int qui est après et genre c'est chiant et j'ai la flemme la
+			// System.out.println("B + Entrée");
+			// futureLine = l'int de mort du coup;
+			// sortie(code);
+			// break;
 			case "Q" :
 				System.out.println("Q + Entrée");
 				// finDuProgramme = true;
 				break;
+			default:
+				getUserInput();
 		}
 	}
-
-	private void previousLine() {
-	}
-
-	private void nextLine() {
-	}
-	
 
 }

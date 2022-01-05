@@ -17,12 +17,19 @@ public class LecteurPseudoCode {
 		return pseudoCode;	
 	}
 	
-	public LecteurPseudoCode() throws IOException
+	public LecteurPseudoCode()
 	{
 		System.out.println("Veuillez indiquer le fichier a ouvrir : ");
 		// Scanner reader = new Scanner(System.in);
 		String fichier = "Exemple2.algo";//reader.next();
 		// reader.close();
+
+		/*try (Scanner reader = new Scanner(System.in)){
+			String fichier = reader.nextLine();
+		}
+		catch(Error e) {
+			e.printStackTrace();
+		}*/
 		
 		try (Scanner sc = new Scanner(new FileInputStream(fichier)))
 		{
