@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.lang.model.util.ElementScanner14;
+
 public class Interpreteur {
 	
 	static ArrayList<String> console = new ArrayList<String>();
@@ -110,6 +112,62 @@ public class Interpreteur {
 				break boucle1;
 		}
 	}
+	
+	public String verifierCaractere(char car, String chaine)
+	{
+		char[] tabCar = new char[2];
+		int[] indexCar = new int[2];
+		if(car == '(') { tabCar[0] = '('; tabCar[1] = ')'; }
+		else if(car == '"') { tabCar[0] = '"'; tabCar[1] = '"'; }
+		else if(car == '\'') { tabCar[0] = '\''; tabCar[1] = '\''; }
+		
+        for(int i=0; i<chaine.length(); i++) 
+        {
+            char chr = chaine.charAt(i);
+                if(tabCar[0] == chr)
+                {  
+                	indexCar[0] = i;
+                }
+        }
+        
+        for(int i=0; i<chaine.length(); i++) 
+        {
+            char chr = chaine.charAt(i);
+                if(tabCar[1] == chr)
+                {  
+                	indexCar[1] = i;
+                }
+        }
+        
+        if(indexCar[0] < indexCar[1]) { return chaine.substring(indexCar[0] + 1,indexCar[1] - 1);}
+		return null;
+	}
+	
+	public int chercherConstante(String chaine)
+	{
+		String chaineTemp = chaine.replaceAll(" ", "");
+		for(int i = 0; i < constantes.size(); i++)
+		{
+			if(constantes.get(i).getNom().equals(chaineTemp))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public int chercherVariable(String chaine)
+	{
+		String chaineTemp = chaine.replaceAll(" ", "");
+		for(int i = 0; i < variables.size(); i++)
+		{
+			if(variables.get(i).getNom().equals(chaineTemp))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
 
 	public Interpreteur (ArrayList<String> pseudoCode)
 	{
@@ -177,41 +235,37 @@ public class Interpreteur {
 			{
 				while (numLigne < pseudoCode.size())
 				{
-					String[] ligneTemp = pseudoCode.get(numLigne).split(" ");
+					String[] ligneTemp = pseudoCode.get(numLigne).split(" ", 2);
 					switch(ligneTemp[0]) {
 						case "lire" :
 							/*Scanner reader = new Scanner(System.in);
 							String temp = reader.next();*/
 							break;
-						case "écrire":
-							//A changer car ça prend uniquement quand y a des espaces
-							if(ligneTemp[1].charAt(0) == '(' && ligneTemp[3].charAt(0) == ')')
-							{
-								if(ligneTemp[2].charAt(0) == '"')
+						case "ecrire":
+							String chaineTemp[] = new String[3];
+							chaineTemp[0] = verifierCaractere('(', ligneTemp[1]);
+							if(chaineTemp[0] != null) {
+								chaineTemp[1] = verifierCaractere('"', ligneTemp[1]);
+								chaineTemp[2] = verifierCaractere('\'', ligneTemp[1]);
+								int indexConstante = chercherConstante(chaineTemp[0]);
+								int indexVariable = chercherVariable(chaineTemp[0]);
+								
+								if(chaineTemp[1] != null || chaineTemp[2] != null) 
+								{ 
+									console.add(chaineTemp[1]);
+								}
+								else if(indexConstante > -1)
 								{
-									console.add(ligneTemp[2].replaceAll("\"", null));
+									console.add(constantes.get(indexVariable).getValue());
+								}
+								else if(indexVariable > -1)
+								{
+									console.add(variables.get(indexVariable).getValue());
 								}
 								else
-								{
-									if(ligneTemp[2].charAt(0) <= 'a' && ligneTemp[2].charAt(0) <= 'z')
-									{
-										//cherche dans l'arraylist de variables si un nom correspond
-										for(int i = 0; i < constantes.size(); i++)
-										{
-											if(constantes.get(i).getNom() == ligneTemp[2])
-											{
-												// console.add(constantes.get(i).);	
-											}
-										}
-										
-									}
-									else if (ligneTemp[2].charAt(0) <= 'A' && ligneTemp[2].charAt(0) <= 'Z')
-									{
-										//Cherche dans l'arraylist de constante
-										// console.add(chercher(ligneTemp[1]));
-									}
-								}
+									console.add("La valeur n'est pas instancié");
 							}
+							else { console.add("Erreur absence de parenthèses"); }
 							break;
 					}
 					numLigne++;
@@ -222,12 +276,8 @@ public class Interpreteur {
 		}
 		else
 			console.add("Erreur : La classe n'est pas déclaré");
-
-		for ( Constante constante : constantes )
-		console.add(constante.getNom() + " : " + constante.getType());
-		for ( Variable variable : variables )
-		console.add(variable.nom + " : " + variable.type);
 	}
+	
 
 	public static ArrayList<Constante> getConstantes(){
 		return constantes;

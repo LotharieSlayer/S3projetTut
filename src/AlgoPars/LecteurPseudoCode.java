@@ -21,7 +21,7 @@ public class LecteurPseudoCode {
 	{
 		System.out.println("Veuillez indiquer le fichier a ouvrir : ");
 		// Scanner reader = new Scanner(System.in);
-		String fichier = "Exemple2.algo";//reader.next();
+		String fichier = "Exemple1.algo";//reader.next();
 		// reader.close();
 
 		/*try (Scanner reader = new Scanner(System.in)){

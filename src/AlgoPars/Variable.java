@@ -22,8 +22,8 @@ public class Variable {
 				this.type = "double";
 				break;
 
-			case "char":
-				this.type = "char";
+			case "caractère":
+				this.type = "caractère";
 				break;
 
 			case "chaine de caractères":
@@ -35,7 +35,7 @@ public class Variable {
 				break;
 		
 			default:
-				this.type = "erreur de type";
+				this.type = "Erreur de déclaration du type";
 				break;
 		}
 	}
@@ -45,33 +45,20 @@ public class Variable {
 	public String getType() { return this.type; }
 	
 	public String getValue() {
-		String valeur;
 		switch (this.type) {
 			case "entier":
-				valeur = String.valueOf(this.valeurInt);
-				break;
-
-			case "chaine de caractères":
-				valeur = this.valeurString;
-				break;
-
+				return String.valueOf(this.valeurInt);
+		case "chaine de caractères":
+				return this.valeurString;
 			case "caractère":
-				valeur = "" + this.valeurChar;
-				break;
-
+				return "" + this.valeurChar;
 			case "réel":
-				valeur = String.valueOf(this.valeurDouble);
-				break;
-
+				return String.valueOf(this.valeurDouble);
 			case "booléen":
-				if (this.valeurBoolean) valeur = "vrai";
-				else { valeur = "faux"; }
-				break;
-		
-			default:
-				valeur = "Erreur";
-				break;
+				if (this.valeurBoolean == true) 
+					{ return "Vrai"; }
+				else { return "Faux"; }
 		}
-		return valeur;
+		return null;
 	}
 }

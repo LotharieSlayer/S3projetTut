@@ -9,6 +9,5 @@ DEBUT
 lire ( long, larg )
 
  aire --> long x larg
-écrire ( aire )
+ecrire ( aire ) 
  aire --> TAUX_CORR x aire
-écr

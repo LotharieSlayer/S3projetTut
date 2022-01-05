@@ -27,7 +27,7 @@ public class Constante {
 	{
         this.nom            = nom   	  ;
         this.valeurChar 	= valeurChar;
-        this.type = "caractere";
+        this.type = "caractère";
 	}
 	
 	public Constante(String nom, double valeurDouble )
@@ -48,34 +48,31 @@ public class Constante {
 	
 	public String getType() { return this.type; }
 	
+	public int getInt() { return this.valeurInt; }
+	
+	public double getDouble() { return this.valeurDouble; }
+	
+	public char getChar() { return this.valeurChar; }
+	
+	public boolean getBoolean() { return this.valeurBoolean; }
+	
+	public String getString() { return this.valeurString; }
+	
 	public String getValue() {
-		String valeur;
 		switch (this.type) {
 			case "entier":
-				valeur = String.valueOf(this.valeurInt);
-				break;
-
-			case "chaine de caractères":
-				valeur = this.valeurString;
-				break;
-
+				return String.valueOf(this.valeurInt);
+		case "chaine de caractères":
+				return this.valeurString;
 			case "caractère":
-				valeur = "" + this.valeurChar;
-				break;
-
+				return "" + this.valeurChar;
 			case "réel":
-				valeur = String.valueOf(this.valeurDouble);
-				break;
-
+				return String.valueOf(this.valeurDouble);
 			case "booléen":
-				if (this.valeurBoolean) valeur = "vrai";
-				else { valeur = "faux"; }
-				break;
-		
-			default:
-				valeur = "Erreur";
-				break;
+				if (this.valeurBoolean == true) 
+					{ return "Vrai"; }
+				else { return "Faux"; }
 		}
-		return valeur;
+		return null;
 	}
 }
