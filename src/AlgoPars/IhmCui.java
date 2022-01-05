@@ -35,18 +35,18 @@ public class IhmCui {
 			// Partie code
 
 			String color = "";
+			String colorReset = "";
 			if(futureLine == i){
 				color = "\033[44m";
+				colorReset = "\033[40m";
 			}
 
 			// Si plus de 80 caractères
 			if (pseudoCode.get(i).length() > 80)
-				System.out.print( color + "|" + String.format ( "%-2d", i ) + " " +  String.format ( "%-76.75s", pseudoCode.get(i) ) + " ... |");
+				System.out.print( color + "|" + String.format ( "%-2d", i ) + " " +  String.format ( "%-76.75s", pseudoCode.get(i) ) + " ... |" + colorReset);
 
-            else { System.out.print( color + "|" + String.format ( "%-2d", i ) + " " +  String.format ( "%-80s", pseudoCode.get(i) ) + " " + "|"); }
+            else { System.out.print( color + "|" + String.format ( "%-2d", i ) + " " +  String.format ( "%-80s", pseudoCode.get(i) ) + " " + "|" + colorReset); }
 
-			if(futureLine == i)
-				System.out.println("\033[40m");
 
 			// Si plus de 40 lignes
             if ( i >= 40 ){
@@ -137,4 +137,7 @@ public class IhmCui {
 		}
 	}
 
+	public int getFutureLine() {
+		return futureLine;
+	}
 }
