@@ -34,16 +34,16 @@ public class IhmCui {
 		{
 			// Partie code
 
-			// Faut revoir pourquoi le bleu va sur 3 ligne (je ne sais pas moi meme au pire il faudrait faire une condition UwU)
-
-			if(futureLine == i)
-				System.out.println("\033[44m");
+			String color = "";
+			if(futureLine == i){
+				color = "\033[44m";
+			}
 
 			// Si plus de 80 caractères
 			if (pseudoCode.get(i).length() > 80)
-				System.out.print(  "|" + String.format ( "%-2d", i ) + " " +  String.format ( "%-76.75s", pseudoCode.get(i) ) + " ... |");
+				System.out.print( color + "|" + String.format ( "%-2d", i ) + " " +  String.format ( "%-76.75s", pseudoCode.get(i) ) + " ... |");
 
-            else { System.out.print("|" + String.format ( "%-2d", i ) + " " +  String.format ( "%-80s", pseudoCode.get(i) ) + " " + "|"); }
+            else { System.out.print( color + "|" + String.format ( "%-2d", i ) + " " +  String.format ( "%-80s", pseudoCode.get(i) ) + " " + "|"); }
 
 			if(futureLine == i)
 				System.out.println("\033[40m");
