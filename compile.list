@@ -1,0 +1,10 @@
+-encoding utf8
+
+./src/AlgoPars/Constante.java
+./src/AlgoPars/Variable.java
+
+./src/AlgoPars/IhmCui.java
+./src/AlgoPars/Interpreteur.java
+./src/AlgoPars/LecteurPseudoCode.java
+
+./src/AlgoPars/Main.java
