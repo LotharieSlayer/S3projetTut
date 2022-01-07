@@ -61,31 +61,4 @@ public class Variable {
 		}
 		return null;
 	}
-
-	public void affecterVariable(String valeur)
-	{
-		switch (this.type) {
-			case "entier":
-			this.valeurInt = Integer.parseInt(valeur);
-				break;
-		case "chaine de caractères":
-				this.valeurString = valeur;
-				break;
-			case "caractère":
-				this.valeurChar = valeur.charAt(0);
-				break;
-			case "réel":
-				this.valeurDouble = Double.parseDouble(valeur);
-				break;
-			case "booléen":
-				if (valeur == "vrai") 
-					{ this.valeurBoolean = true;
-					  break; 
-					}
-				else { this.valeurBoolean = false;
-					   break; 
-				  }
-		}
-	}
-
 }

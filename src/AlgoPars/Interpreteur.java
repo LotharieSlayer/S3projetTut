@@ -23,7 +23,7 @@ public class Interpreteur {
 	}
 	
 	public void declarerConstante(String constante) {
-		String[] tempString = constante.split("<--");
+		String[] tempString = constante.split("-->");
 		if(tempString[1] != null)
 		{
 			if(tempString[1].charAt(0) >= '0' && tempString[1].charAt(0) <= '9')
@@ -67,6 +67,19 @@ public class Interpreteur {
 			console.add("Erreur de déclaration de constante");
 	}
 	
+	public Constante chercher (String nom)
+	{
+		for(int i=0; i < constantes.size();i++)
+		{
+			if(nom.equals(constantes.get(i).getNom()))
+			{
+				return constantes.get(i);
+			};
+		}
+		console.add("La constante spécifié n'existe pas");
+		return null;
+	}
+	
 	public void declarerVariable(String variable) {
 		String[] tempStringType = variable.split(":");
 		String[] tempStringVariables = tempStringType[0].replaceAll(" ", "").split(",");
@@ -82,12 +95,12 @@ public class Interpreteur {
 				variables.add(new Variable(tempStringVariables[i], "double"));
 				break;
 
-			case "chaine de caractères":
+			case "chainedecaractères":
 				variables.add(new Variable(tempStringVariables[i], "chaine de caractères"));
 				break;
 		
-			case "caractère":
-				variables.add(new Variable(tempStringVariables[i], "caractère"));
+			case "char":
+				variables.add(new Variable(tempStringVariables[i], "char"));
 				break;
 
 			case "booléen":
@@ -154,146 +167,6 @@ public class Interpreteur {
 			}
 		}
 		return -1;
-	}
-
-	public String detecterType(String chaine)
-	{
-		String chaineTemp[] = new String[2];
-
-		chaineTemp[0] = verifierCaractere('"', chaine);
-		chaineTemp[1] = verifierCaractere('\'', chaine);
-
-		if(chaineTemp[0] != null)
-		{
-			return "chaine de caractères";
-		}
-		else if (chaineTemp[1] != null)
-		{
-			return "caractère";
-		}
-		else if(chaine.charAt(0) >= '0' && chaine.charAt(0) <= '9')
-		{
-			String[] valeur = chaine.split(".", 2);
-			if(valeur[1] == null)
-			{
-				return "entier";
-			}
-			else
-				return "réel";
-		}
-		else if (chaine.replaceAll("" , "").equals("vrai") || chaine.equals("faux"))
-		{
-			return "booléen";
-		}
-		else
-		{
-			return "expression";
-		}
-	}
-
-	public String calculateur(String chaine)
-	{
-		//Pour l'instant je m'occupe de remplacer les variables et constantes par leurs valeurs
-		String chaineTemp = chaine.replaceAll(" ", "");
-
-		int indexConstante = chercherConstante(chaine);
-		int indexVariable = chercherVariable(chaine);
-
-		for(int i = 0; i < constantes.size(); i++)
-		{
-			if(chaineTemp.contains(constantes.get(i).getNom()))
-			{
-				chaineTemp.replaceAll(constantes.get(i).getNom(), constantes.get(i).getValue());
-			}
-		}
-
-		for(int i = 0; i < variables.size(); i++)
-		{
-			if(chaineTemp.contains(variables.get(i).getNom()))
-			{
-				chaineTemp.replaceAll(variables.get(i).getNom(), variables.get(i).getValue());
-			}
-		}
-
-		if(chaineTemp.contains("+"))
-		{
-			String[] expression = chaineTemp.split("+", 2);
-			chaineTemp = addition(expression[0], expression[1]);
-		}
-		if(chaineTemp.contains("×"))
-		{
-			String[] expression = chaineTemp.split("×", 2);
-			chaineTemp = multiplication(expression[0], expression[1]);
-		}
-
-		return null;
-	}
-
-	public String addition(String a, String b)
-	{
-		double aDouble = 0, bDouble = 0;
-
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
-
-		return String.valueOf(aDouble + bDouble);
-	}
-
-	public String soustraction(String a, String b)
-	{
-		double aDouble = 0, bDouble = 0;
-
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
-
-		return String.valueOf(aDouble - bDouble);
-	}
-
-	public String multiplication(String a, String b)
-	{
-		double aDouble = 0, bDouble = 0;
-
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
-
-		return String.valueOf(aDouble * bDouble);
-	}
-
-	public String division(String a, String b)
-	{
-		double aDouble = 0, bDouble = 0;
-
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
-
-		return String.valueOf(aDouble / bDouble);
-	}
-
-	public String modulo(String a, String b)
-	{
-		double aDouble = 0, bDouble = 0;
-
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
-
-		return String.valueOf(aDouble % bDouble);
-	}
-
-	public String puissance(String a, String b)
-	{
-		double aDouble = 0, bDouble = 0;
-
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
-
-		return String.valueOf(Math.pow(aDouble,bDouble));
-	}
-	
-	public String racineCarre(String a, String b)
-	{
-		Double aDouble = Double.parseDouble(a);
-
-		return String.valueOf(Math.sqrt(aDouble));
 	}
 
 	public Interpreteur (ArrayList<String> pseudoCode)
@@ -394,26 +267,6 @@ public class Interpreteur {
 							}
 							else { console.add("Erreur absence de parenthèses"); }
 							break;
-					}
-					//Divise en fontion de la flèche d'instanciation
-					String[] tempString = pseudoCode.get(numLigne).split("<--");
-					if(tempString[1] != null)
-					{
-						int indexVariable = chercherVariable(tempString[0].replaceAll(" ", ""));
-
-						if(indexVariable > -1)
-						{
-							if(detecterType(tempString[1]).equals(variables.get(indexVariable).getType()))
-							{
-								variables.get(indexVariable).affecterVariable(tempString[1]);
-							}
-							else if(detecterType(tempString[1]).equals("expression"))
-							{
-								variables.get(indexVariable).affecterVariable(calculateur(tempString[1]));
-							}
-						}
-						else
-							console.add("La variable n'a pas été instancié");
 					}
 					numLigne++;
 				}
