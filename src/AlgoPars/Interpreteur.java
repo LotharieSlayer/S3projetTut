@@ -9,6 +9,8 @@ import javax.lang.model.util.ElementScanner14;
 public class Interpreteur {
 	
 	static ArrayList<String> console = new ArrayList<String>();
+	static ArrayList<String> trace = new ArrayList<String>();
+
 	static ArrayList<Constante> constantes = new ArrayList<Constante>();
 	static ArrayList<Variable> variables = new ArrayList<Variable>();
 	
@@ -50,21 +52,21 @@ public class Interpreteur {
 				{
 					if(tempString[1].charAt(tempString[1].length() - 1) == '\'')
 						constantes.add(new Constante(tempString[0], tempString[1]));
-					else { console.add("Erreur de déclaration de constante"); }
+					else { console.set(numLigne, "Erreur de déclaration de constante"); }
 				}
 
 				else if(tempString[1].charAt(0) == '"')
 				{
 					if(tempString[1].charAt(tempString[1].length() - 1) == '\"')
 						constantes.add(new Constante(tempString[0], tempString[1]));
-					else { console.add("Erreur de déclaration de constante"); }
+					else { console.set(numLigne, "Erreur de déclaration de constante"); }
 				}
 				else
-					console.add("Erreur de déclaration de constante");
+					console.set(numLigne, "Erreur de déclaration de constante");
 			}
 		}
 		else
-			console.add("Erreur de déclaration de constante");
+			console.set(numLigne, "Erreur de déclaration de constante");
 	}
 	
 	public Constante chercher (String nom)
@@ -76,7 +78,7 @@ public class Interpreteur {
 				return constantes.get(i);
 			};
 		}
-		console.add("La constante spécifié n'existe pas");
+		console.set(numLigne, "La constante spécifié n'existe pas");
 		return null;
 	}
 	
@@ -108,7 +110,7 @@ public class Interpreteur {
 				break;
 		
 			default:
-				console.add("Type de base non reconnu");
+				console.set(numLigne, "Type de base non reconnu");
 				break boucle1;
 		}
 	}
@@ -346,12 +348,18 @@ public class Interpreteur {
 
 	public Interpreteur (ArrayList<String> pseudoCode)
 	{
+		// Initialisation des ArrayLists pour créer une grosse taille de vide afin de pouvoir le replace
+		// Méthode à changer car non optimisé !
+		for(int i = 0; i < 3852; i++){
+			console.add(i, "");
+			trace.add(i, "");
+		}
 		//Vérifie le Algorithme Nom de Classe
 		
 		String[] declareClass = pseudoCode.get(0).split(" ");
 		if(declareClass[0].equals("Algorithme")) {
 			
-			console.add("Classe ajouté");
+			console.set(numLigne, "Classe ajouté");
 			
 			numLigne++;
 			
@@ -376,7 +384,7 @@ public class Interpreteur {
 								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								//Méthode pour ajouter la constante
 								declarerConstante(ligneTemp);
-								console.add("Constante ajouté");
+								console.set(numLigne, "Constante ajouté");
 							}
 							numLigne++;
 						}
@@ -393,7 +401,7 @@ public class Interpreteur {
 
 								//Méthode pour ajouter la variable
 								declarerVariable(ligneTemp);
-								console.add("Variable ajouté");
+								console.set(numLigne, "Variable ajouté");
 							}
 							numLigne++;
 						}
@@ -427,20 +435,20 @@ public class Interpreteur {
 								
 								if(chaineTemp[1] != null || chaineTemp[2] != null) 
 								{ 
-									console.add(chaineTemp[1]);
+									console.set(numLigne, chaineTemp[1]);
 								}
 								else if(indexConstante > -1)
 								{
-									console.add(constantes.get(indexVariable).getValue());
+									console.set(numLigne, constantes.get(indexVariable).getValue());
 								}
 								else if(indexVariable > -1)
 								{
-									console.add(variables.get(indexVariable).getValue());
+									console.set(numLigne, variables.get(indexVariable).getValue());
 								}
 								else
-									console.add("La valeur n'est pas instancié");
+									console.set(numLigne, "La valeur n'est pas instancié");
 							}
-							else { console.add("Erreur absence de parenthèses"); }
+							else { console.set(numLigne, "Erreur absence de parenthèses"); }
 							break;
 					}
 					//Divise en fontion de la flèche d'instanciation
@@ -467,14 +475,14 @@ public class Interpreteur {
 									}
 									else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
 									{
-										console.add("Impossible d'affecter un réel dans un entier");
+										console.set(numLigne, "Impossible d'affecter un réel dans un entier");
 									}
 									else
 										variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp));
 								}
 							}
 							else
-								console.add("La variable n'a pas été instancié");
+								console.set(numLigne, "La variable n'a pas été instancié");
 							
 						}
 					}
@@ -482,10 +490,10 @@ public class Interpreteur {
 				}
 			}
 			else
-				console.add("Erreur : Le programme ne démarre pas");
+				console.set(numLigne, "Erreur : Le programme ne démarre pas");
 		}
 		else
-			console.add("Erreur : La classe n'est pas déclaré");
+			console.set(numLigne, "Erreur : La classe n'est pas déclaré");
 	}
 	
 

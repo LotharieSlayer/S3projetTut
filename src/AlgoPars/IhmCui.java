@@ -95,6 +95,7 @@ public class IhmCui {
 		for(int i = 0; i < futureLine; i++)
 		{
 			if(console.size() < futureLine) break;
+			if(console.get(i).equals("")) continue;
 			System.out.println("|" + String.format ( "%-83s", console.get(i) ) + " " + "|");
 		}
 		System.out.println("--------------------------------------------------------------------------------------");
