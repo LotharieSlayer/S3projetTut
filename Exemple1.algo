@@ -1,13 +1,18 @@
 Algorithme Exemple
 Constante :
- TAUX_CORR --> 0.9
- REPONSE --> vrai
+ TAUX_CORR <-- 0.9
+ REPONSE <-- vrai
 Variable :
- long, larg : entier
+ long : entier
+ larg : entier
  aire : entier
 DEBUT
+long <-- 3
+larg <-- 8
 lire ( long, larg )
-
- aire --> long x larg
+ecrire ( long ) 
+ecrire ( larg ) 
+ aire <-- long x larg
 ecrire ( aire ) 
- aire --> TAUX_CORR x aire
+ aire <-- TAUX_CORR x aire
+ecrire ( aire ) 

@@ -23,7 +23,7 @@ public class Interpreteur {
 	}
 	
 	public void declarerConstante(String constante) {
-		String[] tempString = constante.split("-->");
+		String[] tempString = constante.split("<--");
 		if(tempString[1] != null)
 		{
 			if(tempString[1].charAt(0) >= '0' && tempString[1].charAt(0) <= '9')
@@ -169,6 +169,181 @@ public class Interpreteur {
 		return -1;
 	}
 
+	public String detecterType(String chaine)
+	{
+		String chaineTemp[] = new String[2];
+
+		chaineTemp[0] = verifierCaractere('"', chaine);
+		chaineTemp[1] = verifierCaractere('\'', chaine);
+
+		chaine = chaine.replaceAll(" ", "");
+
+		if(chaineTemp[0] != null)
+		{
+			return "chaine de caractères";
+		}
+		else if (chaineTemp[1] != null)
+		{
+			return "caractère";
+		}
+		else if(chaine.charAt(0) >= '0' && chaine.charAt(0) <= '9')
+		{
+			if(chaine.contains("."))
+			{
+				return "réel";
+			}
+			else
+				return "entier";
+		}
+		else if (chaine.replaceAll("" , "").equals("vrai") || chaine.equals("faux"))
+		{
+			return "booléen";
+		}
+		else
+		{
+			return "expression";
+		}
+	}
+
+	public String calculateur(String chaine)
+	{
+		//Pour l'instant je m'occupe de remplacer les variables et constantes par leurs valeurs
+		String chaineTemp = chaine.replaceAll(" ", "");
+
+		//int indexConstante = chercherConstante(chaineTemp);
+		//int indexVariable = chercherVariable(chaineTemp);
+
+		//Méthode pour remplacer les variables et constantes par leur valeur (dans le futur faire une méthode plus universelle en fonction des types)
+		for(int i = 0; i < constantes.size(); i++)
+		{
+			if(chaineTemp.contains(constantes.get(i).getNom()))
+			{
+				chaineTemp = chaineTemp.replaceAll(constantes.get(i).getNom(), constantes.get(i).getValue());
+			}
+		}
+
+		for(int i = 0; i < variables.size(); i++)
+		{
+			if(chaineTemp.contains(variables.get(i).getNom()))
+			{
+				chaineTemp = chaineTemp.replaceAll(variables.get(i).getNom(), variables.get(i).getValue());
+			}
+		}
+
+		if(chaineTemp.contains("+"))
+		{
+			String[] expression = chaineTemp.split("+", 2); 
+			chaineTemp = addition(expression[0], expression[1]);
+		}
+		if(chaineTemp.contains("x"))
+		{
+			String[] expression = chaineTemp.split("x", 2);
+			chaineTemp = multiplication(expression[0], expression[1]);
+		}
+		if(chaineTemp.contains("-"))
+		{
+			String[] expression = chaineTemp.split("-", 2);
+			chaineTemp = soustraction(expression[0], expression[1]);
+		}
+		if(chaineTemp.contains("/"))
+		{
+			String[] expression = chaineTemp.split("/", 2);
+			chaineTemp = division(expression[0], expression[1]);
+		}
+		if(chaineTemp.contains("%"))
+		{
+			String[] expression = chaineTemp.split("%", 2);
+			chaineTemp = modulo(expression[0], expression[1]);
+		}
+		if(chaineTemp.contains("^"))
+		{
+			String[] expression = chaineTemp.split("^", 2);
+			chaineTemp = puissance(expression[0], expression[1]);
+		}
+
+
+		return chaineTemp;
+	}
+
+	public String convertirDoubleInt(String expression)
+	{
+		//Converti les double en int si c'est possible
+		if( Double.parseDouble(expression) % 1 == 0)
+		{
+			int temp = (int) Double.parseDouble(expression) ;
+			return String.valueOf(temp);	
+		}
+		else
+			return null;
+	}
+
+	public String addition(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		aDouble = Double.parseDouble(a);
+		bDouble = Double.parseDouble(b);
+
+		return String.valueOf(aDouble + bDouble);
+	}
+
+	public String soustraction(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		aDouble = Double.parseDouble(a);
+		bDouble = Double.parseDouble(b);
+
+		return String.valueOf(aDouble - bDouble);
+	}
+
+	public String multiplication(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		aDouble = Double.parseDouble(a);
+		bDouble = Double.parseDouble(b);
+
+		return String.valueOf(aDouble * bDouble);
+	}
+
+	public String division(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		aDouble = Double.parseDouble(a);
+		bDouble = Double.parseDouble(b);
+
+		return String.valueOf(aDouble / bDouble);
+	}
+
+	public String modulo(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		aDouble = Double.parseDouble(a);
+		bDouble = Double.parseDouble(b);
+
+		return String.valueOf(aDouble % bDouble);
+	}
+
+	public String puissance(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		aDouble = Double.parseDouble(a);
+		bDouble = Double.parseDouble(b);
+
+		return String.valueOf(Math.pow(aDouble,bDouble));
+	}
+	
+	public String racineCarre(String a, String b)
+	{
+		Double aDouble = Double.parseDouble(a);
+
+		return String.valueOf(Math.sqrt(aDouble));
+	}
+
 	public Interpreteur (ArrayList<String> pseudoCode)
 	{
 		//Vérifie le Algorithme Nom de Classe
@@ -267,6 +442,41 @@ public class Interpreteur {
 							}
 							else { console.add("Erreur absence de parenthèses"); }
 							break;
+					}
+					//Divise en fontion de la flèche d'instanciation
+					if(pseudoCode.get(numLigne).contains("<--"))
+					{
+						String[] tempString = pseudoCode.get(numLigne).split("<--");
+						if(tempString[1] != null)
+						{
+							int indexVariable = chercherVariable(tempString[0].replaceAll(" ", ""));
+	
+							if(indexVariable > -1)
+							{
+								if(detecterType(tempString[1]).equals(variables.get(indexVariable).getType()))
+								{
+									variables.get(indexVariable).affecterVariable(tempString[1]);
+								}
+								else if(detecterType(tempString[1]).equals("expression"))
+								{
+									Double valeurTemp = Double.parseDouble(calculateur(tempString[1]));
+
+									if(variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) != null)
+									{
+										variables.get(indexVariable).affecterVariable(String.valueOf(convertirDoubleInt(String.valueOf(valeurTemp))));
+									}
+									else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
+									{
+										console.add("Impossible d'affecter un réel dans un entier");
+									}
+									else
+										variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp));
+								}
+							}
+							else
+								console.add("La variable n'a pas été instancié");
+							
+						}
 					}
 					numLigne++;
 				}

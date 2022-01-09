@@ -61,4 +61,33 @@ public class Variable {
 		}
 		return null;
 	}
+
+	public void affecterVariable(String valeur)
+	{
+		switch (this.type) {
+			case "entier":
+			valeur = valeur.replaceAll(" ", "");
+			this.valeurInt = Integer.parseInt(valeur);
+				break;
+		case "chaine de caractères":
+				this.valeurString = valeur;
+				break;
+			case "caractère":
+				this.valeurChar = valeur.charAt(0);
+				break;
+			case "réel":
+				valeur = valeur.replaceAll(" ", "");
+				this.valeurDouble = Double.parseDouble(valeur);
+				break;
+			case "booléen":
+				valeur = valeur.replaceAll(" ", "");
+				if (valeur == "vrai") 
+					{ this.valeurBoolean = true;
+					  break; 
+					}
+				else { this.valeurBoolean = false;
+					   break; 
+				  }
+		}
+	}
 }
