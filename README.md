@@ -1,7 +1,7 @@
 # S3projetTut
 AlgoPars - Projet tutoré du semestre 3
 
-Compiler manuellement : `javac "@compile.list" -d bin`
+Compiler manuellement : `javac "@compile.list"`
 
 
 ### Windows :

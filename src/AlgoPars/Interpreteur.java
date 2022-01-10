@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.lang.model.util.ElementScanner14;
 
 public class Interpreteur {
 	
@@ -18,6 +17,10 @@ public class Interpreteur {
 	
 	public ArrayList<String> getConsole() {
 		return console;	
+	}
+		
+	public ArrayList<String> getTrace() {
+		return trace;	
 	}
 	
 	public int getNumLigne() {
@@ -41,6 +44,7 @@ public class Interpreteur {
 			else if (tempString[1].equals("vrai"))
 			{
 				constantes.add(new Constante(tempString[0], true));
+				trace.add(numLigne, tempString[0] + " ");
 			}
 			else if (tempString[1].equals("faux"))
 			{
@@ -52,21 +56,21 @@ public class Interpreteur {
 				{
 					if(tempString[1].charAt(tempString[1].length() - 1) == '\'')
 						constantes.add(new Constante(tempString[0], tempString[1]));
-					else { console.set(numLigne, "Erreur de déclaration de constante"); }
+					else { console.add(numLigne, "Erreur de déclaration de constante"); }
 				}
 
 				else if(tempString[1].charAt(0) == '"')
 				{
 					if(tempString[1].charAt(tempString[1].length() - 1) == '\"')
 						constantes.add(new Constante(tempString[0], tempString[1]));
-					else { console.set(numLigne, "Erreur de déclaration de constante"); }
+					else { console.add(numLigne, "Erreur de déclaration de constante"); }
 				}
 				else
-					console.set(numLigne, "Erreur de déclaration de constante");
+					console.add(numLigne, "Erreur de déclaration de constante");
 			}
 		}
 		else
-			console.set(numLigne, "Erreur de déclaration de constante");
+			console.add(numLigne, "Erreur de déclaration de constante");
 	}
 	
 	public Constante chercher (String nom)
@@ -78,7 +82,7 @@ public class Interpreteur {
 				return constantes.get(i);
 			};
 		}
-		console.set(numLigne, "La constante spécifié n'existe pas");
+		console.add(numLigne, "La constante spécifié n'existe pas");
 		return null;
 	}
 	
@@ -86,7 +90,6 @@ public class Interpreteur {
 		String[] tempStringType = variable.split(":");
 		String[] tempStringVariables = tempStringType[0].replaceAll(" ", "").split(",");
 		
-		boucle1 :
 		for ( int i = 0 ; i < tempStringVariables.length ; i++)
 		switch (tempStringType[1]) {
 			case "entier":
@@ -110,8 +113,8 @@ public class Interpreteur {
 				break;
 		
 			default:
-				console.set(numLigne, "Type de base non reconnu");
-				break boucle1;
+				console.add(numLigne, "Type de base non reconnu");
+				break;
 		}
 	}
 	
@@ -359,7 +362,7 @@ public class Interpreteur {
 		String[] declareClass = pseudoCode.get(0).split(" ");
 		if(declareClass[0].equals("Algorithme")) {
 			
-			console.set(numLigne, "Classe ajouté");
+			console.add(numLigne, "Classe ajouté");
 			
 			numLigne++;
 			
@@ -373,35 +376,33 @@ public class Interpreteur {
 				{
 					case "Constante:" :
 						numLigne++;
-						boucle1 :
 						while(true)
 						{
 							if(!pseudoCode.get(numLigne).replaceAll(" ", "").equals("")){
 								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								if(pseudoCode.get(numLigne).equals("Variable :") || pseudoCode.get(numLigne).equals("DEBUT"))
-									break boucle1;
+									break;
 
 								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								//Méthode pour ajouter la constante
 								declarerConstante(ligneTemp);
-								console.set(numLigne, "Constante ajouté");
+								console.add(numLigne, "Constante ajouté");
 							}
 							numLigne++;
 						}
 						break;
 					case "Variable:" :
 						numLigne++;
-						boucle1 :
 						while(true)
 						{
 							if(!pseudoCode.get(numLigne).replaceAll(" ", "").equals("")){
 								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								if(pseudoCode.get(numLigne).equals("Constante :") || pseudoCode.get(numLigne).equals("DEBUT"))
-									break boucle1;
+									break;
 
 								//Méthode pour ajouter la variable
 								declarerVariable(ligneTemp);
-								console.set(numLigne, "Variable ajouté");
+								console.add(numLigne, "Variable ajouté");
 							}
 							numLigne++;
 						}
@@ -435,20 +436,20 @@ public class Interpreteur {
 								
 								if(chaineTemp[1] != null || chaineTemp[2] != null) 
 								{ 
-									console.set(numLigne, chaineTemp[1]);
+									console.add(numLigne, chaineTemp[1]);
 								}
 								else if(indexConstante > -1)
 								{
-									console.set(numLigne, constantes.get(indexVariable).getValue());
+									console.add(numLigne, constantes.get(indexVariable).getValue());
 								}
 								else if(indexVariable > -1)
 								{
-									console.set(numLigne, variables.get(indexVariable).getValue());
+									console.add(numLigne, variables.get(indexVariable).getValue());
 								}
 								else
-									console.set(numLigne, "La valeur n'est pas instancié");
+									console.add(numLigne, "La valeur n'est pas instancié");
 							}
-							else { console.set(numLigne, "Erreur absence de parenthèses"); }
+							else { console.add(numLigne, "Erreur absence de parenthèses"); }
 							break;
 					}
 					//Divise en fontion de la flèche d'instanciation
@@ -475,14 +476,14 @@ public class Interpreteur {
 									}
 									else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
 									{
-										console.set(numLigne, "Impossible d'affecter un réel dans un entier");
+										console.add(numLigne, "Impossible d'affecter un réel dans un entier");
 									}
 									else
 										variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp));
 								}
 							}
 							else
-								console.set(numLigne, "La variable n'a pas été instancié");
+								console.add(numLigne, "La variable n'a pas été instancié");
 							
 						}
 					}
@@ -490,10 +491,10 @@ public class Interpreteur {
 				}
 			}
 			else
-				console.set(numLigne, "Erreur : Le programme ne démarre pas");
+				console.add(numLigne, "Erreur : Le programme ne démarre pas");
 		}
 		else
-			console.set(numLigne, "Erreur : La classe n'est pas déclaré");
+			console.add(numLigne, "Erreur : La classe n'est pas déclaré");
 	}
 	
 

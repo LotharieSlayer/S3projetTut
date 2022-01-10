@@ -24,6 +24,11 @@ public class Main {
 	public ArrayList<String> getConsole()
 	{
 		return this.metier.getConsole();
+	}	
+
+	public ArrayList<String> getTrace()
+	{
+		return this.metier.getTrace();
 	}
 	
 	public static void main (String[] args) throws Exception{
