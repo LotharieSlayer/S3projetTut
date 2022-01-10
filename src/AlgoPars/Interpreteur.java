@@ -14,6 +14,7 @@ public class Interpreteur {
 	static ArrayList<Variable> variables = new ArrayList<Variable>();
 	
 	int numLigne = 0;
+	int numLigneIgnorer = 0;
 	
 	public ArrayList<String> getConsole() {
 		return console;	
@@ -210,13 +211,9 @@ public class Interpreteur {
 		}
 	}
 
-	public String calculateur(String chaine)
-	{
-		//Pour l'instant je m'occupe de remplacer les variables et constantes par leurs valeurs
-		String chaineTemp = chaine.replaceAll(" ", "");
+	public String remplacerNomParValeur(String chaine){
 
-		//int indexConstante = chercherConstante(chaineTemp);
-		//int indexVariable = chercherVariable(chaineTemp);
+		String chaineTemp = chaine.replaceAll(" ", "");
 
 		//Méthode pour remplacer les variables et constantes par leur valeur (dans le futur faire une méthode plus universelle en fonction des types)
 		for(int i = 0; i < constantes.size(); i++)
@@ -234,6 +231,12 @@ public class Interpreteur {
 				chaineTemp = chaineTemp.replaceAll(variables.get(i).getNom(), variables.get(i).getValue());
 			}
 		}
+		return chaineTemp;	
+	}
+
+	public String calculateur(String chaine)
+	{
+		String chaineTemp = remplacerNomParValeur(chaine);
 
 		if(chaineTemp.contains("+"))
 		{
@@ -349,6 +352,100 @@ public class Interpreteur {
 		return String.valueOf(Math.sqrt(aDouble));
 	}
 
+	public boolean verifierCondition(String chaine)
+	{
+		String chaineTemp = remplacerNomParValeur(chaine);
+		boolean Valeur = false;
+
+		if(chaineTemp.contains("="))
+		{
+			String[] expression = chaineTemp.split("=", 2); 
+			Valeur = egalite(calculateur(expression[0]), calculateur(expression[1]));
+		}
+		if(chaineTemp.contains(">"))
+		{
+			String[] expression = chaineTemp.split(">", 2);
+			Valeur = superieur(calculateur(expression[0]), calculateur(expression[1]));
+		}
+		if(chaineTemp.contains("<"))
+		{
+			String[] expression = chaineTemp.split("<", 2);
+			Valeur = inferieur(calculateur(expression[0]), calculateur(expression[1]));
+		}
+		if(chaineTemp.contains("<="))
+		{
+			String[] expression = chaineTemp.split("<=", 2);
+			Valeur = superieurEgal(calculateur(expression[0]), calculateur(expression[1]));
+		}
+		if(chaineTemp.contains("/="))
+		{
+			String[] expression = chaineTemp.split("/=", 2);
+			Valeur = pasEgal(calculateur(expression[0]), calculateur(expression[1]));
+		}
+
+		return Valeur;
+	}
+
+	public boolean egalite(String a, String b)
+	{
+		if (Double.parseDouble(a) == Double.parseDouble(b))
+		{  
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public boolean superieur(String a, String b)
+	{
+		if (Double.parseDouble(a) == Double.parseDouble(b))
+		{  
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public boolean inferieur(String a, String b)
+	{
+		if (Double.parseDouble(a) < Double.parseDouble(b))
+		{  
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public boolean superieurEgal(String a, String b)
+	{
+		if (Double.parseDouble(a) >= Double.parseDouble(b))
+		{  
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public boolean inferieurEgal(String a, String b)
+	{
+		if (Double.parseDouble(a) <= Double.parseDouble(b))
+		{  
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public boolean pasEgal(String a, String b)
+	{
+		if (Double.parseDouble(a) != Double.parseDouble(b))
+		{  
+			return true;
+		}
+		else
+			return false;
+	}
+
 	public Interpreteur (ArrayList<String> pseudoCode)
 	{
 		// Initialisation des ArrayLists pour créer une grosse taille de vide afin de pouvoir le replace
@@ -419,74 +516,7 @@ public class Interpreteur {
 			{
 				while (numLigne < pseudoCode.size())
 				{
-					String[] ligneTemp = pseudoCode.get(numLigne).split(" ", 2);
-					switch(ligneTemp[0]) {
-						case "lire" :
-							/*Scanner reader = new Scanner(System.in);
-							String temp = reader.next();*/
-							break;
-						case "ecrire":
-							String chaineTemp[] = new String[3];
-							chaineTemp[0] = verifierCaractere('(', ligneTemp[1]);
-							if(chaineTemp[0] != null) {
-								chaineTemp[1] = verifierCaractere('"', ligneTemp[1]);
-								chaineTemp[2] = verifierCaractere('\'', ligneTemp[1]);
-								int indexConstante = chercherConstante(chaineTemp[0]);
-								int indexVariable = chercherVariable(chaineTemp[0]);
-								
-								if(chaineTemp[1] != null || chaineTemp[2] != null) 
-								{ 
-									console.add(numLigne, chaineTemp[1]);
-								}
-								else if(indexConstante > -1)
-								{
-									console.add(numLigne, constantes.get(indexVariable).getValue());
-								}
-								else if(indexVariable > -1)
-								{
-									console.add(numLigne, variables.get(indexVariable).getValue());
-								}
-								else
-									console.add(numLigne, "La valeur n'est pas instancié");
-							}
-							else { console.add(numLigne, "Erreur absence de parenthèses"); }
-							break;
-					}
-					//Divise en fontion de la flèche d'instanciation
-					if(pseudoCode.get(numLigne).contains("<--"))
-					{
-						String[] tempString = pseudoCode.get(numLigne).split("<--");
-						if(tempString[1] != null)
-						{
-							int indexVariable = chercherVariable(tempString[0].replaceAll(" ", ""));
-	
-							if(indexVariable > -1)
-							{
-								if(detecterType(tempString[1]).equals(variables.get(indexVariable).getType()))
-								{
-									variables.get(indexVariable).affecterVariable(tempString[1]);
-								}
-								else if(detecterType(tempString[1]).equals("expression"))
-								{
-									Double valeurTemp = Double.parseDouble(calculateur(tempString[1]));
-
-									if(variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) != null)
-									{
-										variables.get(indexVariable).affecterVariable(String.valueOf(convertirDoubleInt(String.valueOf(valeurTemp))));
-									}
-									else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
-									{
-										console.add(numLigne, "Impossible d'affecter un réel dans un entier");
-									}
-									else
-										variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp));
-								}
-							}
-							else
-								console.add(numLigne, "La variable n'a pas été instancié");
-							
-						}
-					}
+					Interpretation(pseudoCode);
 					numLigne++;
 				}
 			}
@@ -496,7 +526,113 @@ public class Interpreteur {
 		else
 			console.add(numLigne, "Erreur : La classe n'est pas déclaré");
 	}
+
+	public String detecterFonction(ArrayList<String> pseudoCode, int numLigneTemp)
+	{
+		String[] ligneTemp = pseudoCode.get(numLigneTemp).split(" ", 2);
+		return ligneTemp[0];
+	}
 	
+	public void Interpretation(ArrayList<String> pseudoCode)
+	{
+		String[] ligneTemp = pseudoCode.get(numLigne).split(" ", 2);
+		if(numLigneIgnorer == 0)
+		{
+			switch(ligneTemp[0]) {
+				case "si":
+					String condition[] = ligneTemp[1].split("alors", 2);
+					if(verifierCondition(condition[0]) == false)
+					{
+						for(int i=numLigne; !detecterFonction(pseudoCode, i).contains("fsi");i++)
+						{
+							numLigneIgnorer++;
+						}
+					}
+					break;
+				/**case "tq":
+					String condition2[] = ligneTemp[1].split("alors", 2);
+					while(verifierCondition(condition2[0]) == false)
+					{
+						for(int i=numLigne; !detecterFonction(pseudoCode, i).contains("fsi");i++)
+						{
+							numLigneIgnorer++;
+						}
+					}
+					break;**/
+				case "lire" :
+					/*Scanner reader = new Scanner(System.in);
+					String temp = reader.next();*/
+					break;
+				case "ecrire":
+					String chaineTemp[] = new String[3];
+					chaineTemp[0] = verifierCaractere('(', ligneTemp[1]);
+					if(chaineTemp[0] != null) {
+						chaineTemp[1] = verifierCaractere('"', chaineTemp[0]);
+						chaineTemp[2] = verifierCaractere('\'', chaineTemp[0]);
+						int indexConstante = chercherConstante(chaineTemp[0]);
+						int indexVariable = chercherVariable(chaineTemp[0]);
+						
+						if(chaineTemp[1] != null) 
+						{ 
+							console.add(numLigne, chaineTemp[1]);
+						}
+						else if (chaineTemp[2] != null)
+						{
+							console.add(numLigne, chaineTemp[2]);
+						}
+						else if(indexConstante > -1)
+						{
+							console.add(numLigne, constantes.get(indexVariable).getValue());
+						}
+						else if(indexVariable > -1)
+						{
+							console.add(numLigne, variables.get(indexVariable).getValue());
+						}
+						else
+							console.add(numLigne, "La valeur n'est pas instancié");
+					}
+					else { console.add(numLigne, "Erreur absence de parenthèses"); }
+					break;
+			}
+			//Divise en fontion de la flèche d'instanciation
+			if(pseudoCode.get(numLigne).contains("<--"))
+			{
+				String[] tempString = pseudoCode.get(numLigne).split("<--");
+				if(tempString[1] != null)
+				{
+					int indexVariable = chercherVariable(tempString[0].replaceAll(" ", ""));
+	
+					if(indexVariable > -1)
+					{
+						if(detecterType(tempString[1]).equals(variables.get(indexVariable).getType()))
+						{
+							variables.get(indexVariable).affecterVariable(tempString[1]);
+						}
+						else if(detecterType(tempString[1]).equals("expression"))
+						{
+							Double valeurTemp = Double.parseDouble(calculateur(tempString[1]));
+	
+							if(variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) != null)
+							{
+								variables.get(indexVariable).affecterVariable(String.valueOf(convertirDoubleInt(String.valueOf(valeurTemp))));
+							}
+							else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
+							{
+								console.add(numLigne, "Impossible d'affecter un réel dans un entier");
+							}
+							else
+								variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp));
+						}
+					}
+					else
+						console.add(numLigne, "La variable n'a pas été instancié");
+					
+				}
+			}
+		}
+		else
+			numLigneIgnorer--;
+	}
 
 	public static ArrayList<Constante> getConstantes(){
 		return constantes;

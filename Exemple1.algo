@@ -10,40 +10,13 @@ DEBUT
 long <-- 3
 larg <-- 8
 lire ( long, larg )
+aire <-- 2
+si aire = 3 alors
 ecrire ( long ) 
-ecrire ( larg ) 
+fsi
+si aire = 2 alors
+ecrire ( long ) 
+fsi
  aire <-- long x larg
 ecrire ( aire ) 
  aire <-- TAUX_CORR x aire
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
-ecrire ( aire ) 
