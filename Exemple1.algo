@@ -12,10 +12,12 @@ larg <-- 8
 lire ( long, larg )
 aire <-- 2
 si aire = 3 alors
-ecrire ( long ) 
+ecrire ( "Michel" ) 
+ecrire ( "C'est pas le bresil" ) 
 fsi
 si aire = 2 alors
-ecrire ( long ) 
+ecrire ( "Michel" ) 
+ecrire ( "C'est le bresil" ) 
 fsi
  aire <-- long x larg
 ecrire ( aire ) 

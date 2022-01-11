@@ -133,6 +133,7 @@ public class Interpreteur {
                 if(tabCar[0] == chr)
                 {  
                 	indexCar[0] = i;
+					break;
                 }
         }
         
@@ -145,7 +146,7 @@ public class Interpreteur {
                 }
         }
         
-        if(indexCar[0] < indexCar[1]) { return chaine.substring(indexCar[0] + 1,indexCar[1] - 1);}
+        if(indexCar[0] < indexCar[1]) { return chaine.substring(indexCar[0] + 1,indexCar[1]);}
 		return null;
 	}
 	
@@ -567,6 +568,7 @@ public class Interpreteur {
 					String chaineTemp[] = new String[3];
 					chaineTemp[0] = verifierCaractere('(', ligneTemp[1]);
 					if(chaineTemp[0] != null) {
+
 						chaineTemp[1] = verifierCaractere('"', chaineTemp[0]);
 						chaineTemp[2] = verifierCaractere('\'', chaineTemp[0]);
 						int indexConstante = chercherConstante(chaineTemp[0]);
