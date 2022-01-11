@@ -180,16 +180,15 @@ public class Interpreteur {
 		{
 			return "caractère";
 		}
-		else if(chaine.charAt(0) >= '0' && chaine.charAt(0) <= '9')
+		else if(chaine.matches("^[0-9]+$"))
 		{
-			if(chaine.contains("."))
-			{
-				return "réel";
-			}
-			else
-				return "entier";
+			return "entier";
 		}
-		else if (chaine.replaceAll("" , "").equals("vrai") || chaine.equals("faux"))
+		else if(chaine.matches("^[0-9]+$") && chaine.contains("."))
+		{
+			return "réel";
+		}
+		else if (chaine.equals("vrai") || chaine.equals("faux"))
 		{
 			return "booléen";
 		}
@@ -243,20 +242,20 @@ public class Interpreteur {
 	{
 		String chaineTemp = remplacerNomParValeur(chaine);
 
-		if(chaineTemp.contains("+"))
+		if(chaineTemp.contains("PLUS"))
 		{
-			String[] expression = chaineTemp.split("+", 2); 
+			String[] expression = chaineTemp.split("PLUS", 2); 
 			chaineTemp = addition(expression[0], expression[1]);
-		}
-		if(chaineTemp.contains("x"))
-		{
-			String[] expression = chaineTemp.split("x", 2);
-			chaineTemp = multiplication(expression[0], expression[1]);
 		}
 		if(chaineTemp.contains("-"))
 		{
 			String[] expression = chaineTemp.split("-", 2);
 			chaineTemp = soustraction(expression[0], expression[1]);
+		}
+		if(chaineTemp.contains("x"))
+		{
+			String[] expression = chaineTemp.split("x", 2);
+			chaineTemp = multiplication(expression[0], expression[1]);
 		}
 		if(chaineTemp.contains("/"))
 		{
@@ -294,8 +293,19 @@ public class Interpreteur {
 	{
 		double aDouble = 0, bDouble = 0;
 
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
 
 		return String.valueOf(aDouble + bDouble);
 	}
@@ -304,8 +314,19 @@ public class Interpreteur {
 	{
 		double aDouble = 0, bDouble = 0;
 
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
 
 		return String.valueOf(aDouble - bDouble);
 	}
@@ -314,8 +335,19 @@ public class Interpreteur {
 	{
 		double aDouble = 0, bDouble = 0;
 
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
 
 		return String.valueOf(aDouble * bDouble);
 	}
@@ -324,8 +356,19 @@ public class Interpreteur {
 	{
 		double aDouble = 0, bDouble = 0;
 
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
 
 		return String.valueOf(aDouble / bDouble);
 	}
@@ -334,8 +377,19 @@ public class Interpreteur {
 	{
 		double aDouble = 0, bDouble = 0;
 
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
 
 		return String.valueOf(aDouble % bDouble);
 	}
@@ -344,8 +398,19 @@ public class Interpreteur {
 	{
 		double aDouble = 0, bDouble = 0;
 
-		aDouble = Double.parseDouble(a);
-		bDouble = Double.parseDouble(b);
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
 
 		return String.valueOf(Math.pow(aDouble,bDouble));
 	}
@@ -353,6 +418,13 @@ public class Interpreteur {
 	public String racineCarre(String a, String b)
 	{
 		Double aDouble = Double.parseDouble(a);
+
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
 
 		return String.valueOf(Math.sqrt(aDouble));
 	}

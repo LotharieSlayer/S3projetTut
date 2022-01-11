@@ -10,12 +10,14 @@ long <-- 3
 larg <-- 8
 ecrire ( long PLUS " " PLUS larg PLUS " Pommes de terres") 
 lire ( long, larg )
-aire <-- 2
-si aire = 3 alors
+aire <-- long PLUS larg PLUS 8 x 4
+ecrire ( aire )
+ecrire ( aire )
+si long = 2 alors
  ecrire ( "Michel" ) 
  ecrire ( "C'est pas le bresil" ) 
 fsi
-si aire = 2 alors
+si long = 3 alors
     ecrire ( "Michel" ) 
     ecrire ( "C'est le bresil" ) 
 fsi
