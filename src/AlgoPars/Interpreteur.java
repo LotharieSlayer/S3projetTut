@@ -2,7 +2,10 @@ package AlgoPars;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
+
+import javax.xml.xpath.XPath;
 
 
 public class Interpreteur {
@@ -77,7 +80,7 @@ public class Interpreteur {
 	public void declarerVariable(String variable) {
 		String[] tempStringType = variable.split(":");
 		String[] tempStringVariables = tempStringType[0].replaceAll(" ", "").split(",");
-		
+
 		for ( int i = 0 ; i < tempStringVariables.length ; i++)
 		switch (tempStringType[1]) {
 			case "entier":
@@ -88,7 +91,7 @@ public class Interpreteur {
 				variables.add(new Variable(tempStringVariables[i], "double"));
 				break;
 
-			case "chainedecaractères":
+			case "chaine de caractères":
 				variables.add(new Variable(tempStringVariables[i], "chaine de caractères"));
 				break;
 		
@@ -99,9 +102,90 @@ public class Interpreteur {
 			case "booléen":
 				variables.add(new Variable(tempStringVariables[i], "booléen"));
 				break;
-		
 			default:
-				console.add(numLigne, "Type de base non reconnu");
+				if(tempStringType[1].contains("tableau"))
+				{
+					String tempString = tempStringType[1].replaceAll("tableau", "");
+					String[] tempStringTab = verifierCaractereTab(tempString);
+
+					if(tempString.contains("d'entier"))
+					{
+						if(detecterType(tempStringTab[2]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "entier", Integer.parseInt(tempStringTab[2]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+						}
+						else if(detecterType(tempStringTab[1]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "entier", Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+						}
+						else if(detecterType(tempStringTab[0]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "entier", Integer.parseInt(tempStringTab[0])));
+						}
+					}
+					if(tempString.contains("de réel"))
+					{
+						if(detecterType(tempStringTab[2]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "double", Integer.parseInt(tempStringTab[2]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+						}
+						else if(detecterType(tempStringTab[1]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "double", Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+						}
+						else if(detecterType(tempStringTab[0]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "double", Integer.parseInt(tempStringTab[0])));
+						}
+					}
+					if(tempString.contains("de caractère"))
+					{
+						if(detecterType(tempStringTab[2]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "caractère", Integer.parseInt(tempStringTab[2]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+						}
+						else if(detecterType(tempStringTab[1]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "caractère", Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+						}
+						else if(detecterType(tempStringTab[0]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "caractère", Integer.parseInt(tempStringTab[0])));
+						}
+					}
+					if(tempString.contains("de chaine de caractère"))
+					{
+						if(detecterType(tempStringTab[2]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "chaine de caractères", Integer.parseInt(tempStringTab[2]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+						}
+						else if(detecterType(tempStringTab[1]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "chaine de caractères", Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+						}
+						else if(detecterType(tempStringTab[0]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "chaine de caractères", Integer.parseInt(tempStringTab[0])));
+						}
+					}
+					if(tempString.contains("de booléen"))
+					{
+						if(detecterType(tempStringTab[2]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "booléen", Integer.parseInt(tempStringTab[2]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+						}
+						else if(detecterType(tempStringTab[1]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "booléen", Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+						}
+						else if(detecterType(tempStringTab[0]).contains("entier"))
+						{
+							variables.add(new Variable(tempStringVariables[i], "booléen", Integer.parseInt(tempStringTab[0])));
+						}
+					}
+				}
+				else
+					console.add(numLigne, "Type de base non reconnu");
 				break;
 		}
 	}
@@ -135,6 +219,51 @@ public class Interpreteur {
         
         if(indexCar[0] < indexCar[1]) { return chaine.substring(indexCar[0] + 1,indexCar[1]);}
 		return null;
+	}
+
+	public String[] verifierCaractereTab(String chaine)
+	{
+		char[] tabCar = new char[2];
+		int[] indexCar = new int[2];
+
+		indexCar[0]= 0;
+		indexCar[1]= 0;
+
+		String[] tabTemp = new String[3];
+		String chaineTemp = chaine;
+
+		tabCar[0] = '['; tabCar[1] = ']';
+
+		for(int i = 0; i<3;i++)
+		{
+			if(chaineTemp.contains("["))
+			{
+				for(int j=0; j<chaineTemp.length(); j++) 
+				{
+					char chr = chaineTemp.charAt(j);
+						if(tabCar[0] == chr)
+						{  
+							indexCar[0] = j;
+							break;
+						}
+				}
+				
+				for(int j=0; j<chaineTemp.length(); j++) 
+				{
+					char chr = chaineTemp.charAt(j);
+						if(tabCar[1] == chr)
+						{  
+							indexCar[1] = j;
+							break;
+						}
+				}
+				if(indexCar[0] < indexCar[1]) { 
+					tabTemp[i] = chaineTemp.substring(indexCar[0] + 1, indexCar[1]);
+					chaineTemp = chaineTemp.substring(indexCar[1] + 1, chaineTemp.length());
+				}
+			}
+		}
+		return tabTemp;
 	}
 	
 	public int chercherConstante(String chaine)
@@ -219,7 +348,7 @@ public class Interpreteur {
 
 		String chaineTemp = chaine.replaceAll(" ", "");
 
-		//Méthode pour remplacer les variables et constantes par leur valeur (dans le futur faire une méthode plus universelle en fonction des types)
+		//Méthode pour remplacer les variables et constantes par leur valeur
 		for(int i = 0; i < constantes.size(); i++)
 		{
 			if(chaineTemp.contains(constantes.get(i).getNom()))
@@ -232,7 +361,96 @@ public class Interpreteur {
 		{
 			if(chaineTemp.contains(variables.get(i).getNom()))
 			{
-				chaineTemp = chaineTemp.replaceAll(variables.get(i).getNom(), variables.get(i).getValue());
+				int[] index = new int[3];
+				String chaineTemporaire;
+				String[] tempStringTab;
+				switch(variables.get(i).getDimensions())
+				{
+					case 0:
+						chaineTemp = chaineTemp.replaceAll(variables.get(i).getNom(), variables.get(i).getValue());
+						break;
+					case 1:
+						index[0] = chaineTemp.indexOf(variables.get(i).getNom());
+
+						for(int j=0; j < chaineTemp.length() + 1; j++) 
+						{
+							char chr = chaine.charAt(j);
+							if('[' == chr)
+							{  
+								index[1] = j;
+								break;
+							}
+						}
+
+						for(int j=0; j < chaineTemp.length() + 1; j++) 
+						{
+							char chr = chaine.charAt(j);
+							if(']' == chr)
+							{  
+								index[2] = j;
+							}
+						}
+
+						chaineTemporaire = chaineTemp.substring(index[0], index[2]);
+						tempStringTab = verifierCaractereTab(chaineTemporaire);
+						chaineTemporaire = chaineTemp.substring(index[0], index[1] - 1);
+						chaineTemp = chaineTemp.replaceAll(chaineTemporaire + "\\[" + tempStringTab[0] + "\\]", variables.get(i).getValue(Integer.parseInt(tempStringTab[0])));
+					break;
+					case 2:
+						index[0] = chaineTemp.indexOf(variables.get(i).getNom());
+
+						for(int j=0; j < chaineTemp.length() + 1; j++) 
+						{
+							char chr = chaine.charAt(j);
+							if('[' == chr)
+							{  
+								index[1] = j;
+								break;
+							}
+						}
+
+						for(int j=0; j < chaineTemp.length() + 1; j++) 
+						{
+							char chr = chaine.charAt(j);
+							if(']' == chr)
+							{  
+								index[2] = j;
+							}
+						}
+
+						chaineTemporaire = chaineTemp.substring(index[0], index[2]);
+						tempStringTab = verifierCaractereTab(chaineTemporaire);
+						chaineTemporaire = chaineTemp.substring(index[0], index[1] - 1);
+						chaineTemp = chaineTemp.replaceAll(chaineTemporaire + "\\[" + tempStringTab[0] + "\\]" + "\\[" + tempStringTab[1] + "\\]", variables.get(i).getValue(Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1])));
+					break;
+					case 3:
+						index[0] = chaineTemp.indexOf(variables.get(i).getNom());
+
+						for(int j=0; j < chaineTemp.length() + 1; j++) 
+						{
+							char chr = chaine.charAt(j);
+							if('[' == chr)
+							{  
+								index[1] = j;
+								break;
+							}
+						}
+
+						for(int j=0; j < chaineTemp.length() + 1; j++) 
+						{
+							char chr = chaine.charAt(j);
+							if(']' == chr)
+							{  
+								index[2] = j;
+							}
+						}
+
+						chaineTemporaire = chaineTemp.substring(index[0], index[2]);
+						tempStringTab = verifierCaractereTab(chaineTemporaire);
+						chaineTemporaire = chaineTemp.substring(index[0], index[1] - 1);
+						chaineTemp = chaineTemp.replaceAll(chaineTemporaire + "\\[" + tempStringTab[0] + "\\]" + "\\[" + tempStringTab[1] + "\\]" + "\\[" + tempStringTab[2] + "\\]", variables.get(i).getValue(Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1]), Integer.parseInt(tempStringTab[2])));
+						break;
+				}
 			}
 		}
 		return chaineTemp;	
@@ -383,11 +601,11 @@ public class Interpreteur {
 					}
 				}
 			}
-			
+
 			chaineTemp = puissance(expression[0], expression[1]);
 		}
 
-
+		
 		return chaineTemp;
 	}
 
@@ -740,6 +958,9 @@ public class Interpreteur {
 						}
 					}
 					break;
+				case "sinon":
+					
+					break;
 				/**case "tq":
 					String condition2[] = ligneTemp[1].split("alors", 2);
 					while(verifierCondition(condition2[0]) == false)
@@ -761,15 +982,12 @@ public class Interpreteur {
 
 						String[] chaineConcatenation = ecrireTemp.split("PLUS");
 						String chainePrint = "";
-						boolean toPrint = true;
 
 						for ( int i = 0 ; i < chaineConcatenation.length ; i++)
 						{
 							String chaineTemp[] = new String[2];
 							chaineTemp[0] = verifierCaractere('"', chaineConcatenation[i]);
 							chaineTemp[1] = verifierCaractere('\'', chaineConcatenation[i]);
-							int indexConstante = chercherConstante(chaineConcatenation[i]);
-							int indexVariable = chercherVariable(chaineConcatenation[i]);
 							
 							if(chaineTemp[0] != null) 
 							{ 
@@ -779,23 +997,10 @@ public class Interpreteur {
 							{
 								chainePrint = chainePrint + chaineTemp[1];
 							}
-							else if(indexConstante > -1)
-							{
-								chainePrint = chainePrint + constantes.get(indexVariable).getValue();
-							}
-							else if(indexVariable > -1)
-							{
-								chainePrint = chainePrint + variables.get(indexVariable).getValue();
-							}
 							else
-								console.add(numLigne, "La valeur n'est pas instancié");
+								chainePrint = chainePrint + calculateur(chaineConcatenation[i]);
 						}
-						if(toPrint == true)
-						{
-							console.add(numLigne, chainePrint);
-						}
-						else
-							console.add(numLigne, "Erreur il n'y a rien a ajouter dans la console");
+						console.add(numLigne, chainePrint);						
 					}
 					else { console.add(numLigne, "Erreur absence de parenthèses"); }
 					break;
@@ -804,36 +1009,115 @@ public class Interpreteur {
 			if(pseudoCode.get(numLigne).contains("<--"))
 			{
 				String[] tempString = pseudoCode.get(numLigne).split("<--");
+
 				if(tempString[1] != null)
 				{
+					String[] tempStringTab = verifierCaractereTab(tempString[0]);
+					if(tempString[0].contains("[") && tempString[0].contains("]"))
+					{
+						int indexCar = 0;
+						for(int i=0; i< tempString[0].length();i++)
+						{
+							if(tempString[0].charAt(i) == '['){ indexCar = i; break;}
+						}
+						tempString[0] = tempString[0].substring(0,indexCar);
+					}
+
 					int indexVariable = chercherVariable(tempString[0].replaceAll(" ", ""));
-	
+
 					if(indexVariable > -1)
 					{
-						if(detecterType(tempString[1]).equals(variables.get(indexVariable).getType()))
+						switch(variables.get(indexVariable).getDimensions())
 						{
-							variables.get(indexVariable).affecterVariable(tempString[1]);
+							case 0:
+									if(detecterType(tempString[1]).equals(variables.get(indexVariable).getType()))
+									{
+										variables.get(indexVariable).affecterVariable(tempString[1]);
+									}
+									else if(detecterType(tempString[1]).equals("expression"))
+									{
+										Double valeurTemp = Double.parseDouble(calculateur(tempString[1]));
+				
+										if(variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) != null)
+										{
+											variables.get(indexVariable).affecterVariable(String.valueOf(convertirDoubleInt(String.valueOf(valeurTemp))));
+										}
+										else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
+										{
+											console.add(numLigne, "Impossible d'affecter un réel dans un entier");
+										}
+										else
+											variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp));
+									}
+									break;
+								case 1:
+									if(detecterType(tempString[1]).equals(variables.get(indexVariable).getType()))
+									{
+										variables.get(indexVariable).affecterVariable(tempString[1], Integer.parseInt(tempStringTab[0]));
+									}
+									else if(detecterType(tempString[1]).equals("expression"))
+									{
+										Double valeurTemp = Double.parseDouble(calculateur(tempString[1]));
+				
+										if(variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) != null)
+										{
+											variables.get(indexVariable).affecterVariable(String.valueOf(convertirDoubleInt(String.valueOf(valeurTemp))), Integer.parseInt(tempStringTab[0]));
+										}
+										else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
+										{
+											console.add(numLigne, "Impossible d'affecter un réel dans un entier");
+										}
+										else
+											variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp), Integer.parseInt(tempStringTab[0]));
+									}
+									break;
+								case 2:
+									if(detecterType(tempString[1]).equals(variables.get(indexVariable).getType()))
+									{
+										variables.get(indexVariable).affecterVariable(tempString[1], Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1]));
+									}
+									else if(detecterType(tempString[1]).equals("expression"))
+									{
+										Double valeurTemp = Double.parseDouble(calculateur(tempString[1]));
+				
+										if(variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) != null)
+										{
+											variables.get(indexVariable).affecterVariable(String.valueOf(convertirDoubleInt(String.valueOf(valeurTemp))), Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1]));
+										}
+										else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
+										{
+											console.add(numLigne, "Impossible d'affecter un réel dans un entier");
+										}
+										else
+											variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp), Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1]));
+									}
+									break;
+								case 3:
+									if(detecterType(tempString[1]).equals(variables.get(indexVariable).getType()))
+									{
+										variables.get(indexVariable).affecterVariable(tempString[1], Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[2]));
+									}
+									else if(detecterType(tempString[1]).equals("expression"))
+									{
+										Double valeurTemp = Double.parseDouble(calculateur(tempString[1]));
+				
+										if(variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) != null)
+										{
+											variables.get(indexVariable).affecterVariable(String.valueOf(convertirDoubleInt(String.valueOf(valeurTemp))), Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1]), Integer.parseInt(tempStringTab[2]));
+										}
+										else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
+										{
+											console.add(numLigne, "Impossible d'affecter un réel dans un entier");
+										}
+										else
+											variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp), Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[2]));
+									}
+									break;
 						}
-						else if(detecterType(tempString[1]).equals("expression"))
-						{
-							//System.out.print(calculateur(tempString[1]));
-							Double valeurTemp = Double.parseDouble(calculateur(tempString[1]));
-	
-							if(variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) != null)
-							{
-								variables.get(indexVariable).affecterVariable(String.valueOf(convertirDoubleInt(String.valueOf(valeurTemp))));
-							}
-							else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
-							{
-								console.add(numLigne, "Impossible d'affecter un réel dans un entier");
-							}
-							else
-								variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp));
-						}
+								
 					}
 					else
 						console.add(numLigne, "La variable n'a pas été instancié");
-					
 				}
 			}
 		}

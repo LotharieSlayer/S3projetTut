@@ -3,6 +3,7 @@ Constante :
  TAUX_CORR <-- 0.9
  REPONSE <-- vrai
 Variable :
+ tab : tableau[8][9][10] d'entiers
  long,larg : entier
  aire : entier
 DEBUT
@@ -12,3 +13,5 @@ aire <-- long PLUS larg x 4
 ecrire ( aire )
 aire <-- (long PLUS larg) x 4
 ecrire ( aire )
+tab[0][0][0] <-- 5 PLUS 8
+ecrire ( tab[0][0][0] x 2 )
