@@ -74,19 +74,6 @@ public class Interpreteur {
 			console.add(numLigne, "Erreur de déclaration de constante");
 	}
 	
-	public Constante chercher (String nom)
-	{
-		for(int i=0; i < constantes.size();i++)
-		{
-			if(nom.equals(constantes.get(i).getNom()))
-			{
-				return constantes.get(i);
-			};
-		}
-		console.add(numLigne, "La constante spécifié n'existe pas");
-		return null;
-	}
-	
 	public void declarerVariable(String variable) {
 		String[] tempStringType = variable.split(":");
 		String[] tempStringVariables = tempStringType[0].replaceAll(" ", "").split(",");
@@ -565,33 +552,47 @@ public class Interpreteur {
 					String temp = reader.next();*/
 					break;
 				case "ecrire":
-					String chaineTemp[] = new String[3];
-					chaineTemp[0] = verifierCaractere('(', ligneTemp[1]);
-					if(chaineTemp[0] != null) {
+					String ecrireTemp;
+					ecrireTemp = verifierCaractere('(', ligneTemp[1]);
+					if(ecrireTemp != null) {
 
-						chaineTemp[1] = verifierCaractere('"', chaineTemp[0]);
-						chaineTemp[2] = verifierCaractere('\'', chaineTemp[0]);
-						int indexConstante = chercherConstante(chaineTemp[0]);
-						int indexVariable = chercherVariable(chaineTemp[0]);
-						
-						if(chaineTemp[1] != null) 
-						{ 
-							console.add(numLigne, chaineTemp[1]);
-						}
-						else if (chaineTemp[2] != null)
+						String[] chaineConcatenation = ecrireTemp.split("PLUS");
+						String chainePrint = "";
+						boolean toPrint = true;
+
+						for ( int i = 0 ; i < chaineConcatenation.length ; i++)
 						{
-							console.add(numLigne, chaineTemp[2]);
+							String chaineTemp[] = new String[2];
+							chaineTemp[0] = verifierCaractere('"', chaineConcatenation[i]);
+							chaineTemp[1] = verifierCaractere('\'', chaineConcatenation[i]);
+							int indexConstante = chercherConstante(chaineConcatenation[i]);
+							int indexVariable = chercherVariable(chaineConcatenation[i]);
+							
+							if(chaineTemp[0] != null) 
+							{ 
+								chainePrint = chainePrint + chaineTemp[0];
+							}
+							else if (chaineTemp[1] != null)
+							{
+								chainePrint = chainePrint + chaineTemp[1];
+							}
+							else if(indexConstante > -1)
+							{
+								chainePrint = chainePrint + constantes.get(indexVariable).getValue();
+							}
+							else if(indexVariable > -1)
+							{
+								chainePrint = chainePrint + variables.get(indexVariable).getValue();
+							}
+							else
+								console.add(numLigne, "La valeur n'est pas instancié");
 						}
-						else if(indexConstante > -1)
+						if(toPrint == true)
 						{
-							console.add(numLigne, constantes.get(indexVariable).getValue());
-						}
-						else if(indexVariable > -1)
-						{
-							console.add(numLigne, variables.get(indexVariable).getValue());
+							console.add(numLigne, chainePrint);
 						}
 						else
-							console.add(numLigne, "La valeur n'est pas instancié");
+							console.add(numLigne, "Erreur il n'y a rien a ajouter dans la console");
 					}
 					else { console.add(numLigne, "Erreur absence de parenthèses"); }
 					break;

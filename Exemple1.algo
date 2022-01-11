@@ -3,12 +3,12 @@ Constante :
  TAUX_CORR <-- 0.9
  REPONSE <-- vrai
 Variable :
- long : entier
- larg : entier
+ long,larg : entier
  aire : entier
 DEBUT
 long <-- 3
 larg <-- 8
+ecrire ( long PLUS " " PLUS larg PLUS " Pommes de terres") 
 lire ( long, larg )
 aire <-- 2
 si aire = 3 alors
