@@ -199,6 +199,23 @@ public class Interpreteur {
 		}
 	}
 
+	public String supprimerEspacesDebut(String chaine)
+	{
+		//Supprimer les espaces du début
+		int indice = 0;
+		for(int i=0; i< chaine.length(); i++) 
+		{
+			char chr = chaine.charAt(i);
+				if(' ' != chr)
+				{  
+					indice = i;
+					break;
+				}
+		}
+
+		return chaine.substring(indice,chaine.length());
+	}
+
 	public String remplacerNomParValeur(String chaine){
 
 		String chaineTemp = chaine.replaceAll(" ", "");
@@ -523,7 +540,7 @@ public class Interpreteur {
 	
 	public void Interpretation(ArrayList<String> pseudoCode)
 	{
-		String[] ligneTemp = pseudoCode.get(numLigne).split(" ", 2);
+		String[] ligneTemp = supprimerEspacesDebut(pseudoCode.get(numLigne)).split(" ", 2);
 		if(numLigneIgnorer == 0)
 		{
 			switch(ligneTemp[0]) {

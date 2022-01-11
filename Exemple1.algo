@@ -12,12 +12,12 @@ ecrire ( long PLUS " " PLUS larg PLUS " Pommes de terres")
 lire ( long, larg )
 aire <-- 2
 si aire = 3 alors
-ecrire ( "Michel" ) 
-ecrire ( "C'est pas le bresil" ) 
+ ecrire ( "Michel" ) 
+ ecrire ( "C'est pas le bresil" ) 
 fsi
 si aire = 2 alors
-ecrire ( "Michel" ) 
-ecrire ( "C'est le bresil" ) 
+    ecrire ( "Michel" ) 
+    ecrire ( "C'est le bresil" ) 
 fsi
  aire <-- long x larg
 ecrire ( aire ) 
