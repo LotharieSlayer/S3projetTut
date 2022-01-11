@@ -241,35 +241,149 @@ public class Interpreteur {
 	public String calculateur(String chaine)
 	{
 		String chaineTemp = remplacerNomParValeur(chaine);
+		String[][] valeurEntreParenthese= new String[2][2]; 
 
+		for(int i = 0; i<2; i++)
+		{
+			if(chaineTemp.contains("(")|| chaineTemp.contains(")"))
+			{
+				String ecrireTemp;
+				ecrireTemp = verifierCaractere('(', chaineTemp);
+				if(ecrireTemp != null) {
+					valeurEntreParenthese[i][0] = "ValeurEntreParenthese" + i;
+					valeurEntreParenthese[i][1]= ecrireTemp;
+					ecrireTemp = "\\(" + ecrireTemp + "\\)";
+					chaineTemp = chaineTemp.replaceAll(ecrireTemp, valeurEntreParenthese[i][0]);
+				}
+			}
+		}
 		if(chaineTemp.contains("PLUS"))
 		{
 			String[] expression = chaineTemp.split("PLUS", 2); 
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
 			chaineTemp = addition(expression[0], expression[1]);
+			valeurEntreParenthese = null;
 		}
 		if(chaineTemp.contains("-"))
 		{
 			String[] expression = chaineTemp.split("-", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
 			chaineTemp = soustraction(expression[0], expression[1]);
 		}
 		if(chaineTemp.contains("x"))
 		{
 			String[] expression = chaineTemp.split("x", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
 			chaineTemp = multiplication(expression[0], expression[1]);
+			valeurEntreParenthese = null;
+
 		}
 		if(chaineTemp.contains("/"))
 		{
 			String[] expression = chaineTemp.split("/", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
 			chaineTemp = division(expression[0], expression[1]);
 		}
 		if(chaineTemp.contains("%"))
 		{
 			String[] expression = chaineTemp.split("%", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
 			chaineTemp = modulo(expression[0], expression[1]);
 		}
 		if(chaineTemp.contains("^"))
 		{
 			String[] expression = chaineTemp.split("^", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+			
 			chaineTemp = puissance(expression[0], expression[1]);
 		}
 
@@ -702,6 +816,7 @@ public class Interpreteur {
 						}
 						else if(detecterType(tempString[1]).equals("expression"))
 						{
+							//System.out.print(calculateur(tempString[1]));
 							Double valeurTemp = Double.parseDouble(calculateur(tempString[1]));
 	
 							if(variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) != null)

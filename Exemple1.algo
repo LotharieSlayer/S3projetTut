@@ -8,19 +8,7 @@ Variable :
 DEBUT
 long <-- 3
 larg <-- 8
-ecrire ( long PLUS " " PLUS larg PLUS " Pommes de terres") 
-lire ( long, larg )
-aire <-- long PLUS larg PLUS 8 x 4
+aire <-- long PLUS larg x 4
 ecrire ( aire )
+aire <-- (long PLUS larg) x 4
 ecrire ( aire )
-si long = 2 alors
- ecrire ( "Michel" ) 
- ecrire ( "C'est pas le bresil" ) 
-fsi
-si long = 3 alors
-    ecrire ( "Michel" ) 
-    ecrire ( "C'est le bresil" ) 
-fsi
- aire <-- long x larg
-ecrire ( aire ) 
- aire <-- TAUX_CORR x aire
