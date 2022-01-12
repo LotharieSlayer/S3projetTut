@@ -9,9 +9,12 @@ Variable :
 DEBUT
 long <-- 3
 larg <-- 8
-aire <-- long PLUS larg x 4
+aire <-- long + larg × 4
 ecrire ( aire )
-aire <-- (long PLUS larg) x 4
-ecrire ( aire )
-tab[0][0][0] <-- 5 PLUS 8
-ecrire ( tab[0][0][0] x 2 )
+aire <-- (long + larg) × 4
+ecrire ( aire © " Patates")
+tab[0][0][0] <-- 5 + 8
+ecrire ( tab[0][0][0] × 2 )
+si 2 = 2 alors
+    ecrire ("Michel c'est le brésil")
+fsi

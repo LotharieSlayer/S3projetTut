@@ -285,7 +285,7 @@ public class Interpreteur {
 				}
 				if(indexCar[0] < indexCar[1]) { 
 					tabTemp[i] = chaineTemp.substring(indexCar[0] + 1, indexCar[1]);
-					chaineTemp = chaineTemp.substring(indexCar[1] + 1, chaineTemp.length());
+					chaineTemp = chaineTemp.substring(indexCar[1] + 1);
 				}
 			}
 		}
@@ -368,6 +368,23 @@ public class Interpreteur {
 		}
 
 		return chaine.substring(indice,chaine.length());
+	}
+
+	public String regexFriendly(String chaine)
+	{
+		String chaineTemp = chaine;
+
+		for(int i=0; i < chaine.length(); i++)
+		{
+			char[] chr = new char[3];
+			chr[2] = chaine.charAt(i);
+			if((chr[2] == '+' || chr[2] == '×') && chr[0] != '\\'  &&  chr[1] != '\\')
+			{
+				chaineTemp = chaineTemp.substring(0,i) + "\\" + chaineTemp.substring(i, chaineTemp.length());
+			}
+		}
+		System.out.println(chaineTemp);
+		return chaineTemp;
 	}
 
 	public String remplacerNomParValeur(String chaine){
@@ -472,6 +489,7 @@ public class Interpreteur {
 						}
 
 						chaineTemporaire = chaineTemp.substring(index[0], index[2]);
+						System.out.println(chaineTemporaire);
 						tempStringTab = verifierCaractereTab(chaineTemporaire);
 						chaineTemporaire = chaineTemp.substring(index[0], index[1] - 1);
 						chaineTemp = chaineTemp.replaceAll(chaineTemporaire + "\\[" + tempStringTab[0] + "\\]" + "\\[" + tempStringTab[1] + "\\]" + "\\[" + tempStringTab[2] + "\\]", variables.get(i).getValue(Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1]), Integer.parseInt(tempStringTab[2])));
@@ -496,14 +514,14 @@ public class Interpreteur {
 				if(ecrireTemp != null) {
 					valeurEntreParenthese[i][0] = "ValeurEntreParenthese" + i;
 					valeurEntreParenthese[i][1]= ecrireTemp;
-					ecrireTemp = "\\(" + ecrireTemp + "\\)";
+					ecrireTemp = "\\(" + regexFriendly(ecrireTemp) + "\\)";
 					chaineTemp = chaineTemp.replaceAll(ecrireTemp, valeurEntreParenthese[i][0]);
 				}
 			}
 		}
-		if(chaineTemp.contains("PLUS"))
+		if(chaineTemp.contains("+"))
 		{
-			String[] expression = chaineTemp.split("PLUS", 2); 
+			String[] expression = chaineTemp.split("\\+", 2); 
 
 			for(int i = 0; i<2; i++)
 			{
@@ -544,9 +562,9 @@ public class Interpreteur {
 
 			chaineTemp = soustraction(expression[0], expression[1]);
 		}
-		if(chaineTemp.contains("x"))
+		if(chaineTemp.contains("×"))
 		{
-			String[] expression = chaineTemp.split("x", 2);
+			String[] expression = chaineTemp.split("\\×", 2);
 
 			for(int i = 0; i<2; i++)
 			{
@@ -569,7 +587,7 @@ public class Interpreteur {
 		}
 		if(chaineTemp.contains("/"))
 		{
-			String[] expression = chaineTemp.split("/", 2);
+			String[] expression = chaineTemp.split("\\/", 2);
 
 			for(int i = 0; i<2; i++)
 			{
@@ -590,7 +608,7 @@ public class Interpreteur {
 		}
 		if(chaineTemp.contains("%"))
 		{
-			String[] expression = chaineTemp.split("%", 2);
+			String[] expression = chaineTemp.split("\\%", 2);
 
 			for(int i = 0; i<2; i++)
 			{
@@ -611,7 +629,7 @@ public class Interpreteur {
 		}
 		if(chaineTemp.contains("^"))
 		{
-			String[] expression = chaineTemp.split("^", 2);
+			String[] expression = chaineTemp.split("\\^", 2);
 
 			for(int i = 0; i<2; i++)
 			{
@@ -789,33 +807,155 @@ public class Interpreteur {
 
 	public boolean verifierCondition(String chaine)
 	{
-		String chaineTemp = remplacerNomParValeur(chaine);
+		String chaineTemp = remplacerNomParValeur(regexFriendly(chaine));
 		boolean Valeur = false;
+
+		String[][] valeurEntreParenthese= new String[2][2]; 
+
+		for(int i = 0; i<2; i++)
+		{
+			if(chaineTemp.contains("(")|| chaineTemp.contains(")"))
+			{
+				String ecrireTemp;
+				ecrireTemp = verifierCaractere('(', chaineTemp);
+				if(ecrireTemp != null) {
+					valeurEntreParenthese[i][0] = "ValeurEntreParenthese" + i;
+					valeurEntreParenthese[i][1]= ecrireTemp;
+					ecrireTemp = "\\(" + regexFriendly(ecrireTemp) + "\\)";
+					chaineTemp = chaineTemp.replaceAll(ecrireTemp, valeurEntreParenthese[i][0]);
+				}
+			}
+		}
 
 		if(chaineTemp.contains("="))
 		{
-			String[] expression = chaineTemp.split("=", 2); 
+			String[] expression = chaineTemp.split("\\=", 2); 
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
 			Valeur = egalite(calculateur(expression[0]), calculateur(expression[1]));
+			valeurEntreParenthese = null;
 		}
 		if(chaineTemp.contains(">"))
 		{
 			String[] expression = chaineTemp.split(">", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
 			Valeur = superieur(calculateur(expression[0]), calculateur(expression[1]));
+			valeurEntreParenthese = null;
 		}
 		if(chaineTemp.contains("<"))
 		{
-			String[] expression = chaineTemp.split("<", 2);
+			String[] expression = chaineTemp.split("\\<", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
 			Valeur = inferieur(calculateur(expression[0]), calculateur(expression[1]));
+			valeurEntreParenthese = null;
 		}
 		if(chaineTemp.contains("<="))
 		{
-			String[] expression = chaineTemp.split("<=", 2);
+			String[] expression = chaineTemp.split("\\<=", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
 			Valeur = superieurEgal(calculateur(expression[0]), calculateur(expression[1]));
+			valeurEntreParenthese = null;
 		}
 		if(chaineTemp.contains("/="))
 		{
-			String[] expression = chaineTemp.split("/=", 2);
+			String[] expression = chaineTemp.split("\\/=", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
 			Valeur = pasEgal(calculateur(expression[0]), calculateur(expression[1]));
+			valeurEntreParenthese = null;
+		}
+		if(chaineTemp.contains("ET"))
+		{
+			String[] expression = chaineTemp.split("ET", 2);
+			Valeur = etCondition(verifierCondition(calculateur(expression[0])), verifierCondition(calculateur(expression[1])));
+		}
+		if(chaineTemp.contains("OU"))
+		{
+			String[] expression = chaineTemp.split("OU", 2);
+			Valeur = ouCondition(verifierCondition(calculateur(expression[0])), verifierCondition(calculateur(expression[1])));
+		}
+		if(chaineTemp.contains("XOU"))
+		{
+			String[] expression = chaineTemp.split("XOU", 2);
+			Valeur = xouCondition(verifierCondition(calculateur(expression[0])), verifierCondition(calculateur(expression[1])));
+		}
+		if(chaineTemp.contains("NON"))
+		{
+			String[] expression = chaineTemp.split("NON", 2);
+			Valeur = nonCondition(verifierCondition(calculateur(expression[1])));
 		}
 
 		return Valeur;
@@ -823,62 +963,52 @@ public class Interpreteur {
 
 	public boolean egalite(String a, String b)
 	{
-		if (Double.parseDouble(a) == Double.parseDouble(b))
-		{  
-			return true;
-		}
-		else
-			return false;
+		return Double.parseDouble(a) == Double.parseDouble(b);
 	}
 
 	public boolean superieur(String a, String b)
 	{
-		if (Double.parseDouble(a) == Double.parseDouble(b))
-		{  
-			return true;
-		}
-		else
-			return false;
+		return Double.parseDouble(a) > Double.parseDouble(b);
 	}
 
 	public boolean inferieur(String a, String b)
 	{
-		if (Double.parseDouble(a) < Double.parseDouble(b))
-		{  
-			return true;
-		}
-		else
-			return false;
+		return Double.parseDouble(a) < Double.parseDouble(b);
 	}
 
 	public boolean superieurEgal(String a, String b)
 	{
-		if (Double.parseDouble(a) >= Double.parseDouble(b))
-		{  
-			return true;
-		}
-		else
-			return false;
+		return Double.parseDouble(a) >= Double.parseDouble(b);
 	}
 
 	public boolean inferieurEgal(String a, String b)
 	{
-		if (Double.parseDouble(a) <= Double.parseDouble(b))
-		{  
-			return true;
-		}
-		else
-			return false;
+		return Double.parseDouble(a) <= Double.parseDouble(b);
 	}
 
 	public boolean pasEgal(String a, String b)
 	{
-		if (Double.parseDouble(a) != Double.parseDouble(b))
-		{  
-			return true;
-		}
-		else
-			return false;
+		return Double.parseDouble(a) != Double.parseDouble(b);
+	}
+
+	public boolean etCondition(boolean a, boolean b)
+	{
+		return a && b;
+	}
+
+	public boolean ouCondition(boolean a, boolean b)
+	{
+		return a || b;
+	}
+
+	public boolean xouCondition(boolean a, boolean b)
+	{
+		return a ^ b;
+	}
+
+	public boolean nonCondition(boolean a)
+	{
+		return !a;
 	}
 
 	public Interpreteur (ArrayList<String> pseudoCode)
@@ -1015,7 +1145,7 @@ public class Interpreteur {
 					ecrireTemp = verifierCaractere('(', ligneTemp[1]);
 					if(ecrireTemp != null) {
 
-						String[] chaineConcatenation = ecrireTemp.split("PLUS");
+						String[] chaineConcatenation = ecrireTemp.split("\\©");
 						String chainePrint = "";
 
 						for ( int i = 0 ; i < chaineConcatenation.length ; i++)
