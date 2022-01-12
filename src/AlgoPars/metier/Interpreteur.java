@@ -482,6 +482,311 @@ public class Interpreteur {
 		return chaineTemp;	
 	}
 
+	public String calculateur(String chaine)
+	{
+		String chaineTemp = remplacerNomParValeur(chaine);
+		String[][] valeurEntreParenthese= new String[2][2]; 
+
+		for(int i = 0; i<2; i++)
+		{
+			if(chaineTemp.contains("(")|| chaineTemp.contains(")"))
+			{
+				String ecrireTemp;
+				ecrireTemp = verifierCaractere('(', chaineTemp);
+				if(ecrireTemp != null) {
+					valeurEntreParenthese[i][0] = "ValeurEntreParenthese" + i;
+					valeurEntreParenthese[i][1]= ecrireTemp;
+					ecrireTemp = "\\(" + ecrireTemp + "\\)";
+					chaineTemp = chaineTemp.replaceAll(ecrireTemp, valeurEntreParenthese[i][0]);
+				}
+			}
+		}
+		if(chaineTemp.contains("PLUS"))
+		{
+			String[] expression = chaineTemp.split("PLUS", 2); 
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
+			chaineTemp = addition(expression[0], expression[1]);
+			valeurEntreParenthese = null;
+		}
+		if(chaineTemp.contains("-"))
+		{
+			String[] expression = chaineTemp.split("-", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
+			chaineTemp = soustraction(expression[0], expression[1]);
+		}
+		if(chaineTemp.contains("x"))
+		{
+			String[] expression = chaineTemp.split("x", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
+			chaineTemp = multiplication(expression[0], expression[1]);
+			valeurEntreParenthese = null;
+
+		}
+		if(chaineTemp.contains("/"))
+		{
+			String[] expression = chaineTemp.split("/", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
+			chaineTemp = division(expression[0], expression[1]);
+		}
+		if(chaineTemp.contains("%"))
+		{
+			String[] expression = chaineTemp.split("%", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
+			chaineTemp = modulo(expression[0], expression[1]);
+		}
+		if(chaineTemp.contains("^"))
+		{
+			String[] expression = chaineTemp.split("^", 2);
+
+			for(int i = 0; i<2; i++)
+			{
+				if(valeurEntreParenthese[i][0] != null)
+				{
+					if(expression[0].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+					else if(expression[1].contains(valeurEntreParenthese[i][0]))
+					{
+						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
+					}
+				}
+			}
+
+			chaineTemp = puissance(expression[0], expression[1]);
+		}
+
+		
+		return chaineTemp;
+	}
+
+	public String convertirDoubleInt(String expression)
+	{
+		//Converti les double en int si c'est possible
+		if( Double.parseDouble(expression) % 1 == 0)
+		{
+			int temp = (int) Double.parseDouble(expression) ;
+			return String.valueOf(temp);	
+		}
+		else
+			return null;
+	}
+
+	public String addition(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
+
+		return String.valueOf(aDouble + bDouble);
+	}
+
+	public String soustraction(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
+
+		return String.valueOf(aDouble - bDouble);
+	}
+
+	public String multiplication(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
+
+		return String.valueOf(aDouble * bDouble);
+	}
+
+	public String division(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
+
+		return String.valueOf(aDouble / bDouble);
+	}
+
+	public String modulo(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
+
+		return String.valueOf(aDouble % bDouble);
+	}
+
+	public String puissance(String a, String b)
+	{
+		double aDouble = 0, bDouble = 0;
+
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		if(detecterType(b) == "expression")
+		{
+			bDouble = Double.parseDouble(calculateur(b));
+		}
+		else
+			bDouble = Double.parseDouble(b);
+
+		return String.valueOf(Math.pow(aDouble,bDouble));
+	}
+	
+	public String racineCarre(String a, String b)
+	{
+		Double aDouble = Double.parseDouble(a);
+
+		if(detecterType(a) == "expression")
+		{
+			aDouble = Double.parseDouble(calculateur(a));
+		}
+		else
+			aDouble = Double.parseDouble(a);
+
+		return String.valueOf(Math.sqrt(aDouble));
+	}
+
 	public boolean verifierCondition(String chaine)
 	{
 		String chaineTemp = remplacerNomParValeur(chaine);
