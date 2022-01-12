@@ -21,7 +21,7 @@ public class Main {
 		instance = this;
 		this.lecteur = new LecteurFichier(fichier);
 		this.metier = new Interpreteur(this.lecteur.getPseudoCode());
-		this.ihm = new IhmCui(this.lecteur.getPseudoCode(), this.lecteur.getTrace());
+		this.ihm = new IhmCui(this.lecteur.getPseudoCodeColore(), this.lecteur.getTrace());
 	}
 
 	public void reloadInterpreteur(){

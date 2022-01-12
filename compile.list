@@ -6,6 +6,7 @@
 
 ./src/AlgoPars/metier/Interpreteur.java
 ./src/AlgoPars/metier/LecteurFichier.java
+./src/AlgoPars/metier/Coloration.java
 
 ./src/AlgoPars/ihm/IhmCui.java
 

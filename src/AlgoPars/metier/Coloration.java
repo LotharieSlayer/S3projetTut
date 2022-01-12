@@ -48,7 +48,7 @@ public class Coloration {
 				alTmp.add( e.getAttribute( "poids" ).getValue() );
 
 				couleurs.put( child.getText(), alTmp );
-				regPatterns.put( child.getText(), Pattern.compile( "\\b" +child.getText() + "\\b" ) );
+				regPatterns.put( child.getText(), Pattern.compile( "\\b" + child.getText() + "\\b(?![^\"]*\"[^\"]*(?:\"[^\"]*\"[^\"]*)*$)" ) );
 			}
 		}
 	}
@@ -114,22 +114,22 @@ public class Coloration {
 				couleur = CouleurConsole.BLANC.getFont();
 				break;
 			case "1": 
-				couleur = CouleurConsole.BLEU.getFont();
+				couleur = CouleurConsole.JAUNE.getFont();
 				break;
 			case "2": 
-				couleur = CouleurConsole.CYAN.getFont();
+				couleur = CouleurConsole.ROUGE.getFont();
 				break;
 			case "3": 
-				couleur = CouleurConsole.JAUNE.getFont();
+				couleur = CouleurConsole.MAUVE.getFont();
 				break;
 			case "4": 
 				couleur = CouleurConsole.VERT.getFont();
 				break;
 			case "5":
-				couleur = CouleurConsole.ROUGE.getFont();
+				couleur = CouleurConsole.CYAN.getFont();
 				break;
 			case "6":
-				couleur = CouleurConsole.MAUVE.getFont();
+				couleur = CouleurConsole.BLEU.getFont();
 				break;
 			default: 
 				couleur = CouleurConsole.BLANC.getFont();

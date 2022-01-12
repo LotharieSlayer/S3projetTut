@@ -9,12 +9,15 @@
         <mot>retourne</mot>
     </structure>
 
-    <methode idCoul="1" poids="false">
+    <ecrire idCoul="1" poids="false">
         <mot>ecrire</mot>
-        <mot>lire</mot>
-    </methode>
+    </ecrire>
 
-    <commande idCoul="2" poids="false">
+    <lire idCoul="2" poids="false">
+        <mot>lire</mot>
+    </lire>
+
+    <commande idCoul="3" poids="false">
         <mot>si</mot> <!--conditions-->
         <mot>sinon</mot>
         <mot>alors</mot>
@@ -47,11 +50,11 @@
         <mot>chaine</mot>
         <mot>tableau de</mot>
 
-        <mot>vrai</mot> <!--booléens-->
+        <mot>vrai</mot> <!--boolÃ©ens-->
         <mot>faux</mot>
     </commande>
 
-    <commentaire idCoul="3" poids="false">
+    <commentaire idCoul="4" poids="false">
         <mot>//</mot>
         <mot>/*</mot>
     </commentaire>
