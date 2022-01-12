@@ -1,0 +1,58 @@
+<coloration>
+    <structure idCoul="0" poids="true">
+        <mot>ALGORITHME</mot>
+        <mot>constante</mot>
+        <mot>variable</mot>
+        <mot>DEBUT</mot>
+        <mot>FIN</mot>
+        <mot>appel</mot>
+        <mot>retourne</mot>
+    </structure>
+
+    <methode idCoul="1" poids="false">
+        <mot>ecrire</mot>
+        <mot>lire</mot>
+    </methode>
+
+    <commande idCoul="2" poids="false">
+        <mot>si</mot> <!--conditions-->
+        <mot>sinon</mot>
+        <mot>alors</mot>
+        <mot>fsi</mot>
+
+        <mot>selon</mot>
+        <mot>cas</mot>
+        <mot>autre cas</mot>
+        <mot>fselon</mot>
+
+        <mot>tant que</mot>
+        <mot>tq</mot>
+        <mot>faire</mot>
+        <mot>ftq</mot>
+        <mot>repeter</mot>
+        <mot>fois</mot>
+        <mot>frepeter</mot>
+
+        <mot>jusqu'a</mot>
+
+        <mot>ou</mot> <!--connecteurs logiques-->
+        <mot>et</mot>
+        <mot>xou</mot>
+        <mot>non</mot>
+
+        <mot>booleen</mot> <!--types-->
+        <mot>entier</mot>
+        <mot>reel</mot>
+        <mot>caractere</mot>
+        <mot>chaine</mot>
+        <mot>tableau de</mot>
+
+        <mot>vrai</mot> <!--booléens-->
+        <mot>faux</mot>
+    </commande>
+
+    <commentaire idCoul="3" poids="false">
+        <mot>//</mot>
+        <mot>/*</mot>
+    </commentaire>
+</coloration>
