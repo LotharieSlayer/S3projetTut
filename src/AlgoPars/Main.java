@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import AlgoPars.ihm.IhmCui;
+import AlgoPars.metier.Interpreteur;
+import AlgoPars.metier.LecteurFichier;
+
 public class Main {
 	private LecteurFichier lecteur;
 	private Interpreteur metier;

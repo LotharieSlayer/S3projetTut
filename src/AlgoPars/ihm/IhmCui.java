@@ -1,8 +1,11 @@
-package AlgoPars;
+package AlgoPars.ihm;
 
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import AlgoPars.Main;
+
 import java.util.HashMap;
 
 public class IhmCui {

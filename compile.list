@@ -1,11 +1,12 @@
 -encoding utf8
 -d bin
 
-./src/AlgoPars/Constante.java
-./src/AlgoPars/Variable.java
+./src/AlgoPars/metier/objets/Constante.java
+./src/AlgoPars/metier/objets/Variable.java
 
-./src/AlgoPars/IhmCui.java
-./src/AlgoPars/Interpreteur.java
-./src/AlgoPars/LecteurFichier.java
+./src/AlgoPars/metier/Interpreteur.java
+./src/AlgoPars/metier/LecteurFichier.java
+
+./src/AlgoPars/ihm/IhmCui.java
 
 ./src/AlgoPars/Main.java

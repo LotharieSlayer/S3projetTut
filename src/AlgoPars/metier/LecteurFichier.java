@@ -1,4 +1,4 @@
-package AlgoPars;
+package AlgoPars.metier;
 
 import java.io.FileInputStream;
 import java.io.IOException;

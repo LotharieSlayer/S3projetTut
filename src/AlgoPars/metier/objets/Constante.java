@@ -1,4 +1,4 @@
-package AlgoPars;
+package AlgoPars.metier.objets;
 
 public class Constante {
 	String nom;
