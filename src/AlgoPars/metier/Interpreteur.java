@@ -7,7 +7,7 @@ import AlgoPars.Main;
 import AlgoPars.metier.objets.Constante;
 import AlgoPars.metier.objets.Variable;
 
-
+import java.io.Console;
 
 public class Interpreteur {
 	
@@ -1003,8 +1003,12 @@ public class Interpreteur {
 					}
 					break;**/
 				case "lire" :
-					/*Scanner reader = new Scanner(System.in);
-					String temp = reader.next();*/
+					/*Console console = System.console();
+					System.out.println(">");
+					String ligne = console.readLine();
+					String lireTemp;
+					lireTemp = verifierCaractere('(', ligneTemp[1]);
+					System.out.println(lireTemp);*/
 					break;
 				case "ecrire":
 					String ecrireTemp;
