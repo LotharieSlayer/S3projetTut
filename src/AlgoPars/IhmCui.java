@@ -3,22 +3,50 @@ package AlgoPars;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.HashMap;
 
 public class IhmCui {
 
 	static int futureLine;
 	static ArrayList<String> code;
+	static ArrayList<String> console = Main.getInstance().getConsole();
+
+	static ArrayList<String> variablesATracer;
+	static ArrayList<String> sTraceHashMap = new ArrayList<String>();
+	static HashMap<String, String> varTrace = Main.getInstance().getTraceur();
+
+
 
 	/**
 	 * @param pseudoCode	Le pseudo-code en entrée pour l'afficher
 	 */
-	public IhmCui(ArrayList<String> pseudoCode) {
+	public IhmCui(ArrayList<String> pseudoCode, ArrayList<String> variables) {
 		code = pseudoCode;
-		sortie(code);
+		variablesATracer = variables;
+
+
+		sortie(code, variablesATracer);
 		
 	}
 
-	public void sortie(ArrayList<String> pseudoCode){
+	public void sortie(ArrayList<String> pseudoCode, ArrayList<String> variables){
+
+		// RELOAD
+		Main.getInstance().setLimiteLine(futureLine);
+		Main.getInstance().reloadInterpreteur();
+
+		// TRACEUR
+		sTraceHashMap.clear();
+		// Toutes les variables récupéré dans le traceur
+		for(String var : variablesATracer){
+			// Boucle pour récupérer les variables à tracer et afficher celles qui sont spécifié dans le fichier ***.var.
+			for (String j : varTrace.keySet()){
+				if(j.equals(var)) {
+					sTraceHashMap.add(String.format("%-20s", " " +  j) + "│" +  String.format("%23s", varTrace.get(j)) + " │" );
+				}
+			}	
+		}
+		
 		// Première partie code deuxième partie données
 		System.out.println(  "┌──────────┐" + String.format ( "%84s", "┌─────────┐"));
 		System.out.println(  "│   CODE   │" + String.format ( "%84s", "│ DONNÉES │" ));
@@ -33,6 +61,8 @@ public class IhmCui {
 			if(futureLine == i){
 				color = "\033[44m";
 				colorReset = "\033[40m";
+				// System.out.println("IHM : " + Main.getInstance().getLimiteLine()); // log débug
+				
 			}
 
 			// Si plus de 80 caractères
@@ -52,11 +82,19 @@ public class IhmCui {
 
 			// Partie données
 
-			ArrayList<String> trace = Main.getInstance().getTrace();
-
 			// Première ligne
 			if ( i == 0 )	System.out.println( String.format( "%20s", "NOM         ") + String.format("%-10s", "│") + String.format("%7s", "VALEUR") + "        │" );
-			if ( i != 0)	System.out.println( String.format("%-20s", " " +  trace.get(i) ) + "│" +  String.format("%25s", trace.get(i) + " │" ) );
+			
+			
+			if ( i != 0 ){
+				if(i > sTraceHashMap.size()){
+					System.out.println( String.format("%-20s", "" ) + "│" +  String.format("%25s", "" + " │" ) );
+				}
+				else {
+					System.out.println(sTraceHashMap.get(i - 1));
+				}
+
+			}
 		}
 		
 		System.out.println( "└────────────────────────────────────────────────────────────────────────────────────┴─────────────────────────────────────────────┘");
@@ -66,10 +104,9 @@ public class IhmCui {
 		System.out.println("┌─────────────┐");
 		System.out.println("│   CONSOLE   │");
 		System.out.println("├─────────────┴──────────────────────────────────────────────────────────────────────┐");
-		ArrayList<String> console = Main.getInstance().getConsole();
-		for(int i = 0; i < futureLine; i++)
+		for(int i = 0; i < console.size(); i++)
 		{
-			if(console.size() < futureLine) break;
+			// if(console.size() < futureLine) break;
 			if(console.get(i).equals("")) continue;
 			System.out.println("│" + String.format ( "%-83s", console.get(i) ) + " " + "│");
 		}
@@ -81,39 +118,38 @@ public class IhmCui {
 
 	public void getUserInput() {
 
-		System.out.println("Entrée      (avancer ligne par ligne)");
-		System.out.println("B + Entrée  (reculer ligne par ligne)");
-		System.out.println("LX + Entrée (aller à la ligne X)");
+		System.out.println("Entrée		(avancer ligne par ligne)");
+		System.out.println("B + Entrée	(reculer ligne par ligne)");
+		System.out.println("LX + Entrée	(aller à la ligne X)");
+		System.out.println("Q + Entrée	(quitter)");
 
 		Console console = System.console();
 		String ligne = console.readLine();
 
+		if(ligne.startsWith("L")){
+			// split le L et le chiffre
+			String[] temp = ligne.split("L");
+			futureLine = Integer.parseInt(temp[1]);
+			sortie(code, variablesATracer);
+		}
+
 		switch(ligne){
 			case "" :
-				System.out.println("Entrée");
+				// System.out.println("Entrée");
 				futureLine += 1;
-				sortie(code);
+				sortie(code, variablesATracer);
 				break;
 			case "B" :
-				System.out.println("B + Entrée");
+				// System.out.println("B + Entrée");
 				futureLine -= 1;
-				sortie(code);
+				if(futureLine == -1) futureLine = 0;
+				sortie(code, variablesATracer);
 				break;
-			// case "L" +  : en fait la faut vérifier l'int qui est après et genre c'est chiant et j'ai la flemme la
-			// System.out.println("B + Entrée");
-			// futureLine = l'int de mort du coup;
-			// sortie(code);
-			// break;
 			case "Q" :
-				System.out.println("Q + Entrée");
-				// finDuProgramme = true;
+				// System.out.println("Q + Entrée");
 				break;
 			default:
 				getUserInput();
 		}
-	}
-
-	public int getFutureLine() {
-		return futureLine;
 	}
 }

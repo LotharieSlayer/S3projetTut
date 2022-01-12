@@ -6,6 +6,6 @@
 
 ./src/AlgoPars/IhmCui.java
 ./src/AlgoPars/Interpreteur.java
-./src/AlgoPars/LecteurPseudoCode.java
+./src/AlgoPars/LecteurFichier.java
 
 ./src/AlgoPars/Main.java

@@ -1,34 +1,45 @@
 package AlgoPars;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.HashMap;
 
-import javax.xml.xpath.XPath;
 
 
 public class Interpreteur {
 	
 	static ArrayList<String> console = new ArrayList<String>();
-	static ArrayList<String> trace = new ArrayList<String>();
+	static HashMap<String, String> traceur = new HashMap<String, String>();
+
 
 	static ArrayList<Constante> constantes = new ArrayList<Constante>();
 	static ArrayList<Variable> variables = new ArrayList<Variable>();
+
 	
 	int numLigne = 0;
 	int numLigneIgnorer = 0;
-	
+
 	public ArrayList<String> getConsole() {
 		return console;	
 	}
 		
-	public ArrayList<String> getTrace() {
-		return trace;	
+	public HashMap<String, String> getTraceur() {
+		return traceur;
 	}
 	
 	public int getNumLigne() {
 		return numLigne;
+	}
+
+	public int setNumLigne(int numLigne) {
+		return this.numLigne = numLigne;
+	}
+
+	public static ArrayList<Constante> getConstantes(){
+		return constantes;
+	}
+
+	public static ArrayList<Variable> getVariables(){
+		return variables;
 	}
 	
 	public void declarerConstante(String constante) {
@@ -41,18 +52,22 @@ public class Interpreteur {
 				if(valeur[1] == null)
 				{
 					constantes.add(new Constante(tempString[0], Integer.parseInt(tempString[1])));
+					traceur.put(tempString[0], tempString[1]);
 				}
-				else
+				else{
 					constantes.add(new Constante(tempString[0], Double.parseDouble(tempString[1])));
+					traceur.put(tempString[0], tempString[1]);
+				}
 			}
 			else if (tempString[1].equals("vrai"))
 			{
 				constantes.add(new Constante(tempString[0], true));
-				trace.add(numLigne, tempString[0] + " ");
+				traceur.put(tempString[0], "VRAI");
 			}
 			else if (tempString[1].equals("faux"))
 			{
 				constantes.add(new Constante(tempString[0], false));
+				traceur.put(tempString[0], "FAUX");
 			}
 			else
 			{
@@ -60,21 +75,23 @@ public class Interpreteur {
 				{
 					if(tempString[1].charAt(tempString[1].length() - 1) == '\'')
 						constantes.add(new Constante(tempString[0], tempString[1]));
-					else { console.add(numLigne, "Erreur de déclaration de constante"); }
+					else { console.add("Erreur de déclaration de constante"); }
 				}
 
 				else if(tempString[1].charAt(0) == '"')
 				{
-					if(tempString[1].charAt(tempString[1].length() - 1) == '\"')
+					if(tempString[1].charAt(tempString[1].length() - 1) == '\"'){
 						constantes.add(new Constante(tempString[0], tempString[1]));
-					else { console.add(numLigne, "Erreur de déclaration de constante"); }
+						traceur.put(tempString[0], tempString[1]);
+					}
+					else { console.add("Erreur de déclaration de constante"); }
 				}
 				else
-					console.add(numLigne, "Erreur de déclaration de constante");
+					console.add("Erreur de déclaration de constante");
 			}
 		}
 		else
-			console.add(numLigne, "Erreur de déclaration de constante");
+			console.add("Erreur de déclaration de constante");
 	}
 	
 	public void declarerVariable(String variable) {
@@ -85,22 +102,27 @@ public class Interpreteur {
 		switch (tempStringType[1]) {
 			case "entier":
 				variables.add(new Variable(tempStringVariables[i], "entier"));
+				traceur.put(tempStringVariables[i], "NULL");
 				break;
 
 			case "double":
 				variables.add(new Variable(tempStringVariables[i], "double"));
+				traceur.put(tempStringVariables[i], "NULL");
 				break;
 
 			case "chaine de caractères":
 				variables.add(new Variable(tempStringVariables[i], "chaine de caractères"));
+				traceur.put(tempStringVariables[i], "NULL");
 				break;
 		
 			case "char":
 				variables.add(new Variable(tempStringVariables[i], "char"));
+				traceur.put(tempStringVariables[i], "NULL");
 				break;
 
 			case "booléen":
 				variables.add(new Variable(tempStringVariables[i], "booléen"));
+				traceur.put(tempStringVariables[i], "NULL");
 				break;
 			default:
 				if(tempStringType[1].contains("tableau"))
@@ -185,7 +207,7 @@ public class Interpreteur {
 					}
 				}
 				else
-					console.add(numLigne, "Type de base non reconnu");
+					console.add("Type de base non reconnu");
 				break;
 		}
 	}
@@ -858,25 +880,27 @@ public class Interpreteur {
 	public Interpreteur (ArrayList<String> pseudoCode)
 	{
 		// Initialisation des ArrayLists pour créer une grosse taille de vide afin de pouvoir le replace
-		// Méthode à changer car non optimisé !
-		for(int i = 0; i < 3852; i++){
-			console.add(i, "");
-			trace.add(i, "");
-		}
+
+		console.clear();
+		traceur.clear();
+
+		int limiteLine = Main.getInstance().getLimiteLine();
+		// int limiteLine = preLimiteLine + 1;
+		// System.out.println("INTERPRETEUR : " + limiteLine ); // log débug
+		// System.out.println("LIGNE : " + numLigne); // log débug
+
 		//Vérifie le Algorithme Nom de Classe
-		
 		String[] declareClass = pseudoCode.get(0).split(" ");
 		if(declareClass[0].equals("Algorithme")) {
-			
-			console.add(numLigne, "Classe ajouté");
-			
+			console.add("Classe ajouté");
 			numLigne++;
-			
+
 			boolean finData = false;
 			
 			//Méthode de shlag pour terminer le coin DATA
 			for(int i = 0; i < 20; i++)
 			{
+				if(numLigne > limiteLine && limiteLine != 0) continue;
 				String ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 				switch(ligneTemp)
 				{
@@ -884,6 +908,7 @@ public class Interpreteur {
 						numLigne++;
 						while(true)
 						{
+							if(numLigne > limiteLine && limiteLine != 0) break;
 							if(!pseudoCode.get(numLigne).replaceAll(" ", "").equals("")){
 								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								if(pseudoCode.get(numLigne).equals("Variable :") || pseudoCode.get(numLigne).equals("DEBUT"))
@@ -892,7 +917,7 @@ public class Interpreteur {
 								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								//Méthode pour ajouter la constante
 								declarerConstante(ligneTemp);
-								console.add(numLigne, "Constante ajouté");
+								console.add("Constante ajouté");
 							}
 							numLigne++;
 						}
@@ -901,6 +926,7 @@ public class Interpreteur {
 						numLigne++;
 						while(true)
 						{
+							if(numLigne > limiteLine && limiteLine != 0) break;
 							if(!pseudoCode.get(numLigne).replaceAll(" ", "").equals("")){
 								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								if(pseudoCode.get(numLigne).equals("Constante :") || pseudoCode.get(numLigne).equals("DEBUT"))
@@ -908,7 +934,7 @@ public class Interpreteur {
 
 								//Méthode pour ajouter la variable
 								declarerVariable(ligneTemp);
-								console.add(numLigne, "Variable ajouté");
+								console.add("Variable ajouté");
 							}
 							numLigne++;
 						}
@@ -927,13 +953,14 @@ public class Interpreteur {
 				{
 					Interpretation(pseudoCode);
 					numLigne++;
+					if(numLigne > limiteLine && limiteLine != 0) break;
 				}
 			}
-			else
-				console.add(numLigne, "Erreur : Le programme ne démarre pas");
+			else if (numLigne <= limiteLine)
+				console.add("Erreur : Le programme ne démarre pas");
 		}
-		else
-			console.add(numLigne, "Erreur : La classe n'est pas déclaré");
+		else if (numLigne <= limiteLine)
+			console.add("Erreur : La classe n'est pas déclaré");
 	}
 
 	public String detecterFonction(ArrayList<String> pseudoCode, int numLigneTemp)
@@ -1000,9 +1027,9 @@ public class Interpreteur {
 							else
 								chainePrint = chainePrint + calculateur(chaineConcatenation[i]);
 						}
-						console.add(numLigne, chainePrint);						
+						console.add(chainePrint);						
 					}
-					else { console.add(numLigne, "Erreur absence de parenthèses"); }
+					else { console.add("Erreur absence de parenthèses"); }
 					break;
 			}
 			//Divise en fontion de la flèche d'instanciation
@@ -1033,6 +1060,7 @@ public class Interpreteur {
 									if(detecterType(tempString[1]).equals(variables.get(indexVariable).getType()))
 									{
 										variables.get(indexVariable).affecterVariable(tempString[1]);
+										traceur.put(variables.get(indexVariable).getNom(), variables.get(indexVariable).getValue());
 									}
 									else if(detecterType(tempString[1]).equals("expression"))
 									{
@@ -1041,13 +1069,17 @@ public class Interpreteur {
 										if(variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) != null)
 										{
 											variables.get(indexVariable).affecterVariable(String.valueOf(convertirDoubleInt(String.valueOf(valeurTemp))));
+											traceur.put(variables.get(indexVariable).getNom(), variables.get(indexVariable).getValue());
 										}
 										else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
 										{
-											console.add(numLigne, "Impossible d'affecter un réel dans un entier");
+											console.add("Impossible d'affecter un réel dans un entier");
 										}
-										else
+										else{
 											variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp));
+											traceur.put(variables.get(indexVariable).getNom(), variables.get(indexVariable).getValue());
+										}
+
 									}
 									break;
 								case 1:
@@ -1065,7 +1097,7 @@ public class Interpreteur {
 										}
 										else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
 										{
-											console.add(numLigne, "Impossible d'affecter un réel dans un entier");
+											console.add("Impossible d'affecter un réel dans un entier");
 										}
 										else
 											variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp), Integer.parseInt(tempStringTab[0]));
@@ -1086,7 +1118,7 @@ public class Interpreteur {
 										}
 										else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
 										{
-											console.add(numLigne, "Impossible d'affecter un réel dans un entier");
+											console.add("Impossible d'affecter un réel dans un entier");
 										}
 										else
 											variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp), Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1]));
@@ -1107,7 +1139,7 @@ public class Interpreteur {
 										}
 										else if (variables.get(indexVariable).getType() == "entier" && convertirDoubleInt(String.valueOf(valeurTemp)) == null)
 										{
-											console.add(numLigne, "Impossible d'affecter un réel dans un entier");
+											console.add("Impossible d'affecter un réel dans un entier");
 										}
 										else
 											variables.get(indexVariable).affecterVariable(String.valueOf(valeurTemp), Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[2]));
@@ -1117,7 +1149,7 @@ public class Interpreteur {
 								
 					}
 					else
-						console.add(numLigne, "La variable n'a pas été instancié");
+						console.add("La variable n'a pas été instancié");
 				}
 			}
 		}
@@ -1125,11 +1157,4 @@ public class Interpreteur {
 			numLigneIgnorer--;
 	}
 
-	public static ArrayList<Constante> getConstantes(){
-		return constantes;
-	}
-
-	public static ArrayList<Variable> getVariables(){
-		return variables;
-	}
 }
