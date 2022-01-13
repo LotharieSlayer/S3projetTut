@@ -19,7 +19,10 @@ public class Interpreteur {
 	static ArrayList<Constante> constantes = new ArrayList<Constante>();
 	static ArrayList<Variable> variables = new ArrayList<Variable>();
 
-	
+	ArrayList<Boolean> conditionsListe = new  ArrayList<Boolean>();
+
+	int numCondition = 0;
+	int numLigneBoucle = 0;
 	int numLigne = 0;
 	int numLigneIgnorer = 0;
 
@@ -1025,7 +1028,6 @@ public class Interpreteur {
 		//Vérifie le Algorithme Nom de Classe
 		String[] declareClass = pseudoCode.get(0).split(" ");
 		if(declareClass[0].equals("Algorithme")) {
-			console.add("Classe ajouté");
 			numLigne++;
 
 			boolean finData = false;
@@ -1055,7 +1057,6 @@ public class Interpreteur {
 								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								//Méthode pour ajouter la constante
 								declarerConstante(ligneTemp);
-								console.add("Constante ajouté");
 							}
 							numLigne++;
 						}
@@ -1077,7 +1078,6 @@ public class Interpreteur {
 
 								//Méthode pour ajouter la variable
 								declarerVariable(ligneTemp);
-								console.add("Variable ajouté");
 							}
 							numLigne++;
 						}
@@ -1108,39 +1108,63 @@ public class Interpreteur {
 
 	public String detecterFonction(ArrayList<String> pseudoCode, int numLigneTemp)
 	{
-		String[] ligneTemp = pseudoCode.get(numLigneTemp).split(" ", 2);
+		String[] ligneTemp = supprimerEspacesDebut(pseudoCode.get(numLigneTemp)).split(" ", 2);
 		return ligneTemp[0];
 	}
 	
 	public void Interpretation(ArrayList<String> pseudoCode)
 	{
+		String condition[];
+
 		String[] ligneTemp = supprimerEspacesDebut(pseudoCode.get(numLigne)).split(" ", 2);
 		if(numLigneIgnorer == 0)
 		{
 			switch(ligneTemp[0]) {
 				case "si":
-					String condition[] = ligneTemp[1].split("alors", 2);
-					if(verifierCondition(condition[0]) == false)
+					condition = ligneTemp[1].split("alors", 2);
+					conditionsListe.add(numCondition,verifierCondition(condition[0]));
+					if(conditionsListe.get(numCondition) == false)
 					{
-						for(int i=numLigne; !detecterFonction(pseudoCode, i).contains("fsi");i++)
+						for(int i=numLigne; (!detecterFonction(pseudoCode, i).contains("fsi") && !detecterFonction(pseudoCode, i).contains("sinon"));i++)
 						{
 							numLigneIgnorer++;
 						}
 					}
+					numCondition++;
 					break;
 				case "sinon":
-					
-					break;
-				/**case "tq":
-					String condition2[] = ligneTemp[1].split("alors", 2);
-					while(verifierCondition(condition2[0]) == false)
+					if(conditionsListe.get(numCondition-1) == true)
 					{
 						for(int i=numLigne; !detecterFonction(pseudoCode, i).contains("fsi");i++)
 						{
 							numLigneIgnorer++;
 						}
 					}
-					break;**/
+					break;
+				case "tq":
+					condition = ligneTemp[1].split("faire", 2);
+					conditionsListe.add(numCondition,verifierCondition(condition[0]));
+					if(conditionsListe.get(numCondition) == true)
+					{
+						for(int i=numLigne; !detecterFonction(pseudoCode, i).contains("ftq");i++)
+						{
+							numLigneBoucle++;
+						}
+						System.out.println(numLigneBoucle);
+					}
+					else
+					{
+						for(int i=numLigne; (!detecterFonction(pseudoCode, i).contains("ftq"));i++)
+						{
+							numLigneIgnorer++;
+						}
+					}
+					numCondition++;
+					break;
+				case "ftq":
+					numLigne = numLigne - numLigneBoucle;
+					numLigneBoucle = 0;
+					break;
 				case "lire":
 					String lireTemp = verifierCaractere('(', ligneTemp[1]);
 					if(hmLire.get(lireTemp) == null){
