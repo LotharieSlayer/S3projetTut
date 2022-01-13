@@ -60,6 +60,7 @@ public class IhmCui {
 
 		int limiteAffichage = 0;
 		int cptLigne;
+		// Si on dépasse la ligne 20 alors créer le défilement (futureLine - 20).
 		if (futureLine > 20)
 			cptLigne = futureLine - 20;
 		else

@@ -14,6 +14,7 @@ public class Interpreteur {
 	static ArrayList<String> console = new ArrayList<String>();
 	static HashMap<String, String> traceur = new HashMap<String, String>();
 
+	static HashMap<String, String> hmLire = new HashMap<String, String>();
 
 	static ArrayList<Constante> constantes = new ArrayList<Constante>();
 	static ArrayList<Variable> variables = new ArrayList<Variable>();
@@ -1141,11 +1142,29 @@ public class Interpreteur {
 					}
 					break;**/
 				case "lire":
-					/*Console reader = System.console();
-					System.out.println("Veuillez entrer la valeur dans la variable :");
-					String ligne = reader.readLine();
-					System.out.println(ligne);*/
-					break;
+					String lireTemp = verifierCaractere('(', ligneTemp[1]);
+					System.out.println(lireTemp);
+					if(hmLire.get(lireTemp) == null){
+						Console reader = System.console();
+						System.out.println("Veuillez entrer la valeur dans la variable :");
+						String ligne = reader.readLine();
+						System.out.println(ligne);
+						hmLire.put(lireTemp, ligne);
+						hmLire.get(lireTemp);
+						
+						int indexVariable = chercherVariable(lireTemp.replaceAll(" ", ""));
+
+						if(indexVariable > -1)
+						{
+							if(detecterType(ligne).equals(variables.get(indexVariable).getType()))
+							{
+								variables.get(indexVariable).affecterVariable(ligne);
+								traceur.put(variables.get(indexVariable).getNom(), variables.get(indexVariable).getValue());
+							}
+						}
+
+					}
+					else break;
 				case "ecrire":
 					String ecrireTemp;
 					ecrireTemp = verifierCaractere('(', ligneTemp[1]);
