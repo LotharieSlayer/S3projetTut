@@ -509,24 +509,18 @@ public class Interpreteur {
 		int[] indexOperateur = new int[16];
 
 		//Priorité 0
-		indexOperateur[0] = chaineTemp.lastIndexOf("(");
 		
-		System.out.println(chaineTemp);
-
 		for(int i = 0; i<2; i++)
 		{
-			if(indexOperateur[0] != - 1|| chaineTemp.contains(")"))
+			indexOperateur[0] = chaineTemp.lastIndexOf("(");
+			if(indexOperateur[0] != - 1 && chaineTemp.contains(")"))
 			{
 				String ecrireTemp;
 				ecrireTemp = verifierCaractere('(', chaineTemp.substring(indexOperateur[0]));
-				System.out.println(chaineTemp);
-				System.out.println(ecrireTemp);
 				if(ecrireTemp != null) {
 					valeurEntreParenthese[i][0] = "ValeurEntreParenthese" + i;
 					valeurEntreParenthese[i][1]= ecrireTemp;
-					chaineTemp = chaineTemp.replaceAll(regexFriendly(ecrireTemp), valeurEntreParenthese[i][0]);
-					System.out.println("Valeur1" + valeurEntreParenthese[i][0]);
-					System.out.println("Valeur2" + valeurEntreParenthese[i][1]);
+					chaineTemp = chaineTemp.replaceAll("\\(" + regexFriendly(ecrireTemp) + "\\)", valeurEntreParenthese[i][0]);
 				}
 			}
 		}
@@ -548,12 +542,13 @@ public class Interpreteur {
 
 
 		//Détermination de l'opérateur le plus à droite
-		int ValeurMax = 0;
+		int[] ValeurMax = new int[3];
+		ValeurMax[0] = 0;
 		for(int i = 1; i < 7; i++)
 		{
-			if(indexOperateur[i] > ValeurMax)
+			if(indexOperateur[i] > ValeurMax[0])
 			{
-				ValeurMax = indexOperateur[i];
+				ValeurMax[0] = indexOperateur[i];
 				OperationLaMoinsPrioritaire = i;
 			}
 		}
@@ -625,12 +620,12 @@ public class Interpreteur {
 		indexOperateur[9] = chaineTemp.lastIndexOf("-");
 
 		//Détermination de l'opérateur le plus à droite
-		ValeurMax = 0;
+		ValeurMax[1] = 0;
 		for(int i = 7; i < 10; i++)
 		{
-			if(indexOperateur[i] > ValeurMax)
+			if(indexOperateur[i] > ValeurMax[1])
 			{
-				ValeurMax = indexOperateur[i];
+				ValeurMax[1] = indexOperateur[i];
 				OperationLaMoinsPrioritaire = i;
 			}
 		}
@@ -674,12 +669,12 @@ public class Interpreteur {
 
 		//Détermination de l'opérateur le plus à droite
 		
-		ValeurMax = 0;
+		ValeurMax[2] = 0;
 		for(int i = 10; i < 13; i++)
 		{
-			if(indexOperateur[i] > ValeurMax)
+			if(indexOperateur[i] > ValeurMax[2])
 			{
-				ValeurMax = indexOperateur[i];
+				ValeurMax[2] = indexOperateur[i];
 				OperationLaMoinsPrioritaire = i;
 			}
 		}
@@ -701,8 +696,6 @@ public class Interpreteur {
 				{
 					expression = remplacerValeur(expression, valeurEntreParenthese);
 				}
-				System.out.println(expression[0]);
-				System.out.println(expression[1]);
 				chaineTemp = multiplication(calculateur(expression[0]), calculateur(expression[1]));
 				valeurEntreParenthese = null;
 				break;
@@ -752,6 +745,23 @@ public class Interpreteur {
 			Valeur = nonCondition(verifierCondition(calculateur(expression[1])));
 			valeurEntreParenthese = null;
 		}*/
+		if(ValeurMax[0] == 0 && ValeurMax[1] == 0 && ValeurMax[2] == 0)
+		{
+			if(valeurEntreParenthese != null)
+			{
+				for(int i = 0; i<2; i++)
+				{
+					if(valeurEntreParenthese[i][0] != null)
+					{
+						if(chaineTemp.contains(valeurEntreParenthese[i][0]))
+						{
+							chaineTemp = calculateur(chaineTemp.replaceAll(regexFriendly(valeurEntreParenthese[i][0]), valeurEntreParenthese[i][1]));
+						}
+					}
+				}
+			}
+		}
+
 		return chaineTemp;
 	}
 
@@ -938,7 +948,7 @@ public class Interpreteur {
 
 		int[] indexOperateur = new int[14];
 
-		//Priorité 0
+		/*//Priorité 0
 		indexOperateur[0] = chaineTemp.lastIndexOf("(");
 
 		for(int i = 0; i<2; i++)
@@ -953,7 +963,7 @@ public class Interpreteur {
 					chaineTemp = chaineTemp.replaceAll(regexFriendly(ecrireTemp), valeurEntreParenthese[i][0]);
 				}
 			}
-		}
+		}*/
 
 		//Priorité 1
 		indexOperateur[1] = chaineTemp.lastIndexOf("<");
