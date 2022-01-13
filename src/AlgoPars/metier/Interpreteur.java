@@ -1482,8 +1482,8 @@ public class Interpreteur {
 
 			boolean finData = false;
 			
-			//Méthode de shlag pour terminer le coin DATA
-			for(int i = 0; i < 20; i++)
+			//Méthode pour terminer le coin DATA
+			for(int i = 0; i < 200; i++)
 			{
 				if(numLigne > limiteLine) continue;
 				String ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
