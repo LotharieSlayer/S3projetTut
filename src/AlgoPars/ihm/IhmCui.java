@@ -59,6 +59,7 @@ public class IhmCui {
 		System.out.println(  "├──────────┴─────────────────────────────────────────────────────────────────────────┼─────────┴──────────┬────────────────────────┐" );
 
 		int limiteAffichage = 0;
+		int numTrace = 0;
 		int cptLigne;
 		// Si on dépasse la ligne 20 alors créer le défilement (futureLine - 20).
 		if (futureLine > 20)
@@ -98,19 +99,18 @@ public class IhmCui {
 			// Partie données
 
 			// Première ligne
-			if ( i == 0 )	System.out.println( String.format( "%20s", "NOM         ") + String.format("%-10s", "│") + String.format("%7s", "VALEUR") + "        │" );
+			if ( numTrace == 0 )	System.out.println( String.format( "%20s", "NOM         ") + String.format("%-10s", "│") + String.format("%7s", "VALEUR") + "        │" );
 			
 			
-			if ( i != 0 ){
-				if(i > sTraceHashMap.size()){
+			if ( numTrace != 0 ){
+				if(numTrace > sTraceHashMap.size()){
 					System.out.println( String.format("%-20s", "" ) + "│" +  String.format("%25s", "" + " │" ) );
 				}
 				else {
-					System.out.println(sTraceHashMap.get(i - 1));
+					System.out.println(sTraceHashMap.get(numTrace - 1));
 				}
-
 			}
-
+			numTrace++;
 			limiteAffichage++;
 		}
 		

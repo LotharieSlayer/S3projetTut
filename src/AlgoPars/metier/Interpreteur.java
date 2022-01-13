@@ -1143,14 +1143,11 @@ public class Interpreteur {
 					break;**/
 				case "lire":
 					String lireTemp = verifierCaractere('(', ligneTemp[1]);
-					System.out.println(lireTemp);
 					if(hmLire.get(lireTemp) == null){
 						Console reader = System.console();
-						System.out.println("Veuillez entrer la valeur dans la variable :");
+						System.out.println("Veuillez entrer la valeur de la variable " + lireTemp + " :");
 						String ligne = reader.readLine();
-						System.out.println(ligne);
 						hmLire.put(lireTemp, ligne);
-						hmLire.get(lireTemp);
 						
 						int indexVariable = chercherVariable(lireTemp.replaceAll(" ", ""));
 

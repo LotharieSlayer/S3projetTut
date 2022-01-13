@@ -11,6 +11,7 @@ DEBUT
 lire (long)
 long <-- 3
 larg <-- 8
+lire (larg)
 aire <-- long + larg × 4
  //oucaca
 ecrire ( aire )
