@@ -506,152 +506,252 @@ public class Interpreteur {
 	{
 		String chaineTemp = remplacerNomParValeur(chaine);
 		String[][] valeurEntreParenthese= new String[2][2]; 
+		int[] indexOperateur = new int[16];
+
+		//Priorité 0
+		indexOperateur[0] = chaineTemp.lastIndexOf("(");
+		
+		System.out.println(chaineTemp);
 
 		for(int i = 0; i<2; i++)
 		{
-			if(chaineTemp.contains("(")|| chaineTemp.contains(")"))
+			if(indexOperateur[0] != - 1|| chaineTemp.contains(")"))
 			{
 				String ecrireTemp;
-				ecrireTemp = verifierCaractere('(', chaineTemp);
+				ecrireTemp = verifierCaractere('(', chaineTemp.substring(indexOperateur[0]));
+				System.out.println(chaineTemp);
+				System.out.println(ecrireTemp);
 				if(ecrireTemp != null) {
 					valeurEntreParenthese[i][0] = "ValeurEntreParenthese" + i;
 					valeurEntreParenthese[i][1]= ecrireTemp;
-					ecrireTemp = "\\(" + regexFriendly(ecrireTemp) + "\\)";
-					chaineTemp = chaineTemp.replaceAll(ecrireTemp, valeurEntreParenthese[i][0]);
+					chaineTemp = chaineTemp.replaceAll(regexFriendly(ecrireTemp), valeurEntreParenthese[i][0]);
+					System.out.println("Valeur1" + valeurEntreParenthese[i][0]);
+					System.out.println("Valeur2" + valeurEntreParenthese[i][1]);
 				}
 			}
 		}
-		if(chaineTemp.contains("+"))
+
+		//Priorité 1
+		indexOperateur[1] = chaineTemp.lastIndexOf("<");
+		indexOperateur[2] = chaineTemp.lastIndexOf(">");
+		indexOperateur[3] = chaineTemp.lastIndexOf("<=");
+		indexOperateur[4] = chaineTemp.lastIndexOf(">=");
+		indexOperateur[5] = chaineTemp.lastIndexOf("/=");
+		indexOperateur[6] = chaineTemp.lastIndexOf("=");
+
+		int OperationLaMoinsPrioritaire = 0;
+
+		//Gestion des conflits entre opérateurs
+		if(indexOperateur[1] == indexOperateur[3]){ indexOperateur[1] = 0;}
+		if(indexOperateur[2] == indexOperateur[4]){ indexOperateur[2] = 0;}
+		if(indexOperateur[6] == indexOperateur[3] + 1 || indexOperateur[6] == indexOperateur[4] + 1 || indexOperateur[6] == indexOperateur[5] + 1){ indexOperateur[6] = 0;}
+
+
+		//Détermination de l'opérateur le plus à droite
+		int ValeurMax = 0;
+		for(int i = 1; i < 7; i++)
 		{
-			String[] expression = chaineTemp.split("\\+", 2); 
-
-			for(int i = 0; i<2; i++)
+			if(indexOperateur[i] > ValeurMax)
 			{
-				if(valeurEntreParenthese[i][0] != null)
-				{
-					if(expression[0].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-					else if(expression[1].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-				}
+				ValeurMax = indexOperateur[i];
+				OperationLaMoinsPrioritaire = i;
 			}
-
-			chaineTemp = addition(expression[0], expression[1]);
-			valeurEntreParenthese = null;
 		}
-		if(chaineTemp.contains("-"))
+
+		//Exécution récursive de l'opération la moins prioritaire
+		String[] expression;
+		switch(OperationLaMoinsPrioritaire)
 		{
-			String[] expression = chaineTemp.split("-", 2);
-
-			for(int i = 0; i<2; i++)
-			{
-				if(valeurEntreParenthese[i][0] != null)
+			/*case 1:
+				expression = chaineTemp.split("\\<", 2);
+				if(valeurEntreParenthese != null)
 				{
-					if(expression[0].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-					else if(expression[1].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
+					expression = remplacerValeur(expression, valeurEntreParenthese);
 				}
-			}
-
-			chaineTemp = soustraction(expression[0], expression[1]);
+				Valeur = inferieur(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 2:
+				expression = chaineTemp.split("\\>", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = superieur(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 3:
+				expression = chaineTemp.split("\\<\\=", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = inferieurEgal(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 4:
+				expression = chaineTemp.split("\\>\\=", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = superieurEgal(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 5:
+				expression = chaineTemp.split("\\/\\=", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = pasEgal(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 6:
+				expression = chaineTemp.split("\\=", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = egalite(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;*/
 		}
-		if(chaineTemp.contains("×"))
+		OperationLaMoinsPrioritaire = 0;
+
+		//Priorité 2
+		indexOperateur[7] = chaineTemp.lastIndexOf("OU");
+		indexOperateur[8] = chaineTemp.lastIndexOf("+");
+		indexOperateur[9] = chaineTemp.lastIndexOf("-");
+
+		//Détermination de l'opérateur le plus à droite
+		ValeurMax = 0;
+		for(int i = 7; i < 10; i++)
 		{
-			String[] expression = chaineTemp.split("\\×", 2);
-
-			for(int i = 0; i<2; i++)
+			if(indexOperateur[i] > ValeurMax)
 			{
-				if(valeurEntreParenthese[i][0] != null)
-				{
-					if(expression[0].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-					else if(expression[1].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-				}
+				ValeurMax = indexOperateur[i];
+				OperationLaMoinsPrioritaire = i;
 			}
-
-			chaineTemp = multiplication(expression[0], expression[1]);
-			valeurEntreParenthese = null;
-
 		}
-		if(chaineTemp.contains("/"))
+
+		switch(OperationLaMoinsPrioritaire)
 		{
-			String[] expression = chaineTemp.split("\\/", 2);
-
-			for(int i = 0; i<2; i++)
-			{
-				if(valeurEntreParenthese[i][0] != null)
+			/*case 7:
+				expression = chaineTemp.split("OU", 2);
+				if(valeurEntreParenthese != null)
 				{
-					if(expression[0].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-					else if(expression[1].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
+					expression = remplacerValeur(expression, valeurEntreParenthese);
 				}
-			}
-
-			chaineTemp = division(expression[0], expression[1]);
-		}
-		if(chaineTemp.contains("%"))
-		{
-			String[] expression = chaineTemp.split("\\%", 2);
-
-			for(int i = 0; i<2; i++)
-			{
-				if(valeurEntreParenthese[i][0] != null)
+				Valeur = ouCondition(verifierCondition(calculateur(expression[0])), verifierCondition(calculateur(expression[1])));
+				valeurEntreParenthese = null;
+				break;*/
+			case 8:
+				expression = chaineTemp.split("\\+", 2);
+				if(valeurEntreParenthese != null)
 				{
-					if(expression[0].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-					else if(expression[1].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
+					expression = remplacerValeur(expression, valeurEntreParenthese);
 				}
-			}
-
-			chaineTemp = modulo(expression[0], expression[1]);
-		}
-		if(chaineTemp.contains("^"))
-		{
-			String[] expression = chaineTemp.split("\\^", 2);
-
-			for(int i = 0; i<2; i++)
-			{
-				if(valeurEntreParenthese[i][0] != null)
+				chaineTemp = addition(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 9:
+				expression = chaineTemp.split("\\-", 2);
+				if(valeurEntreParenthese != null)
 				{
-					if(expression[0].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-					else if(expression[1].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
+					expression = remplacerValeur(expression, valeurEntreParenthese);
 				}
-			}
-
-			chaineTemp = puissance(expression[0], expression[1]);
+				chaineTemp = soustraction(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
 		}
 
+		//Priorité 3
+		indexOperateur[10] = chaineTemp.lastIndexOf("ET");
+		indexOperateur[11] = chaineTemp.lastIndexOf("×");
+		indexOperateur[12] = chaineTemp.lastIndexOf("/");
+		indexOperateur[13] = chaineTemp.lastIndexOf("mod");
+
+		//Détermination de l'opérateur le plus à droite
 		
+		ValeurMax = 0;
+		for(int i = 10; i < 13; i++)
+		{
+			if(indexOperateur[i] > ValeurMax)
+			{
+				ValeurMax = indexOperateur[i];
+				OperationLaMoinsPrioritaire = i;
+			}
+		}
+
+		switch(OperationLaMoinsPrioritaire)
+		{
+			/*case 10:
+				expression = chaineTemp.split("ET", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = etCondition(verifierCondition(calculateur(expression[0])), verifierCondition(calculateur(expression[1])));
+				valeurEntreParenthese = null;
+				break;*/
+			case 11:
+				expression = chaineTemp.split("\\×", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				System.out.println(expression[0]);
+				System.out.println(expression[1]);
+				chaineTemp = multiplication(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 12:
+				expression = chaineTemp.split("\\/", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				chaineTemp = division(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 13:
+				expression = chaineTemp.split("mod", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				chaineTemp = modulo(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+		}
+		
+		indexOperateur[14] = chaineTemp.lastIndexOf("^");
+
+		if(indexOperateur[14] != -1)
+		{
+			expression = chaineTemp.split("\\^", 2);
+			if(valeurEntreParenthese != null)
+			{
+				expression = remplacerValeur(expression, valeurEntreParenthese);
+			}
+			chaineTemp = puissance(calculateur(expression[0]), calculateur(expression[1]));
+			valeurEntreParenthese = null;
+		}
+
+		//Priorité 4
+		indexOperateur[15] = chaineTemp.lastIndexOf("NON");
+
+		/*if(indexOperateur[15] != -1)
+		{
+			expression = chaineTemp.split("NON", 2);
+			if(valeurEntreParenthese != null)
+			{
+				expression = remplacerValeur(expression, valeurEntreParenthese);
+			}
+			Valeur = nonCondition(verifierCondition(calculateur(expression[1])));
+			valeurEntreParenthese = null;
+		}*/
 		return chaineTemp;
 	}
 
@@ -807,159 +907,249 @@ public class Interpreteur {
 		return String.valueOf(Math.sqrt(aDouble));
 	}
 
+	public String[] remplacerValeur(String[] expression, String[][] valeurEntreParenthese)
+	{
+		for(int i = 0; i<2; i++)
+		{
+			if(valeurEntreParenthese[i][0] != null)
+			{
+				if(expression[0].contains(valeurEntreParenthese[i][0]))
+				{
+					expression[0] = expression[0].replaceAll(regexFriendly(valeurEntreParenthese[i][0]), valeurEntreParenthese[i][1]);
+
+					System.out.println("Valeur" + valeurEntreParenthese[i][0]);
+					System.out.println("Valeur" + valeurEntreParenthese[i][1]);
+				}
+				else if(expression[1].contains(valeurEntreParenthese[i][0]))
+				{
+					expression[1] = expression[1].replaceAll(regexFriendly(valeurEntreParenthese[i][0]), valeurEntreParenthese[i][1]);
+				}
+			}
+		}
+		return expression;
+	}
+
 	public boolean verifierCondition(String chaine)
 	{
-		String chaineTemp = remplacerNomParValeur(regexFriendly(chaine));
+		String chaineTemp = remplacerNomParValeur(chaine);
 		boolean Valeur = false;
 
 		String[][] valeurEntreParenthese= new String[2][2]; 
 
+		int[] indexOperateur = new int[14];
+
+		//Priorité 0
+		indexOperateur[0] = chaineTemp.lastIndexOf("(");
+
 		for(int i = 0; i<2; i++)
 		{
-			if(chaineTemp.contains("(")|| chaineTemp.contains(")"))
+			if(indexOperateur[0] != - 1|| chaineTemp.contains(")"))
 			{
 				String ecrireTemp;
-				ecrireTemp = verifierCaractere('(', chaineTemp);
+				ecrireTemp = verifierCaractere('(', chaineTemp.substring(indexOperateur[0]));
 				if(ecrireTemp != null) {
 					valeurEntreParenthese[i][0] = "ValeurEntreParenthese" + i;
 					valeurEntreParenthese[i][1]= ecrireTemp;
-					ecrireTemp = "\\(" + regexFriendly(ecrireTemp) + "\\)";
-					chaineTemp = chaineTemp.replaceAll(ecrireTemp, valeurEntreParenthese[i][0]);
+					chaineTemp = chaineTemp.replaceAll(regexFriendly(ecrireTemp), valeurEntreParenthese[i][0]);
 				}
 			}
 		}
 
-		if(chaineTemp.contains("="))
-		{
-			String[] expression = chaineTemp.split("\\=", 2); 
+		//Priorité 1
+		indexOperateur[1] = chaineTemp.lastIndexOf("<");
+		indexOperateur[2] = chaineTemp.lastIndexOf(">");
+		indexOperateur[3] = chaineTemp.lastIndexOf("<=");
+		indexOperateur[4] = chaineTemp.lastIndexOf(">=");
+		indexOperateur[5] = chaineTemp.lastIndexOf("/=");
+		indexOperateur[6] = chaineTemp.lastIndexOf("=");
 
-			for(int i = 0; i<2; i++)
+		int OperationLaMoinsPrioritaire = 0;
+
+		//Gestion des conflits entre opérateurs
+		if(indexOperateur[1] == indexOperateur[3]){ indexOperateur[1] = 0;}
+		if(indexOperateur[2] == indexOperateur[4]){ indexOperateur[2] = 0;}
+		if(indexOperateur[6] == indexOperateur[3] + 1 || indexOperateur[6] == indexOperateur[4] + 1 || indexOperateur[6] == indexOperateur[5] + 1){ indexOperateur[6] = 0;}
+
+		//Détermination de l'opérateur le plus à droite
+		int ValeurMax = 0;
+		for(int i = 1; i < 7; i++)
+		{
+			if(indexOperateur[i] > ValeurMax)
 			{
-				if(valeurEntreParenthese[i][0] != null)
-				{
-					if(expression[0].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-					else if(expression[1].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-				}
+				ValeurMax = indexOperateur[i];
+				OperationLaMoinsPrioritaire = i;
 			}
-
-			Valeur = egalite(calculateur(expression[0]), calculateur(expression[1]));
-			valeurEntreParenthese = null;
 		}
-		if(chaineTemp.contains(">"))
-		{
-			String[] expression = chaineTemp.split(">", 2);
 
-			for(int i = 0; i<2; i++)
+		//Exécution récursive de l'opération la moins prioritaire
+		String[] expression;
+		switch(OperationLaMoinsPrioritaire)
+		{
+			case 1:
+				expression = chaineTemp.split("\\<", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = inferieur(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 2:
+				expression = chaineTemp.split("\\>", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = superieur(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 3:
+				expression = chaineTemp.split("\\<\\=", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = inferieurEgal(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 4:
+				expression = chaineTemp.split("\\>\\=", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = superieurEgal(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 5:
+				expression = chaineTemp.split("\\/\\=", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = pasEgal(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 6:
+				expression = chaineTemp.split("\\=", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = egalite(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+		}
+		OperationLaMoinsPrioritaire = 0;
+
+		//Priorité 2
+		indexOperateur[7] = chaineTemp.lastIndexOf("OU");
+		indexOperateur[8] = chaineTemp.lastIndexOf("+");
+		indexOperateur[9] = chaineTemp.lastIndexOf("-");
+
+		//Détermination de l'opérateur le plus à droite
+		ValeurMax = 0;
+		for(int i = 7; i < 10; i++)
+		{
+			if(indexOperateur[i] > ValeurMax)
 			{
-				if(valeurEntreParenthese[i][0] != null)
-				{
-					if(expression[0].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-					else if(expression[1].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-				}
+				ValeurMax = indexOperateur[i];
+				OperationLaMoinsPrioritaire = i;
 			}
-
-			Valeur = superieur(calculateur(expression[0]), calculateur(expression[1]));
-			valeurEntreParenthese = null;
 		}
-		if(chaineTemp.contains("<"))
-		{
-			String[] expression = chaineTemp.split("\\<", 2);
 
-			for(int i = 0; i<2; i++)
+		switch(OperationLaMoinsPrioritaire)
+		{
+			case 7:
+				expression = chaineTemp.split("OU", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = ouCondition(verifierCondition(calculateur(expression[0])), verifierCondition(calculateur(expression[1])));
+				valeurEntreParenthese = null;
+				break;
+			/*case 8:
+				expression = chaineTemp.split("\\+", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				chaineTemp = addition(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 9:
+				expression = chaineTemp.split("\\-", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				chaineTemp = soustraction(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;*/
+		}
+
+		//Priorité 3
+		indexOperateur[10] = chaineTemp.lastIndexOf("ET");
+		indexOperateur[11] = chaineTemp.lastIndexOf("×");
+		indexOperateur[12] = chaineTemp.lastIndexOf("/");
+
+		//Détermination de l'opérateur le plus à droite
+		
+		ValeurMax = 0;
+		for(int i = 10; i < 13; i++)
+		{
+			if(indexOperateur[i] > ValeurMax)
 			{
-				if(valeurEntreParenthese[i][0] != null)
-				{
-					if(expression[0].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-					else if(expression[1].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-				}
+				ValeurMax = indexOperateur[i];
+				OperationLaMoinsPrioritaire = i;
 			}
-
-			Valeur = inferieur(calculateur(expression[0]), calculateur(expression[1]));
-			valeurEntreParenthese = null;
 		}
-		if(chaineTemp.contains("<="))
-		{
-			String[] expression = chaineTemp.split("\\<=", 2);
 
-			for(int i = 0; i<2; i++)
+		switch(OperationLaMoinsPrioritaire)
+		{
+			case 10:
+				expression = chaineTemp.split("ET", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				Valeur = etCondition(verifierCondition(calculateur(expression[0])), verifierCondition(calculateur(expression[1])));
+				valeurEntreParenthese = null;
+				break;
+			/*case 11:
+				expression = chaineTemp.split("\\×", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				chaineTemp = multiplication(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;
+			case 12:
+				expression = chaineTemp.split("\\/", 2);
+				if(valeurEntreParenthese != null)
+				{
+					expression = remplacerValeur(expression, valeurEntreParenthese);
+				}
+				chaineTemp = division(calculateur(expression[0]), calculateur(expression[1]));
+				valeurEntreParenthese = null;
+				break;*/
+		}
+		
+		//Priorité 4
+		indexOperateur[13] = chaineTemp.lastIndexOf("NON");
+
+		if(indexOperateur[13] != -1)
+		{
+			expression = chaineTemp.split("NON", 2);
+			if(valeurEntreParenthese != null)
 			{
-				if(valeurEntreParenthese[i][0] != null)
-				{
-					if(expression[0].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-					else if(expression[1].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-				}
+				expression = remplacerValeur(expression, valeurEntreParenthese);
 			}
-
-			Valeur = superieurEgal(calculateur(expression[0]), calculateur(expression[1]));
-			valeurEntreParenthese = null;
-		}
-		if(chaineTemp.contains("/="))
-		{
-			String[] expression = chaineTemp.split("\\/=", 2);
-
-			for(int i = 0; i<2; i++)
-			{
-				if(valeurEntreParenthese[i][0] != null)
-				{
-					if(expression[0].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[0] = expression[0].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-					else if(expression[1].contains(valeurEntreParenthese[i][0]))
-					{
-						expression[1] = expression[1].replaceAll(valeurEntreParenthese[i][0], valeurEntreParenthese[i][1]);
-					}
-				}
-			}
-
-			Valeur = pasEgal(calculateur(expression[0]), calculateur(expression[1]));
-			valeurEntreParenthese = null;
-		}
-		if(chaineTemp.contains("ET"))
-		{
-			String[] expression = chaineTemp.split("ET", 2);
-			Valeur = etCondition(verifierCondition(calculateur(expression[0])), verifierCondition(calculateur(expression[1])));
-		}
-		if(chaineTemp.contains("OU"))
-		{
-			String[] expression = chaineTemp.split("OU", 2);
-			Valeur = ouCondition(verifierCondition(calculateur(expression[0])), verifierCondition(calculateur(expression[1])));
-		}
-		if(chaineTemp.contains("XOU"))
-		{
-			String[] expression = chaineTemp.split("XOU", 2);
-			Valeur = xouCondition(verifierCondition(calculateur(expression[0])), verifierCondition(calculateur(expression[1])));
-		}
-		if(chaineTemp.contains("NON"))
-		{
-			String[] expression = chaineTemp.split("NON", 2);
 			Valeur = nonCondition(verifierCondition(calculateur(expression[1])));
+			valeurEntreParenthese = null;
 		}
-
 		return Valeur;
 	}
 

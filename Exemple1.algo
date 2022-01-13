@@ -10,14 +10,13 @@ long <-- 3
 larg <-- 8
 si long = 3 alors
     ecrire ( "Michel" ) 
-    si larg = 7 alors
+    si larg /= 7 + 8 alors
         ecrire ( "C'est le bresil" ) 
     sinon
-        ecrire ( "C'est pas le bresil" ) 
+        tq long <= 6 faire
+            long <-- long + 1
+            ecrire ("Michel c'est peut-être le brésil")
+         ftq
+        ecrire ("Michel c'est très clairement le brésil")
     fsi
 fsi
-tq long < 6 faire
-    long <-- long + 1
-    ecrire ("Michel c'est peut-être le brésil")
-ftq
-ecrire ("Michel c'est très clairement le brésil")
