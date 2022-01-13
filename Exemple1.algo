@@ -4,10 +4,12 @@ Constante :
  REPONSE <-- vrai
 Variable :
  long,larg : entier
+ test : caractère
  aire : entier
 DEBUT
 long <-- 3
 larg <-- 8
+test <-- 'e'
 si long = (3 + 8) alors
     ecrire ( "Michel" ) 
     si larg = 7 alors

@@ -296,7 +296,7 @@ public class Variable {
 				this.valeurString = valeur;
 				break;
 			case "caractère":
-				this.valeurChar = valeur.charAt(0);
+				this.valeurChar = valeur.charAt(2);
 				break;
 			case "réel":
 				valeur = valeur.replaceAll(" ", "");

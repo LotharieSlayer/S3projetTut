@@ -156,8 +156,8 @@ public class Interpreteur {
 				traceur.put(tempStringVariables[i], "NULL");
 				break;
 		
-			case "char":
-				variables.add(new Variable(tempStringVariables[i], "char"));
+			case "caractère":
+				variables.add(new Variable(tempStringVariables[i], "caractère"));
 				traceur.put(tempStringVariables[i], "NULL");
 				break;
 
@@ -1042,6 +1042,111 @@ public class Interpreteur {
 
 		return String.valueOf(Math.sqrt(aDouble));
 	}
+
+	/**
+	 * Met en chaîne un entier
+	 * @param a
+	 * @return l'entier
+	 */
+	public String enChaine(int a){
+
+		return String.valueOf(a) ;
+	}
+
+	/**
+	 * Met en entier une chaîne
+	 * @param a
+	 * @return la string
+	 */
+	public String enEntier(String a){
+
+		int    aInt ;
+		double aDouble = 0 ;
+
+		if(detecterType(a) == "entier"){ return a ;}
+		else if(detecterType(a) == "réel"){
+			aDouble = Double.parseDouble(a);
+			aInt = (int)aDouble ;
+
+			return String.valueOf(aInt) ;
+		}
+		else{ return null; }
+	}
+
+	// Si la chaîne mise en caractère correspond à un entier, retourne l'entier sous format réel'
+	// Si la chaîne mise en caractère correspond à un réel  , retourne le reel
+	public String enReel(String a){
+
+		double aDouble = 0 ;
+
+		if(detecterType(a) == "réel"){ return a ;}
+		else if(detecterType(a) == "entier"){
+			aDouble = Double.parseDouble(a);
+			return String.valueOf(aDouble);
+		}
+		else{ return null;}
+	}
+
+	// Retourne le caractère correspondant au code ASCII de l'entier mis en paramètre
+	public String car(int a){return Character.toString(a) ;}
+
+	// Retourne le code ASCII du caractère mis en paramètre
+	public String ord(char a){return String.valueOf((int) a) ;}
+
+	// Arrondi le réel mis en paramètre à l'entier inférieur le plus proche
+	public String plancher(double a){return String.valueOf(Math.floor(a));}
+
+	// Arrondi le réel mis en paramètre à l'entier supérieur le plus proche
+	public String plafond(double a){return String.valueOf(Math.ceil(a));}
+
+	// Arrondi le reel mis en paramètre à l'entier le plus proche
+	public String arrondi(double a){return String.valueOf(Math.round(a));}
+
+	// Récupère la date courante au format AAAA-MM-JJ
+	public String aujourdhui(){return String.valueOf(java.time.LocalDate.now());}
+
+	// Récupère le jour de la date courante
+	public String jour(String date){
+		if(date.matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")){
+			String[] aujourdhui = date.split("-");
+			return aujourdhui[2] ;
+		}
+		else {return null;}
+	}
+
+	// Récupère le mois de la date courante
+	public String mois(String date){
+		if(date.matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")){
+			String[] aujourdhui = date.split("-");
+			return aujourdhui[1] ;
+		}
+		else {return null;}
+	}
+
+	// Récupère l'année de la date courante
+	public String annee(String date){
+		if(date.matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")){
+			String[] aujourdhui = date.split("-");
+			return aujourdhui[0] ;
+		}
+		else {return null;}
+	}
+
+	// Renvoie true si la chaine mise en paramètre correspond à un réel
+	public Boolean estReel(String chaine){
+		if(chaine.matches("^[0-9]+$") && chaine.contains(".")){return true;}
+		else{return false;}
+	}
+
+	// Renvoie true si la chaine mise en paramètre correspond à un entier
+	public Boolean estEntier(String chaine){
+		if(chaine.matches("^[0-9]+$") && !(chaine.contains("."))){return true;}
+		else{return false;}
+	}
+
+	// Génère un aléatoire allant de 0 (compris) à maximum (non compris)
+	public static String hasard(int maximum){return String.valueOf((int)(Math.random()*maximum));}
+
 
 	/**
 	 * Gestion des parenthèses, remplace le String "valeurEntreParenthese" + num par la valeur
