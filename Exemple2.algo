@@ -1,47 +1,34 @@
 Algorithme Exemple
 Constante :
- TAUX_CORR --> 0.9
- REPONSE --> vrai
+ NBR_HOPITAL <-- 315
+ TAUX_ADO_VACCINE <-- 60.8 
+ VACCINE <-- vrai
+ CATEGORIE <-- "adolescent"
+ SANGUIN <-- 'B'
 Variable :
- long, larg : entier
- aire : entier
- prénom, nom : chaine de caractères
-DEBUT
-lire ( long, larg )
+ nbrMedecin : entier
+ tauxArretMaladie : double
+ zoneGéographique : caractère
+ estFermé : booléen
 
- aire --> long x larg
-écrire ( aire )
- aire --> TAUX_CORR x aire
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|
-123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|1
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-écr
-oui
+DEBUT
+ecrire (NBR_HOPITAL © "  " © TAUX_ADO_VACCINE)
+ecrire (VACCINE)
+ecrire (SANGUIN)
+
+TAUX_ADO_VACCINE <-- 22.1
+
+ecrire (TAUX_ADO_VACCINE)
+
+nbrMedecin <-- "Remi"
+ecrire (nbrMedecin)
+ecrire (CATEGORIE)
+nbrMedecin <-- 321
+ecrire (nbrMedecin)
+
+tauxArretMaladie <-- 34.5
+zoneGéographique <-- 'A'
+estFermé <-- faux
+
+ecrire (zoneGéographique © " " © estFermé)
+FIN

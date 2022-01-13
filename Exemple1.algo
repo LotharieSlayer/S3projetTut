@@ -1,36 +1,32 @@
 Algorithme Exemple
-Constante :
- TAUX_CORR <-- 0.9
- REPONSE <-- vrai
+
 Variable :
- long,larg : entier
- test : caractère
- aire : entier
+ cpt : entier
+ long, larg, aire : entier
+
 DEBUT
-long <-- 3
-larg <-- 8
-lire ( long )
-ecrire ( long )
-si long = 3 alors
-    ecrire ( "Michel" ) 
-    si larg /= 7 + 8 alors
-        ecrire ( "C'est le bresil" ) 
-    sinon
-        tq long <= 6 faire
-            long <-- long + 1
-            ecrire ("Michel c'est peut-être le brésil")
-         ftq
-        ecrire ("Michel c'est très clairement le brésil")
-    fsi
+cpt <-- 2
+long <-- 4
+larg <-- 3
+lire (aire)
+
+si long > larg alors
+    ecrire ("test1")
 sinon
-    si larg = 7 + 8 alors
-        ecrire ( "C'est le bresil" ) 
-    sinon
-        tq long <= 6 faire
-            long <-- long + 1
-            ecrire ("Michel c'est peut-être le brésil")
-         ftq
-        ecrire ("Michel c'est très clairement le brésil")
-    fsi
+    ecrire ("test1 echoue")
 fsi
+
+si larg > long alors
+    ecrire ("test2")
+    aire <-- long × larg
+sinon
+    ecrire ("test2 echoue")
+fsi
+
+si (larg × long) = aire alors
+    ecrire ("test3")
+    aire <-- aire - (larg - long)
+fsi
+
+FIN
 
