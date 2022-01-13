@@ -1,7 +1,7 @@
 # S3projetTut
 AlgoPars - Projet tutoré du semestre 3
 
-Pensez à importer le dossier ressources contenant les .jar dans les variables d'environnement de votre ordinateur.
+Pensez à importer le dossier `src/AlgoPars/ressources` contenant les .jar dans les variables d'environnement de votre ordinateur.
 Compiler manuellement : `javac "@compile.list"`
 
 
