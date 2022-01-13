@@ -2,7 +2,6 @@ package AlgoPars.ihm;
 
 import java.io.Console;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import AlgoPars.Main;
 
@@ -18,30 +17,35 @@ public class IhmCui {
 	static ArrayList<String> sTraceHashMap = new ArrayList<String>();
 	static HashMap<String, String> varTrace = Main.getInstance().getTraceur();
 
-
-
-	/**
-	 * @param pseudoCode	Le pseudo-code en entrée pour l'afficher
-	 */
+	 /**
+	  * Constructeur de IHMCUI
+	  * @param pseudoCode Le pseudo-code en entrée pour l'affiche
+	  * @param variables Les variables qui seront tracées
+	  */
 	public IhmCui(ArrayList<String> pseudoCode, ArrayList<String> variables) {
 		code = pseudoCode;
 		variablesATracer = variables;
 
-
+		// Appel de la sortie
 		sortie(code, variablesATracer);
 		
 	}
 
+	/**
+	 * La fonction sortie est la fonction qui réitèrera l'affichage et la sortie console pendant que le code fonctionnera
+	 * @param pseudoCode Le pseudo-code en entrée pour l'affiche
+	 * @param variables Les variables qui seront tracées
+	 */
 	public void sortie(ArrayList<String> pseudoCode, ArrayList<String> variables){
 
-		// RELOAD
+		// Re-chargement de l'interpréteur
 		Main.getInstance().setLimiteLine(futureLine);
 
+		// On évite de rechrager une deuxième fois l'interpréteur si on vient de démarrer le programme
 		if(futureLine != 0)
 			Main.getInstance().reloadInterpreteur();
 
-
-		// TRACEUR
+		/*      CHARGEMENT TRACEUR      */
 		sTraceHashMap.clear();
 		// Toutes les variables récupéré dans le traceur
 		for(String var : variablesATracer){
@@ -53,14 +57,21 @@ public class IhmCui {
 			}	
 		}
 		
+
+		/* ----------------------------------------------- */
+		/* AFFICHAGE  :  CODE/TRACEUR                       */
+		/* ----------------------------------------------- */
+
 		// Première partie code deuxième partie données
 		System.out.println(  "┌──────────┐" + String.format ( "%84s", "┌─────────┐"));
 		System.out.println(  "│   CODE   │" + String.format ( "%84s", "│ DONNÉES │" ));
 		System.out.println(  "├──────────┴─────────────────────────────────────────────────────────────────────────┼─────────┴──────────┬────────────────────────┐" );
 
+		// Permet de gérer l'affichage/défilement en fonction des conditions
 		int limiteAffichage = 0;
 		int numTrace = 0;
 		int cptLigne;
+
 		// Si on dépasse la ligne 20 alors créer le défilement (futureLine - 20).
 		if (futureLine > 20)
 			cptLigne = futureLine - 20;
@@ -70,7 +81,7 @@ public class IhmCui {
 		for(int i = cptLigne; i < pseudoCode.size(); i++)
 		{
 
-			// Partie code
+			/*      AFFICHAGE DU CODE      */
 
 			String color = "";
 			String colorReset = "";
@@ -96,7 +107,7 @@ public class IhmCui {
 
 
 
-			// Partie données
+			/*      AFFICHAGE TRACEUR      */
 
 			// Première ligne
 			if ( numTrace == 0 )	System.out.println( String.format( "%20s", "NOM         ") + String.format("%-10s", "│") + String.format("%7s", "VALEUR") + "        │" );
@@ -118,21 +129,29 @@ public class IhmCui {
 		
 		System.out.println("\n");
 		
+		/* ----------------------------------------------- */
+		/* AFFICHAGE  :  CONSOLE                           */
+		/* ----------------------------------------------- */
+
 		System.out.println("┌─────────────┐");
 		System.out.println("│   CONSOLE   │");
 		System.out.println("├─────────────┴──────────────────────────────────────────────────────────────────────┐");
 		for(int i = 0; i < console.size(); i++)
 		{
-			// if(console.size() < futureLine) break;
 			if(console.get(i).equals("")) continue;
 			System.out.println("│" + String.format ( "%-83s", console.get(i) ) + " " + "│");
 		}
 		System.out.println("└────────────────────────────────────────────────────────────────────────────────────┘");
 		
+		// Demande de l'entrée utilisateur
 		getUserInput();
 
 	}
 
+	/**
+	 * getUserInput() demande une interaction avec l'utilisateur, cette interaction une fois
+	 * executée réiterera la fonction sortie()
+	 */
 	public void getUserInput() {
 
 		System.out.println("Entrée		(avancer ligne par ligne)");
@@ -144,7 +163,6 @@ public class IhmCui {
 		String ligne = console.readLine();
 
 		if(ligne.startsWith("L")){
-			// split le L et le chiffre
 			String[] temp = ligne.split("L");
 			futureLine = Integer.parseInt(temp[1]);
 			sortie(code, variablesATracer);
@@ -152,20 +170,20 @@ public class IhmCui {
 
 		switch(ligne){
 			case "" :
-				// System.out.println("Entrée");
+				// Touche Entrée
 				futureLine += 1;
 				// Si on arrive à la taille de l'algorithme on fait -1 pour rester sur le "FIN".
 				if(futureLine >= code.size()) futureLine = code.size() - 1;
 				sortie(code, variablesATracer);
 				break;
 			case "B" :
-				// System.out.println("B + Entrée");
+				// Touche B + Entrée
 				futureLine -= 1;
 				if(futureLine == -1) futureLine = 0;
 				sortie(code, variablesATracer);
 				break;
 			case "Q" :
-				// System.out.println("Q + Entrée");
+				// Touche Q + Entrée
 				break;
 			default:
 				getUserInput();

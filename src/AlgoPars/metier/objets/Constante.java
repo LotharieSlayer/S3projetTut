@@ -9,6 +9,11 @@ public class Constante {
 	double valeurDouble;
 	boolean valeurBoolean;
 	
+	/**
+	 * Constructeur de la constante ayant comme type int
+	 * @param nom
+	 * @param valeurInt
+	 */
 	public Constante(String nom, int valeurInt)
 	{
         this.nom            = nom   ;
@@ -16,6 +21,11 @@ public class Constante {
         this.type = "entier";
 	}
 	
+	/**
+	 * Constructeur de la constante ayant comme type String
+	 * @param nom
+	 * @param valeurString
+	 */
 	public Constante(String nom, String valeurString )
 	{
         this.nom            = nom   	  ;
@@ -23,6 +33,11 @@ public class Constante {
         this.type = "chaine de caractères";
 	}
 	
+	/**
+	 * Constructeur de la constante ayant comme type char
+	 * @param nom
+	 * @param valeurChar
+	 */
 	public Constante(String nom, char valeurChar )
 	{
         this.nom            = nom   	  ;
@@ -30,6 +45,11 @@ public class Constante {
         this.type = "caractère";
 	}
 	
+	/**
+	 * Constructeur de la constante ayant comme type double
+	 * @param nom
+	 * @param valeurDouble
+	 */
 	public Constante(String nom, double valeurDouble )
 	{
         this.nom            = nom   	  ;
@@ -37,6 +57,11 @@ public class Constante {
         this.type = "réel";
 	}
 
+	/**
+	 * Constructeur de la constante ayant comme type booléen
+	 * @param nom
+	 * @param valeurBoolean
+	 */
 	public Constante(String nom, boolean valeurBoolean )
 	{
         this.nom            = nom   	  ;
@@ -44,6 +69,11 @@ public class Constante {
         this.type = "booléen";
 	}
 	
+	
+	/* ----------------------------------------------- */
+	/* GETTERS / SETTERS                               */
+	/* ----------------------------------------------- */
+
 	public String getNom() { return this.nom; }
 	
 	public String getType() { return this.type; }

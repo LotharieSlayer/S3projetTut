@@ -30,6 +30,11 @@ public class Variable {
 	boolean[][] tabBoolDeuxDims;
 	boolean[][][] tabBoolTroisDims;
 
+	/**
+	 * Constructeur de la variable en fonction du type donné en paramètre
+	 * @param nom Nom de la variable
+	 * @param type Type de la variable
+	 */
 	public Variable(String nom, String type)
 	{
 		this.nom = nom;
@@ -62,35 +67,42 @@ public class Variable {
 		}
 	}
 
-	public Variable(String nom, String type, int couches, int colonnes, int lignes)
+	
+	/**
+	 * Constructeur de la variable en fonction du type donné en paramètre
+	 * Tableau dimension : 1
+	 * @param nom Nom de la variable
+	 * @param type Type de la variable
+	 */
+	public Variable(String nom, String type, int lignes)
 	{
 		this.nom = nom;
-		this.dimensions = 3;
+		this.dimensions = 1;
 
 		switch (type) {
 			case "entier":
 				this.type = "entier";
-				this.tabIntTroisDims = new int[couches][colonnes][lignes];
+				this.tabIntUneDim = new int[lignes];
 				break;
 
 			case "double":
 				this.type = "double";
-				this.tabDoubleTroisDims = new double[couches][colonnes][lignes];
+				this.tabDoubleUneDim = new double[lignes];
 				break;
 
 			case "caractère":
 				this.type = "caractère";
-				this.tabCharTroisDims = new char[couches][colonnes][lignes];
+				this.tabCharUneDim = new char[lignes];
 				break;
 
 			case "chaine de caractères":
 				this.type = "chaine de caractères";
-				this.tabStringTroisDims = new String[couches][colonnes][lignes];
+				this.tabStringUneDim = new String[lignes];
 				break;
 		
 			case "booléen":
 				this.type = "booléen";
-				this.tabBoolTroisDims = new boolean[couches][colonnes][lignes];
+				this.tabBoolUneDim = new boolean[lignes];
 				break;
 		
 			default:
@@ -99,6 +111,12 @@ public class Variable {
 		}
 	}
 
+	/**
+	 * Constructeur de la variable en fonction du type donné en paramètre
+	 * Tableau dimension : 2
+	 * @param nom Nom de la variable
+	 * @param type Type de la variable
+	 */
 	public Variable(String nom, String type, int colonnes, int lignes)
 	{
 		this.nom = nom;
@@ -136,35 +154,42 @@ public class Variable {
 		}
 	}
 
-	public Variable(String nom, String type, int lignes)
+	
+	/**
+	 * Constructeur de la variable en fonction du type donné en paramètre
+	 * Tableau dimension : 3
+	 * @param nom Nom de la variable
+	 * @param type Type de la variable
+	 */
+	public Variable(String nom, String type, int couches, int colonnes, int lignes)
 	{
 		this.nom = nom;
-		this.dimensions = 1;
+		this.dimensions = 3;
 
 		switch (type) {
 			case "entier":
 				this.type = "entier";
-				this.tabIntUneDim = new int[lignes];
+				this.tabIntTroisDims = new int[couches][colonnes][lignes];
 				break;
 
 			case "double":
 				this.type = "double";
-				this.tabDoubleUneDim = new double[lignes];
+				this.tabDoubleTroisDims = new double[couches][colonnes][lignes];
 				break;
 
 			case "caractère":
 				this.type = "caractère";
-				this.tabCharUneDim = new char[lignes];
+				this.tabCharTroisDims = new char[couches][colonnes][lignes];
 				break;
 
 			case "chaine de caractères":
 				this.type = "chaine de caractères";
-				this.tabStringUneDim = new String[lignes];
+				this.tabStringTroisDims = new String[couches][colonnes][lignes];
 				break;
 		
 			case "booléen":
 				this.type = "booléen";
-				this.tabBoolUneDim = new boolean[lignes];
+				this.tabBoolTroisDims = new boolean[couches][colonnes][lignes];
 				break;
 		
 			default:
@@ -172,7 +197,12 @@ public class Variable {
 				break;
 		}
 	}
+
 	
+	/* ----------------------------------------------- */
+	/* GETTERS / SETTERS                               */
+	/* ----------------------------------------------- */
+
 	public String getNom() { return this.nom; }
 	
 	public String getType() { return this.type; }
@@ -249,6 +279,10 @@ public class Variable {
 		return null;
 	}
 
+	/**
+	 * Méthode qui retourne les dimensions du tableau contenu dans Variable
+	 * @return les dimensions du tableau
+	 */
 	public int getDimensions() { return this.dimensions; }
 
 	public void affecterVariable(String valeur)
@@ -280,36 +314,49 @@ public class Variable {
 		}
 	}
 
-	public void affecterVariable(String valeur, int couches, int colonnes, int lignes )
+	
+	/**
+	 * Méthode qui permet l'affectation de la variable (tableau 1 dimension)
+	 * @param valeur 
+	 * @param colonnes Y
+	 * @param lignes X
+	 */
+	public void affecterVariable( String valeur, int lignes )
 	{
 		switch (this.type) {
 			case "entier":
 				valeur = valeur.replaceAll(" ", "");
-				this.tabIntTroisDims[couches][colonnes][lignes] = Integer.parseInt(valeur);
+				this.tabIntUneDim[lignes] = Integer.parseInt(valeur);
 				break;
 		case "chaine de caractères":
-				this.tabStringTroisDims[couches][colonnes][lignes] = valeur;
+				this.tabStringUneDim[lignes] = valeur;
 				break;
 			case "caractère":
-				this.tabCharTroisDims[couches][colonnes][lignes] = valeur.charAt(0);
+				this.tabCharUneDim[lignes] = valeur.charAt(0);
 				break;
 			case "réel":
 				valeur = valeur.replaceAll(" ", "");
-				this.tabDoubleTroisDims[couches][colonnes][lignes] = Double.parseDouble(valeur);
+				this.tabDoubleUneDim[lignes] = Double.parseDouble(valeur);
 				break;
 			case "booléen":
 				valeur = valeur.replaceAll(" ", "");
 				if (valeur == "vrai") 
-					{ this.tabBoolTroisDims[couches][colonnes][lignes] = true;
+					{ this.tabBoolUneDim[lignes] = true;
 					  break; 
 					}
-				else { this.tabBoolTroisDims[couches][colonnes][lignes] = false;
+				else { this.tabBoolUneDim[lignes] = false;
 					   break; 
 				  }
 		}
 	}
 
-	public void affecterVariable(String valeur, int colonnes, int lignes )
+	/**
+	 * Méthode qui permet l'affectation de la variable (tableau 2 dimensions)
+	 * @param valeur 
+	 * @param colonnes Y
+	 * @param lignes X
+	 */
+	public void affecterVariable( String valeur, int colonnes, int lignes )
 	{
 		switch (this.type) {
 			case "entier":
@@ -338,30 +385,38 @@ public class Variable {
 		}
 	}
 
-	public void affecterVariable(String valeur, int lignes )
+	
+	/**
+	 * Méthode qui permet l'affectation de la variable (tableau 3 dimensions)
+	 * @param valeur 
+	 * @param couches Z
+	 * @param colonnes Y
+	 * @param lignes X
+	 */
+	public void affecterVariable( String valeur, int couches, int colonnes, int lignes )
 	{
 		switch (this.type) {
 			case "entier":
 				valeur = valeur.replaceAll(" ", "");
-				this.tabIntUneDim[lignes] = Integer.parseInt(valeur);
+				this.tabIntTroisDims[couches][colonnes][lignes] = Integer.parseInt(valeur);
 				break;
 		case "chaine de caractères":
-				this.tabStringUneDim[lignes] = valeur;
+				this.tabStringTroisDims[couches][colonnes][lignes] = valeur;
 				break;
 			case "caractère":
-				this.tabCharUneDim[lignes] = valeur.charAt(0);
+				this.tabCharTroisDims[couches][colonnes][lignes] = valeur.charAt(0);
 				break;
 			case "réel":
 				valeur = valeur.replaceAll(" ", "");
-				this.tabDoubleUneDim[lignes] = Double.parseDouble(valeur);
+				this.tabDoubleTroisDims[couches][colonnes][lignes] = Double.parseDouble(valeur);
 				break;
 			case "booléen":
 				valeur = valeur.replaceAll(" ", "");
 				if (valeur == "vrai") 
-					{ this.tabBoolUneDim[lignes] = true;
+					{ this.tabBoolTroisDims[couches][colonnes][lignes] = true;
 					  break; 
 					}
-				else { this.tabBoolUneDim[lignes] = false;
+				else { this.tabBoolTroisDims[couches][colonnes][lignes] = false;
 					   break; 
 				  }
 		}

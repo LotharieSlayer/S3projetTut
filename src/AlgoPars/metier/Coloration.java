@@ -21,6 +21,7 @@ public class Coloration {
 	private static HashMap<String, Pattern> regex;
 
 	/**
+	 * chargerCouleurs()
 	 * Méthode qui charge la couleur des textes via un fichier xml
 	 */
 	public static void chargerCouleurs()
@@ -53,9 +54,9 @@ public class Coloration {
 
 
 	/**
-	 * Méthode qui colorie la ligne passée en paramètre
+	 * Méthode qui colorie la ligne en paramètre et l'a retourne coloriée
 	 * @param ligne
-	 * @return
+	 * @return la ligne coloriée
 	 */
 	public static String colorierLigne(String ligne)
 	{
@@ -97,14 +98,15 @@ public class Coloration {
 
 
 	/**
-	 * Méthode qui colorie le mot passé en paramètre
+	 * Méthode qui colorie la mot en paramètre et l'a retourne coloriée
 	 * @param mot
-	 * @return
+	 * @return le mot colorié
 	 */
 	private static String colorierMot(String mot)
 	{
 		if (!couleurs.containsKey(mot)) return mot;
 
+		// Switch case pour permettre une flexibilité dans les couleurs en fonction de l'identifiant couleur
 		String couleur;
 		String id = couleurs.get(mot).get( 0 );
 		switch ( id ) 
