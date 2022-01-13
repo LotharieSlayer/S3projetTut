@@ -383,7 +383,6 @@ public class Interpreteur {
 				chaineTemp = chaineTemp.substring(0,i) + "\\" + chaineTemp.substring(i, chaineTemp.length());
 			}
 		}
-		System.out.println(chaineTemp);
 		return chaineTemp;
 	}
 
@@ -489,7 +488,6 @@ public class Interpreteur {
 						}
 
 						chaineTemporaire = chaineTemp.substring(index[0], index[2]);
-						System.out.println(chaineTemporaire);
 						tempStringTab = verifierCaractereTab(chaineTemporaire);
 						chaineTemporaire = chaineTemp.substring(index[0], index[1] - 1);
 						chaineTemp = chaineTemp.replaceAll(chaineTemporaire + "\\[" + tempStringTab[0] + "\\]" + "\\[" + tempStringTab[1] + "\\]" + "\\[" + tempStringTab[2] + "\\]", variables.get(i).getValue(Integer.parseInt(tempStringTab[0]), Integer.parseInt(tempStringTab[1]), Integer.parseInt(tempStringTab[2])));
@@ -1034,7 +1032,7 @@ public class Interpreteur {
 			//Méthode de shlag pour terminer le coin DATA
 			for(int i = 0; i < 20; i++)
 			{
-				if(numLigne > limiteLine && limiteLine != 0) continue;
+				if(numLigne > limiteLine) continue;
 				String ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 				switch(ligneTemp)
 				{
@@ -1042,7 +1040,12 @@ public class Interpreteur {
 						numLigne++;
 						while(true)
 						{
-							if(numLigne > limiteLine && limiteLine != 0) break;
+							if(numLigne > limiteLine) break;
+							String commentaire = pseudoCode.get(numLigne).strip();
+							if(commentaire.startsWith("//")){
+								numLigne++;
+								continue;
+							} 
 							if(!pseudoCode.get(numLigne).replaceAll(" ", "").equals("")){
 								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								if(pseudoCode.get(numLigne).equals("Variable :") || pseudoCode.get(numLigne).equals("DEBUT"))
@@ -1060,7 +1063,12 @@ public class Interpreteur {
 						numLigne++;
 						while(true)
 						{
-							if(numLigne > limiteLine && limiteLine != 0) break;
+							if(numLigne > limiteLine) break;
+							String commentaire = pseudoCode.get(numLigne).strip();
+							if(commentaire.startsWith("//")){
+								numLigne++;
+								continue;
+							} 
 							if(!pseudoCode.get(numLigne).replaceAll(" ", "").equals("")){
 								ligneTemp = pseudoCode.get(numLigne).replaceAll(" ", "");
 								if(pseudoCode.get(numLigne).equals("Constante :") || pseudoCode.get(numLigne).equals("DEBUT"))
@@ -1087,7 +1095,7 @@ public class Interpreteur {
 				{
 					Interpretation(pseudoCode);
 					numLigne++;
-					if(numLigne > limiteLine && limiteLine != 0) break;
+					if(numLigne > limiteLine) break;
 				}
 			}
 			else if (numLigne <= limiteLine)
@@ -1132,13 +1140,11 @@ public class Interpreteur {
 						}
 					}
 					break;**/
-				case "lire" :
-					/*Console console = System.console();
-					System.out.println(">");
-					String ligne = console.readLine();
-					String lireTemp;
-					lireTemp = verifierCaractere('(', ligneTemp[1]);
-					System.out.println(lireTemp);*/
+				case "lire":
+					/*Console reader = System.console();
+					System.out.println("Veuillez entrer la valeur dans la variable :");
+					String ligne = reader.readLine();
+					System.out.println(ligne);*/
 					break;
 				case "ecrire":
 					String ecrireTemp;

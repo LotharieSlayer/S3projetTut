@@ -18,8 +18,7 @@ import java.io.File;
 
 public class Coloration {
     private static HashMap<String, ArrayList<String>> couleurs;
-	private static HashMap<String, Pattern> regPatterns;
-
+	private static HashMap<String, Pattern> regex;
 
 	/**
 	 * Méthode qui charge la couleur des textes via un fichier xml
@@ -27,28 +26,27 @@ public class Coloration {
 	public static void chargerCouleurs()
 	{
 		couleurs    = new HashMap<String, ArrayList<String>>();
-		regPatterns = new HashMap<String, Pattern>();
+		regex 		= new HashMap<String, Pattern>();
 
 		Element racine = null;
-
 		try {
-			Document doc = new SAXBuilder().build( new File( "../coloration.xml" ) );
+			Document doc = new SAXBuilder().build(new File( "../coloration.xml"));
 			racine = doc.getRootElement();
 		}
 		catch( Exception e ) { e.printStackTrace(); }
 
 
-		ArrayList<String> alTmp = null;
+		ArrayList<String> alGetXML = null;
 		for( Element e: racine.getChildren() )
 		{
 			for( Element child: e.getChildren() )
 			{
-				alTmp = new ArrayList<String>();
-				alTmp.add( e.getAttribute( "idCoul" ).getValue() );
-				alTmp.add( e.getAttribute( "poids" ).getValue() );
+				alGetXML = new ArrayList<String>();
+				alGetXML.add( e.getAttribute( "idCoul" ).getValue() );
+				alGetXML.add( e.getAttribute( "poids" ).getValue() );
 
-				couleurs.put( child.getText(), alTmp );
-				regPatterns.put( child.getText(), Pattern.compile( "\\b" + child.getText() + "\\b(?![^\"]*\"[^\"]*(?:\"[^\"]*\"[^\"]*)*$)" ) );
+				couleurs.put( child.getText(), alGetXML );
+				regex.put( child.getText(), Pattern.compile( "\\b" + child.getText() + "\\b(?![^\"]*\"[^\"]*(?:\"[^\"]*\"[^\"]*)*$)" ) );
 			}
 		}
 	}
@@ -59,41 +57,42 @@ public class Coloration {
 	 * @param ligne
 	 * @return
 	 */
-	public static String colorierLigne( String ligne )
+	public static String colorierLigne(String ligne)
 	{
 		int ligneLengthDebut = ligne.length();
 		String debutLigne = ""; // Utilisée pour éviter de colorer des keywords dans les commentaires.
 		String finLigne = "";
 
-		if ( ligne.contains( "//" ) )
+		if(ligne.contains("//"))
 		{
-			int indexDebutCom = ligne.indexOf( "//" );
-
-			if ( indexDebutCom == 0 ) ligne = CouleurConsole.VERT.getFont() + ligne + "\033[0m";
+			int debCommentaire = ligne.indexOf( "//" );
+			if ( debCommentaire == 0 ) ligne = CouleurConsole.VERT.getFont() + ligne + "\033[0m";
 			else
 			{
-				debutLigne = ligne.substring( 0, indexDebutCom );
-				finLigne = CouleurConsole.VERT.getFont() + ligne.substring( indexDebutCom, ligne.length() ) + "\033[0m";
+				debutLigne = ligne.substring( 0, debCommentaire );
+				finLigne = CouleurConsole.VERT.getFont() + ligne.substring( debCommentaire, ligne.length() ) + "\033[0m";
 			}
 		}
 		else
 			debutLigne = ligne;
 
 		Matcher matcher = null;
-		for ( String mot : couleurs.keySet() )
+		for (String mot : couleurs.keySet())
 		{
-			matcher = regPatterns.get( mot ).matcher( ligne );
-			if ( matcher.find() )
+			matcher = regex.get( mot ).matcher(ligne);
+			if (matcher.find())
 			{
-				if ( mot.equals( "a" ) && ligne.indexOf( "a" ) < ligne.indexOf( "faire" ) )
-					debutLigne = debutLigne.replaceFirst( mot, colorierMot( mot ) );
+				if ( mot.equals("a") && ligne.indexOf("a") < ligne.indexOf("faire") )
+					debutLigne = debutLigne.replaceFirst(mot, colorierMot(mot));
 				else
-					debutLigne = debutLigne.replace( mot, colorierMot( mot ) );
+					debutLigne = debutLigne.replace(mot, colorierMot(mot));
 			}
 		}
 		
-		System.out.println( );
-		return debutLigne + finLigne + " ".repeat( 75 - ligneLengthDebut );
+		String resultat = debutLigne + finLigne;
+		if(resultat.length() > 85) return resultat.substring(0, 85);
+		else
+			return resultat + " ".repeat(76 - ligneLengthDebut);
 	}
 
 
@@ -102,12 +101,12 @@ public class Coloration {
 	 * @param mot
 	 * @return
 	 */
-	private static String colorierMot( String mot )
+	private static String colorierMot(String mot)
 	{
-		if ( !couleurs.containsKey( mot ) ) return mot;
+		if (!couleurs.containsKey(mot)) return mot;
 
 		String couleur;
-		String id = couleurs.get( mot ).get( 0 );
+		String id = couleurs.get(mot).get( 0 );
 		switch ( id ) 
 		{
 			case "0": 
@@ -117,25 +116,25 @@ public class Coloration {
 				couleur = CouleurConsole.JAUNE.getFont();
 				break;
 			case "2": 
-				couleur = CouleurConsole.ROUGE.getFont();
+				couleur = CouleurConsole.CYAN.getFont();
 				break;
 			case "3": 
 				couleur = CouleurConsole.MAUVE.getFont();
 				break;
 			case "4": 
-				couleur = CouleurConsole.VERT.getFont();
+				couleur = CouleurConsole.BLEU.getFont();
 				break;
 			case "5":
-				couleur = CouleurConsole.CYAN.getFont();
+				couleur = CouleurConsole.VERT.getFont();
 				break;
 			case "6":
-				couleur = CouleurConsole.BLEU.getFont();
+				couleur = CouleurConsole.ROUGE.getFont();
 				break;
 			default: 
 				couleur = CouleurConsole.BLANC.getFont();
 		}
 
-		if ( couleurs.get( mot ).get( 1 ).equals( "true" ) ) 
+		if (couleurs.get(mot).get(1).equals("true") ) 
 			couleur += "\033[1m";
 
 		return couleur + mot + "\033[0m";

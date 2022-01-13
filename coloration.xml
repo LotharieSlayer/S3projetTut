@@ -17,8 +17,8 @@
         <mot>lire</mot>
     </lire>
 
-    <commande idCoul="3" poids="false">
-        <mot>si</mot> <!--conditions-->
+    <conditions idCoul="3" poids="false">
+        <mot>si</mot>
         <mot>sinon</mot>
         <mot>alors</mot>
         <mot>fsi</mot>
@@ -38,23 +38,25 @@
 
         <mot>jusqu'a</mot>
 
-        <mot>ou</mot> <!--connecteurs logiques-->
+        <mot>ou</mot>
         <mot>et</mot>
         <mot>xou</mot>
         <mot>non</mot>
+    </conditions>
 
-        <mot>booleen</mot> <!--types-->
+    <type idCoul="4" poids="false">
+        <mot>booleen</mot>
         <mot>entier</mot>
         <mot>reel</mot>
         <mot>caractere</mot>
         <mot>chaine</mot>
         <mot>tableau de</mot>
 
-        <mot>vrai</mot> <!--boolÃ©ens-->
+        <mot>vrai</mot>
         <mot>faux</mot>
-    </commande>
+    </type>
 
-    <commentaire idCoul="4" poids="false">
+    <commentaire idCoul="5" poids="false">
         <mot>//</mot>
         <mot>/*</mot>
     </commentaire>

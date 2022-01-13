@@ -36,7 +36,10 @@ public class IhmCui {
 
 		// RELOAD
 		Main.getInstance().setLimiteLine(futureLine);
-		Main.getInstance().reloadInterpreteur();
+
+		if(futureLine != 0)
+			Main.getInstance().reloadInterpreteur();
+
 
 		// TRACEUR
 		sTraceHashMap.clear();
@@ -55,8 +58,16 @@ public class IhmCui {
 		System.out.println(  "│   CODE   │" + String.format ( "%84s", "│ DONNÉES │" ));
 		System.out.println(  "├──────────┴─────────────────────────────────────────────────────────────────────────┼─────────┴──────────┬────────────────────────┐" );
 
-		for(int i = 0; i < pseudoCode.size(); i++)
+		int limiteAffichage = 0;
+		int cptLigne;
+		if (futureLine > 20)
+			cptLigne = futureLine - 20;
+		else
+			cptLigne = 0;
+
+		for(int i = cptLigne; i < pseudoCode.size(); i++)
 		{
+
 			// Partie code
 
 			String color = "";
@@ -70,14 +81,14 @@ public class IhmCui {
 
 			// Si plus de 80 caractères
 			if (pseudoCode.get(i).length() > 80)
-				System.out.print( color + "│" + String.format ( "%-2d", i ) + " " +  String.format ( "%-76.75s", pseudoCode.get(i) ) + " ... │" + colorReset);
+				System.out.print( color + "│" + String.format ( "%-2d", i ) + " " + colorReset + String.format ( "%-80s", pseudoCode.get(i) ) + "     │");
 
-            else { System.out.print( color + "│" + String.format ( "%-2d", i ) + " " +  String.format ( "%-80s", pseudoCode.get(i) ) + " " + "│" + colorReset); }
+			else { System.out.print( color + "│" + String.format ( "%-2d", i ) + " " + colorReset + String.format ( "%-80s", pseudoCode.get(i) ) + " " + "│"); }
 
 
 			// Si plus de 40 lignes
-            if ( i >= 40 ){
-				System.out.println(String.format("%46s", "│") + "\n" + String.format ( "%-40s", "│") + String.format ("%-45s", "...") + "│" + String.format("%46s", "│"));
+            if ( limiteAffichage >= 40 ){
+				System.out.println(String.format("%46s", "│") + "\n" + String.format ( "%-40s", "│") + String.format ("%-45s", "   ") + "│" + String.format("%46s", "│"));
 				break;
 			}
 
@@ -98,6 +109,8 @@ public class IhmCui {
 				}
 
 			}
+
+			limiteAffichage++;
 		}
 		
 		System.out.println( "└────────────────────────────────────────────────────────────────────────────────────┴─────────────────────────────────────────────┘");
@@ -140,6 +153,8 @@ public class IhmCui {
 			case "" :
 				// System.out.println("Entrée");
 				futureLine += 1;
+				// Si on arrive à la taille de l'algorithme on fait -1 pour rester sur le "FIN".
+				if(futureLine >= code.size()) futureLine = code.size() - 1;
 				sortie(code, variablesATracer);
 				break;
 			case "B" :
