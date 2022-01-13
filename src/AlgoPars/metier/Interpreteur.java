@@ -1325,9 +1325,39 @@ public class Interpreteur {
 					conditionsListe.add(numCondition,verifierCondition(condition[0]));
 					if(conditionsListe.get(numCondition) == false)
 					{
-						for(int i=numLigne; (!detecterFonction(pseudoCode, i).contains("fsi") && !detecterFonction(pseudoCode, i).contains("sinon"));i++)
+						int nbSi = 1;
+						for(int i=numLigne+1; i < pseudoCode.size();i++)
 						{
-							numLigneIgnorer++;
+							if((!detecterFonction(pseudoCode, i).contains("si") &&!detecterFonction(pseudoCode, i).contains("fsi") && !detecterFonction(pseudoCode, i).contains("sinon")))
+							{
+								numLigneIgnorer++;
+							}
+							else if(detecterFonction(pseudoCode, i).contains("si") && !detecterFonction(pseudoCode, i).contains("fsi") && !detecterFonction(pseudoCode, i).contains("sinon"))
+							{
+								nbSi++;
+								numLigneIgnorer++;
+							}
+							else if(detecterFonction(pseudoCode, i).contains("sinon"))
+							{
+								if(nbSi == 1)
+								{
+									break;
+								}
+								else
+									numLigneIgnorer++;
+							}
+							else if(detecterFonction(pseudoCode, i).contains("fsi"))
+							{
+								if(nbSi == 1)
+								{
+									break;
+								}
+								else
+								{
+									nbSi--;
+									numLigneIgnorer++;
+								}
+							}
 						}
 					}
 					numCondition++;
@@ -1335,15 +1365,37 @@ public class Interpreteur {
 				case "sinon":
 					if(conditionsListe.get(numCondition-1) == true)
 					{
-						for(int i=numLigne; !detecterFonction(pseudoCode, i).contains("fsi");i++)
+						int nbSi = 1;
+						for(int i=numLigne+1; i < pseudoCode.size();i++)
 						{
-							numLigneIgnorer++;
+							if(!detecterFonction(pseudoCode, i).contains("si") &&!detecterFonction(pseudoCode, i).contains("fsi") && !detecterFonction(pseudoCode, i).contains("sinon"))
+							{
+								numLigneIgnorer++;
+							}
+							else if(detecterFonction(pseudoCode, i).contains("si") && (!detecterFonction(pseudoCode, i).contains("fsi") || !detecterFonction(pseudoCode, i).contains("sinon")))
+							{
+								nbSi++;
+								numLigneIgnorer++;
+							}
+							else if(detecterFonction(pseudoCode, i).contains("fsi"))
+							{
+								if(nbSi == 1)
+								{
+									break;
+								}
+								else
+								{
+									nbSi--;
+									numLigneIgnorer++;
+								}
+							}
 						}
 					}
 					break;
 				case "tq":
 					condition = ligneTemp[1].split("faire", 2);
 					conditionsListe.add(numCondition,verifierCondition(condition[0]));
+					System.out.println("TQ " + conditionsListe.get(numCondition));
 					if(conditionsListe.get(numCondition) == true)
 					{
 						for(int i=numLigne; !detecterFonction(pseudoCode, i).contains("ftq");i++)

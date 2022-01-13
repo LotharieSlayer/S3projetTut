@@ -8,9 +8,21 @@ Variable :
 DEBUT
 long <-- 3
 larg <-- 8
-si long = (3 + 8) alors
+lire ( long )
+ecrire ( long )
+si long = 3 alors
     ecrire ( "Michel" ) 
-    si larg = 7 alors
+    si larg /= 7 + 8 alors
+        ecrire ( "C'est le bresil" ) 
+    sinon
+        tq long <= 6 faire
+            long <-- long + 1
+            ecrire ("Michel c'est peut-être le brésil")
+         ftq
+        ecrire ("Michel c'est très clairement le brésil")
+    fsi
+sinon
+    si larg = 7 + 8 alors
         ecrire ( "C'est le bresil" ) 
     sinon
         tq long <= 6 faire
@@ -20,4 +32,4 @@ si long = (3 + 8) alors
         ecrire ("Michel c'est très clairement le brésil")
     fsi
 fsi
-FIN
+
