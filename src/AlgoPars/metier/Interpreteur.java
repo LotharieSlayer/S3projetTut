@@ -1375,7 +1375,19 @@ public class Interpreteur {
 						}
 
 					}
-					else break;
+					else {
+						int indexVariable = chercherVariable(lireTemp.replaceAll(" ", ""));
+
+						if(indexVariable > -1)
+						{
+							if(detecterType(hmLire.get(lireTemp)).equals(variables.get(indexVariable).getType()))
+							{
+								variables.get(indexVariable).affecterVariable(hmLire.get(lireTemp));
+								traceur.put(variables.get(indexVariable).getNom(), variables.get(indexVariable).getValue());
+							}
+						}
+						break;
+					}
 				case "ecrire":
 					String ecrireTemp;
 					ecrireTemp = verifierCaractere('(', ligneTemp[1]);

@@ -8,6 +8,8 @@ Variable :
 DEBUT
 long <-- 3
 larg <-- 8
+lire ( long )
+ecrire ( long )
 si long = 3 alors
     ecrire ( "Michel" ) 
     si larg /= 7 + 8 alors
