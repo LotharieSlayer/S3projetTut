@@ -26,30 +26,59 @@ public class Interpreteur {
 	int numLigne = 0;
 	int numLigneIgnorer = 0;
 
+	/**
+	 * getConsole()
+	 * @return Récupère la console se trouvant dans l'interprèteur
+	 */
 	public ArrayList<String> getConsole() {
 		return console;	
 	}
 		
+	/**
+	 * getTraceur()
+	 * @return Récupère le traceur dans l'interprèteur
+	 */
 	public HashMap<String, String> getTraceur() {
 		return traceur;
 	}
 	
+	/**
+	 * getNumLigne()
+	 * @return Récupère le numéro de la ligne en exécution
+	 */
 	public int getNumLigne() {
 		return numLigne;
 	}
 
+	/**
+	 * Affceter le numéro de la ligne en exécution
+	 * @param numLigne
+	 * @return
+	 */
 	public int setNumLigne(int numLigne) {
 		return this.numLigne = numLigne;
 	}
 
+	/**
+	 * Récupère toutes les constantes
+	 * @return Arraylist de constantes
+	 */
 	public static ArrayList<Constante> getConstantes(){
 		return constantes;
 	}
 
+	/**
+	 * Récupère toutes les variables
+	 * @return Arraylist de variables
+	 */
 	public static ArrayList<Variable> getVariables(){
 		return variables;
 	}
 	
+	/**
+	 * Permet de déclarer la constante avec la String pris en paramètre
+	 * @param constante
+	 */
 	public void declarerConstante(String constante) {
 		String[] tempString = constante.split("<--");
 		if(tempString[1] != null)
@@ -102,6 +131,10 @@ public class Interpreteur {
 			console.add("Erreur de déclaration de constante");
 	}
 	
+	/**
+	 * Permet de déclarer la variable avec la String pris en paramètre
+	 * @param variable
+	 */
 	public void declarerVariable(String variable) {
 		String[] tempStringType = variable.split(":");
 		String[] tempStringVariables = tempStringType[0].replaceAll(" ", "").split(",");
@@ -123,8 +156,8 @@ public class Interpreteur {
 				traceur.put(tempStringVariables[i], "NULL");
 				break;
 		
-			case "char":
-				variables.add(new Variable(tempStringVariables[i], "char"));
+			case "caractère":
+				variables.add(new Variable(tempStringVariables[i], "caractère"));
 				traceur.put(tempStringVariables[i], "NULL");
 				break;
 
@@ -220,6 +253,12 @@ public class Interpreteur {
 		}
 	}
 	
+	/**
+	 * Permet de vérifier si ya un caractère
+	 * @param car
+	 * @param chaine
+	 * @return la chaine sans les caractères sinon null
+	 */
 	public String verifierCaractere(char car, String chaine)
 	{
 		char[] tabCar = new char[2];
@@ -251,6 +290,11 @@ public class Interpreteur {
 		return null;
 	}
 
+	/**
+	 * Permet de vérifier si ya un caractère pour les tableaux
+	 * @param chaine
+	 * @return la chaine sans les caractères sinon null
+	 */
 	public String[] verifierCaractereTab(String chaine)
 	{
 		char[] tabCar = new char[2];
@@ -296,6 +340,11 @@ public class Interpreteur {
 		return tabTemp;
 	}
 	
+	/**
+	 * Permet de chercher une constante dans l'Arraylist des constantes
+	 * @param chaine
+	 * @return l'index si réussi sinon -1
+	 */
 	public int chercherConstante(String chaine)
 	{
 		String chaineTemp = chaine.replaceAll(" ", "");
@@ -309,6 +358,11 @@ public class Interpreteur {
 		return -1;
 	}
 	
+	/**
+	 * Permet de chercher une constante dans l'Arraylist des variables
+	 * @param chaine
+	 * @return l'index si réussi sinon -1
+	 */
 	public int chercherVariable(String chaine)
 	{
 		String chaineTemp = chaine.replaceAll(" ", "");
@@ -322,6 +376,11 @@ public class Interpreteur {
 		return -1;
 	}
 
+	/**
+	 * Permet de détecter le type de la chaine passé en paramètre.
+	 * @param chaine
+	 * @return le type
+	 */
 	public String detecterType(String chaine)
 	{
 		String chaineTemp[] = new String[2];
@@ -357,6 +416,11 @@ public class Interpreteur {
 		}
 	}
 
+	/**
+	 * Permet de supprimer les espaces en début de chaine
+	 * @param chaine
+	 * @return string sans espace au début
+	 */
 	public String supprimerEspacesDebut(String chaine)
 	{
 		//Supprimer les espaces du début
@@ -374,6 +438,11 @@ public class Interpreteur {
 		return chaine.substring(indice,chaine.length());
 	}
 
+	/**
+	 * Règle les problèmes de regex si fausses en ajoutant des caractères
+	 * @param chaine
+	 * @return la regex
+	 */
 	public String regexFriendly(String chaine)
 	{
 		String chaineTemp = chaine;
@@ -390,6 +459,11 @@ public class Interpreteur {
 		return chaineTemp;
 	}
 
+	/**
+	 * Permet de remplacer le nom de la constante/variable par sa valeur
+	 * @param chaine
+	 * @return valeur
+	 */
 	public String remplacerNomParValeur(String chaine){
 
 		String chaineTemp = chaine.replaceAll(" ", "");
@@ -502,6 +576,11 @@ public class Interpreteur {
 		return chaineTemp;	
 	}
 
+	/**
+	 * Permet de réaliser les différents calculs
+	 * @param chaine
+	 * @return résultat
+	 */
 	public String calculateur(String chaine)
 	{
 		String chaineTemp = remplacerNomParValeur(chaine);
@@ -765,6 +844,11 @@ public class Interpreteur {
 		return chaineTemp;
 	}
 
+	/**
+	 * Convertir double en int
+	 * @param expression
+	 * @return int sinon null
+	 */
 	public String convertirDoubleInt(String expression)
 	{
 		//Converti les double en int si c'est possible
@@ -777,6 +861,12 @@ public class Interpreteur {
 			return null;
 	}
 
+	/**
+	 * Additione deux paramètres
+	 * @param a
+	 * @param b
+	 * @return Résultat de l'addition
+	 */
 	public String addition(String a, String b)
 	{
 		double aDouble = 0, bDouble = 0;
@@ -798,6 +888,12 @@ public class Interpreteur {
 		return String.valueOf(aDouble + bDouble);
 	}
 
+	/**
+	 * Soustrait deux paramètres
+	 * @param a
+	 * @param b
+	 * @return Résultat de la soustraction
+	 */
 	public String soustraction(String a, String b)
 	{
 		double aDouble = 0, bDouble = 0;
@@ -819,6 +915,12 @@ public class Interpreteur {
 		return String.valueOf(aDouble - bDouble);
 	}
 
+	/**
+	 * Multiplie deux paramètres
+	 * @param a
+	 * @param b
+	 * @return Résultat de la multiplication
+	 */
 	public String multiplication(String a, String b)
 	{
 		double aDouble = 0, bDouble = 0;
@@ -840,6 +942,12 @@ public class Interpreteur {
 		return String.valueOf(aDouble * bDouble);
 	}
 
+	/**
+	 * Divise le premier paramètre par le deuxième
+	 * @param a
+	 * @param b
+	 * @return Résultat de la division
+	 */
 	public String division(String a, String b)
 	{
 		double aDouble = 0, bDouble = 0;
@@ -861,6 +969,12 @@ public class Interpreteur {
 		return String.valueOf(aDouble / bDouble);
 	}
 
+	/**
+	 * Donne le reste de la division des deux paramètres
+	 * @param a
+	 * @param b
+	 * @return Résultat du reste
+	 */
 	public String modulo(String a, String b)
 	{
 		double aDouble = 0, bDouble = 0;
@@ -882,6 +996,12 @@ public class Interpreteur {
 		return String.valueOf(aDouble % bDouble);
 	}
 
+	/**
+	 * Fait la puissance (paramètre 2) sur le paramètre 1
+	 * @param a
+	 * @param b
+	 * @return Résultat de la puissance
+	 */
 	public String puissance(String a, String b)
 	{
 		double aDouble = 0, bDouble = 0;
@@ -903,7 +1023,13 @@ public class Interpreteur {
 		return String.valueOf(Math.pow(aDouble,bDouble));
 	}
 	
-	public String racineCarre(String a, String b)
+	/**
+	 * Fait la racine carré de paramètre 1
+	 * @param a
+	 * @param b
+	 * @return Résultat de la racine carré
+	 */
+	public String racineCarre(String a)
 	{
 		Double aDouble = Double.parseDouble(a);
 
@@ -917,6 +1043,117 @@ public class Interpreteur {
 		return String.valueOf(Math.sqrt(aDouble));
 	}
 
+	/**
+	 * Met en chaîne un entier
+	 * @param a
+	 * @return l'entier
+	 */
+	public String enChaine(int a){
+
+		return String.valueOf(a) ;
+	}
+
+	/**
+	 * Met en entier une chaîne
+	 * @param a
+	 * @return la string
+	 */
+	public String enEntier(String a){
+
+		int    aInt ;
+		double aDouble = 0 ;
+
+		if(detecterType(a) == "entier"){ return a ;}
+		else if(detecterType(a) == "réel"){
+			aDouble = Double.parseDouble(a);
+			aInt = (int)aDouble ;
+
+			return String.valueOf(aInt) ;
+		}
+		else{ return null; }
+	}
+
+	// Si la chaîne mise en caractère correspond à un entier, retourne l'entier sous format réel'
+	// Si la chaîne mise en caractère correspond à un réel  , retourne le reel
+	public String enReel(String a){
+
+		double aDouble = 0 ;
+
+		if(detecterType(a) == "réel"){ return a ;}
+		else if(detecterType(a) == "entier"){
+			aDouble = Double.parseDouble(a);
+			return String.valueOf(aDouble);
+		}
+		else{ return null;}
+	}
+
+	// Retourne le caractère correspondant au code ASCII de l'entier mis en paramètre
+	public String car(int a){return Character.toString(a) ;}
+
+	// Retourne le code ASCII du caractère mis en paramètre
+	public String ord(char a){return String.valueOf((int) a) ;}
+
+	// Arrondi le réel mis en paramètre à l'entier inférieur le plus proche
+	public String plancher(double a){return String.valueOf(Math.floor(a));}
+
+	// Arrondi le réel mis en paramètre à l'entier supérieur le plus proche
+	public String plafond(double a){return String.valueOf(Math.ceil(a));}
+
+	// Arrondi le reel mis en paramètre à l'entier le plus proche
+	public String arrondi(double a){return String.valueOf(Math.round(a));}
+
+	// Récupère la date courante au format AAAA-MM-JJ
+	public String aujourdhui(){return String.valueOf(java.time.LocalDate.now());}
+
+	// Récupère le jour de la date courante
+	public String jour(String date){
+		if(date.matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")){
+			String[] aujourdhui = date.split("-");
+			return aujourdhui[2] ;
+		}
+		else {return null;}
+	}
+
+	// Récupère le mois de la date courante
+	public String mois(String date){
+		if(date.matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")){
+			String[] aujourdhui = date.split("-");
+			return aujourdhui[1] ;
+		}
+		else {return null;}
+	}
+
+	// Récupère l'année de la date courante
+	public String annee(String date){
+		if(date.matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")){
+			String[] aujourdhui = date.split("-");
+			return aujourdhui[0] ;
+		}
+		else {return null;}
+	}
+
+	// Renvoie true si la chaine mise en paramètre correspond à un réel
+	public Boolean estReel(String chaine){
+		if(chaine.matches("^[0-9]+$") && chaine.contains(".")){return true;}
+		else{return false;}
+	}
+
+	// Renvoie true si la chaine mise en paramètre correspond à un entier
+	public Boolean estEntier(String chaine){
+		if(chaine.matches("^[0-9]+$") && !(chaine.contains("."))){return true;}
+		else{return false;}
+	}
+
+	// Génère un aléatoire allant de 0 (compris) à maximum (non compris)
+	public static String hasard(int maximum){return String.valueOf((int)(Math.random()*maximum));}
+
+
+	/**
+	 * Gestion des parenthèses, remplace le String "valeurEntreParenthese" + num par la valeur
+	 * @param expression
+	 * @param valeurEntreParenthese
+	 * @return les deux parties de l'expression
+	 */
 	public String[] remplacerValeur(String[] expression, String[][] valeurEntreParenthese)
 	{
 		for(int i = 0; i<2; i++)
@@ -939,6 +1176,11 @@ public class Interpreteur {
 		return expression;
 	}
 
+	/**
+	 * Vérifier une condition prise en paramètre
+	 * @param chaine
+	 * @return boolean
+	 */
 	public boolean verifierCondition(String chaine)
 	{
 		String chaineTemp = remplacerNomParValeur(chaine);
@@ -1163,6 +1405,10 @@ public class Interpreteur {
 		return Valeur;
 	}
 
+	/* ----------------------------------------------- */
+	/* METHODES BOOLÉENNES                             */
+	/* ----------------------------------------------- */
+
 	public boolean egalite(String a, String b)
 	{
 		return Double.parseDouble(a) == Double.parseDouble(b);
@@ -1213,6 +1459,10 @@ public class Interpreteur {
 		return !a;
 	}
 
+	/**
+	 * Constructeur de Interpreteur, prend en paramètre l'Arraylist contenant le pseudo code.
+	 * @param pseudoCode
+	 */
 	public Interpreteur (ArrayList<String> pseudoCode)
 	{
 		// Initialisation des ArrayLists pour créer une grosse taille de vide afin de pouvoir le replace
@@ -1294,7 +1544,7 @@ public class Interpreteur {
 			{
 				while (numLigne < pseudoCode.size())
 				{
-					Interpretation(pseudoCode);
+					interpretation(pseudoCode);
 					numLigne++;
 					if(numLigne > limiteLine) break;
 				}
@@ -1306,13 +1556,23 @@ public class Interpreteur {
 			console.add("Erreur : La classe n'est pas déclaré");
 	}
 
+	/**
+	 * Permet de détécter les fonctions sur la ligne prise en paramètre
+	 * @param pseudoCode
+	 * @param numLigneTemp
+	 * @return String de la ligne
+	 */
 	public String detecterFonction(ArrayList<String> pseudoCode, int numLigneTemp)
 	{
 		String[] ligneTemp = supprimerEspacesDebut(pseudoCode.get(numLigneTemp)).split(" ", 2);
 		return ligneTemp[0];
 	}
 	
-	public void Interpretation(ArrayList<String> pseudoCode)
+	/**
+	 * Interprète le pseudo code
+	 * @param pseudoCode
+	 */
+	public void interpretation(ArrayList<String> pseudoCode)
 	{
 		String condition[];
 
@@ -1394,6 +1654,7 @@ public class Interpreteur {
 					break;
 				case "tq":
 					condition = ligneTemp[1].split("faire", 2);
+					// Vérifie si vrai ou faux dans l'arraylist
 					conditionsListe.add(numCondition,verifierCondition(condition[0]));
 					System.out.println("TQ " + conditionsListe.get(numCondition));
 					if(conditionsListe.get(numCondition) == true)
@@ -1406,6 +1667,7 @@ public class Interpreteur {
 					}
 					else
 					{
+						//Si faux
 						for(int i=numLigne; (!detecterFonction(pseudoCode, i).contains("ftq"));i++)
 						{
 							numLigneIgnorer++;
@@ -1415,6 +1677,9 @@ public class Interpreteur {
 					break;
 				case "ftq":
 					numLigne = numLigne - numLigneBoucle;
+					// int limiteLine = Main.getInstance().getLimiteLine();
+					// Main.getInstance().setLimiteLine(numLigne);
+					
 					numLigneBoucle = 0;
 					break;
 				case "lire":

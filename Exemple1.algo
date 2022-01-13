@@ -4,6 +4,7 @@ Constante :
  REPONSE <-- vrai
 Variable :
  long,larg : entier
+ test : caractère
  aire : entier
 DEBUT
 long <-- 3
