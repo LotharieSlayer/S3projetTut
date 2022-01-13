@@ -1632,7 +1632,7 @@ public class Interpreteur {
 							{
 								numLigneIgnorer++;
 							}
-							else if(detecterFonction(pseudoCode, i).contains("si") && (!detecterFonction(pseudoCode, i).contains("fsi") || !detecterFonction(pseudoCode, i).contains("sinon")))
+							else if(detecterFonction(pseudoCode, i).contains("si") && !detecterFonction(pseudoCode, i).contains("fsi") && !detecterFonction(pseudoCode, i).contains("sinon"))
 							{
 								nbSi++;
 								numLigneIgnorer++;
