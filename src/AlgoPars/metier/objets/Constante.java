@@ -30,7 +30,7 @@ public class Constante {
 	{
         this.nom            = nom   	  ;
         this.valeurString 	= valeurString;
-        this.type = "chaine de caractères";
+        this.type = "chaine";
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class Constante {
 		switch (this.type) {
 			case "entier":
 				return String.valueOf(this.valeurInt);
-		case "chaine de caractères":
+		case "chaine":
 				return this.valeurString;
 			case "caractère":
 				return "" + this.valeurChar;

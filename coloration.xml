@@ -1,8 +1,9 @@
+<!-- Vous pouvez choisir une couleur de 0 à 6 dans idCoul -->
 <coloration>
     <structure idCoul="0" poids="true">
-        <mot>ALGORITHME</mot>
-        <mot>constante</mot>
-        <mot>variable</mot>
+        <mot>Algorithme</mot>
+        <mot>Constante</mot>
+        <mot>Variable</mot>
         <mot>DEBUT</mot>
         <mot>FIN</mot>
         <mot>appel</mot>
@@ -45,12 +46,12 @@
     </conditions>
 
     <type idCoul="4" poids="false">
-        <mot>booleen</mot>
+        <mot>booléen</mot>
         <mot>entier</mot>
-        <mot>reel</mot>
-        <mot>caractere</mot>
+        <mot>réel</mot>
+        <mot>caractère</mot>
         <mot>chaine</mot>
-        <mot>tableau de</mot>
+        <mot>tableau</mot>
 
         <mot>vrai</mot>
         <mot>faux</mot>

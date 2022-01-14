@@ -45,16 +45,16 @@ public class Variable {
 				this.type = "entier";
 				break;
 
-			case "double":
-				this.type = "double";
+			case "réel":
+				this.type = "réel";
 				break;
 
 			case "caractère":
 				this.type = "caractère";
 				break;
 
-			case "chaine de caractères":
-				this.type = "chaine de caractères";
+			case "chaine":
+				this.type = "chaine";
 				break;
 		
 			case "booléen":
@@ -85,8 +85,8 @@ public class Variable {
 				this.tabIntUneDim = new int[lignes];
 				break;
 
-			case "double":
-				this.type = "double";
+			case "réel":
+				this.type = "réel";
 				this.tabDoubleUneDim = new double[lignes];
 				break;
 
@@ -95,8 +95,8 @@ public class Variable {
 				this.tabCharUneDim = new char[lignes];
 				break;
 
-			case "chaine de caractères":
-				this.type = "chaine de caractères";
+			case "chaine":
+				this.type = "chaine";
 				this.tabStringUneDim = new String[lignes];
 				break;
 		
@@ -128,8 +128,8 @@ public class Variable {
 				this.tabIntDeuxDims = new int[colonnes][lignes];
 				break;
 
-			case "double":
-				this.type = "double";
+			case "réel":
+				this.type = "réel";
 				this.tabDoubleDeuxDims = new double[colonnes][lignes];
 				break;
 
@@ -138,8 +138,8 @@ public class Variable {
 				this.tabCharDeuxDims = new char[colonnes][lignes];
 				break;
 
-			case "chaine de caractères":
-				this.type = "chaine de caractères";
+			case "chaine":
+				this.type = "chaine";
 				this.tabStringDeuxDims = new String[colonnes][lignes];
 				break;
 		
@@ -172,8 +172,8 @@ public class Variable {
 				this.tabIntTroisDims = new int[couches][colonnes][lignes];
 				break;
 
-			case "double":
-				this.type = "double";
+			case "réel":
+				this.type = "réel";
 				this.tabDoubleTroisDims = new double[couches][colonnes][lignes];
 				break;
 
@@ -182,8 +182,8 @@ public class Variable {
 				this.tabCharTroisDims = new char[couches][colonnes][lignes];
 				break;
 
-			case "chaine de caractères":
-				this.type = "chaine de caractères";
+			case "chaine":
+				this.type = "chaine";
 				this.tabStringTroisDims = new String[couches][colonnes][lignes];
 				break;
 		
@@ -211,7 +211,7 @@ public class Variable {
 		switch (this.type) {
 			case "entier":
 				return String.valueOf(this.valeurInt);
-		case "chaine de caractères":
+		case "chaine":
 				return this.valeurString;
 			case "caractère":
 				return "" + this.valeurChar;
@@ -229,7 +229,7 @@ public class Variable {
 		switch (this.type) {
 			case "entier":
 				return String.valueOf(this.tabIntTroisDims[couches][colonnes][lignes]);
-		case "chaine de caractères":
+		case "chaine":
 				return this.tabStringTroisDims[couches][colonnes][lignes];
 			case "caractère":
 				return "" + this.tabCharTroisDims[couches][colonnes][lignes];
@@ -247,7 +247,7 @@ public class Variable {
 		switch (this.type) {
 			case "entier":
 				return String.valueOf(this.tabIntTroisDims[colonnes][lignes]);
-		case "chaine de caractères":
+		case "chaine":
 				return this.tabStringDeuxDims[colonnes][lignes];
 			case "caractère":
 				return "" + this.tabCharDeuxDims[colonnes][lignes];
@@ -265,7 +265,7 @@ public class Variable {
 		switch (this.type) {
 			case "entier":
 				return String.valueOf(this.tabIntTroisDims[lignes]);
-		case "chaine de caractères":
+		case "chaine":
 				return this.tabStringUneDim[lignes];
 			case "caractère":
 				return "" + this.tabCharUneDim[lignes];
@@ -292,7 +292,7 @@ public class Variable {
 			valeur = valeur.replaceAll(" ", "");
 			this.valeurInt = Integer.parseInt(valeur);
 				break;
-		case "chaine de caractères":
+		case "chaine":
 				this.valeurString = valeur;
 				break;
 			case "caractère":
@@ -328,7 +328,7 @@ public class Variable {
 				valeur = valeur.replaceAll(" ", "");
 				this.tabIntUneDim[lignes] = Integer.parseInt(valeur);
 				break;
-		case "chaine de caractères":
+		case "chaine":
 				this.tabStringUneDim[lignes] = valeur;
 				break;
 			case "caractère":
@@ -363,7 +363,7 @@ public class Variable {
 				valeur = valeur.replaceAll(" ", "");
 				this.tabIntDeuxDims[colonnes][lignes] = Integer.parseInt(valeur);
 				break;
-		case "chaine de caractères":
+		case "chaine":
 				this.tabStringDeuxDims[colonnes][lignes] = valeur;
 				break;
 			case "caractère":
@@ -400,7 +400,7 @@ public class Variable {
 				valeur = valeur.replaceAll(" ", "");
 				this.tabIntTroisDims[couches][colonnes][lignes] = Integer.parseInt(valeur);
 				break;
-		case "chaine de caractères":
+		case "chaine":
 				this.tabStringTroisDims[couches][colonnes][lignes] = valeur;
 				break;
 			case "caractère":

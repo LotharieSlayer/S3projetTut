@@ -146,13 +146,13 @@ public class Interpreteur {
 				traceur.put(tempStringVariables[i], "NULL");
 				break;
 
-			case "double":
-				variables.add(new Variable(tempStringVariables[i], "double"));
+			case "réel":
+				variables.add(new Variable(tempStringVariables[i], "réel"));
 				traceur.put(tempStringVariables[i], "NULL");
 				break;
 
-			case "chaine de caractères":
-				variables.add(new Variable(tempStringVariables[i], "chaine de caractères"));
+			case "chaine":
+				variables.add(new Variable(tempStringVariables[i], "chaine"));
 				traceur.put(tempStringVariables[i], "NULL");
 				break;
 		
@@ -190,15 +190,15 @@ public class Interpreteur {
 					{
 						if(detecterType(tempStringTab[2]).contains("entier"))
 						{
-							variables.add(new Variable(tempStringVariables[i], "double", Integer.parseInt(tempStringTab[2]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+							variables.add(new Variable(tempStringVariables[i], "réel", Integer.parseInt(tempStringTab[2]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
 						}
 						else if(detecterType(tempStringTab[1]).contains("entier"))
 						{
-							variables.add(new Variable(tempStringVariables[i], "double", Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+							variables.add(new Variable(tempStringVariables[i], "réel", Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
 						}
 						else if(detecterType(tempStringTab[0]).contains("entier"))
 						{
-							variables.add(new Variable(tempStringVariables[i], "double", Integer.parseInt(tempStringTab[0])));
+							variables.add(new Variable(tempStringVariables[i], "réel", Integer.parseInt(tempStringTab[0])));
 						}
 					}
 					if(tempString.contains("de caractère"))
@@ -216,19 +216,19 @@ public class Interpreteur {
 							variables.add(new Variable(tempStringVariables[i], "caractère", Integer.parseInt(tempStringTab[0])));
 						}
 					}
-					if(tempString.contains("de chaine de caractère"))
+					if(tempString.contains("de chaine"))
 					{
 						if(detecterType(tempStringTab[2]).contains("entier"))
 						{
-							variables.add(new Variable(tempStringVariables[i], "chaine de caractères", Integer.parseInt(tempStringTab[2]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+							variables.add(new Variable(tempStringVariables[i], "chaine", Integer.parseInt(tempStringTab[2]), Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
 						}
 						else if(detecterType(tempStringTab[1]).contains("entier"))
 						{
-							variables.add(new Variable(tempStringVariables[i], "chaine de caractères", Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
+							variables.add(new Variable(tempStringVariables[i], "chaine", Integer.parseInt(tempStringTab[1]),Integer.parseInt(tempStringTab[0])));
 						}
 						else if(detecterType(tempStringTab[0]).contains("entier"))
 						{
-							variables.add(new Variable(tempStringVariables[i], "chaine de caractères", Integer.parseInt(tempStringTab[0])));
+							variables.add(new Variable(tempStringVariables[i], "chaine", Integer.parseInt(tempStringTab[0])));
 						}
 					}
 					if(tempString.contains("de booléen"))
@@ -392,7 +392,7 @@ public class Interpreteur {
 
 		if(chaineTemp[0] != null)
 		{
-			return "chaine de caractères";
+			return "chaine";
 		}
 		else if (chaineTemp[1] != null)
 		{

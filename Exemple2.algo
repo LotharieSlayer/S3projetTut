@@ -7,7 +7,7 @@ Constante :
  SANGUIN <-- 'B'
 Variable :
  nbrMedecin : entier
- tauxArretMaladie : double
+ tauxArretMaladie : réel
  zoneGéographique : caractère
  estFermé : booléen
 
