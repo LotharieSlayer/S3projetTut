@@ -1,0 +1,13 @@
+-encoding utf8
+-d javadoc
+
+./src/AlgoPars/metier/objets/Constante.java
+./src/AlgoPars/metier/objets/Variable.java
+
+./src/AlgoPars/metier/Interpreteur.java
+./src/AlgoPars/metier/LecteurFichier.java
+./src/AlgoPars/metier/Coloration.java
+
+./src/AlgoPars/ihm/IhmCui.java
+
+./src/AlgoPars/Main.java
