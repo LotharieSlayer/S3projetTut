@@ -14,3 +14,4 @@ Compiler manuellement : `javac "@compile.list"`
 Ce projet est basé sur Eclipse, vous n'aurez donc pas de mal à l'importer en tant que projet, que ce soit dans Eclipse, VS Code (avec modules Java) ou IntelliJ IDEA, vous pourrez modifier et compiler le code de manière très simple.
 
 (Attention à l'UTF-8 cependant sur IDE)
+Code spaghetti au niveau de l'Interpréteur mais tranquille. :3
