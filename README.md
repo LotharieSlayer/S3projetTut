@@ -12,7 +12,7 @@ Compiler manuellement : `javac "@compile.list"`
 
 ### Windows :
 - Se placer dans le dossier /bin puis exécuter `cd .. && javac "@compile.list" & cd bin` pour compiler.
-- Exécuter le programme `java AlgoPars.Main` (toujours depuis le dossier /bin) et placer un paramètre comme `Exemple 1` pour Exemple1.algo
+- Exécuter le programme `java AlgoPars.Main` (toujours depuis le dossier /bin) et placer un paramètre comme `Exemple1` pour Exemple1.algo
 - All in one (toujours depuis le dossier /bin) : `cd .. && javac "@compile.list" & cd bin && java AlgoPars.Main Exemple1`
 
 ### IDE :
