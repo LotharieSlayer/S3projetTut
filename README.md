@@ -1,7 +1,12 @@
 # S3projetTut
 AlgoPars - Projet tutoré du semestre 3
 
-Pensez à importer le dossier `src/AlgoPars/ressources` contenant les .jar dans les variables d'environnement de votre ordinateur.
+AlgoPars est un interpréteur de pseudo-code écrit en Java dans le but fictif de vendre un outil pour les enseignants du département informatique de l'université.
+Projet réalisé en 2 semaines.
+
+**Comment ça marche ?**
+
+Tout d'abord, pensez à importer le dossier `src/AlgoPars/ressources` contenant les .jar dans les variables d'environnement de votre ordinateur.
 Compiler manuellement : `javac "@compile.list"`
 
 
@@ -15,4 +20,5 @@ Ce projet est basé sur Eclipse, vous n'aurez donc pas de mal à l'importer en t
 
 (Attention à l'UTF-8 cependant sur IDE)
 
-Code spaghetti au niveau de l'Interpréteur mais tranquille. :3
+Code spaghetti au niveau de l'Interpréteur par manque de temps mais tranquille. :3
+(Peut-être qu'un jour je reprendrai le projet pour améliorer tout ça)
