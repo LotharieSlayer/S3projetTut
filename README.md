@@ -1,7 +1,7 @@
 # S3projetTut
 AlgoPars - Projet tutoré du semestre 3
 
-AlgoPars est un interpréteur de pseudo-code écrit en Java dans le but fictif de vendre un outil pour les enseignants du département informatique de l'université.
+AlgoPars est un interpréteur de pseudo-code écrit en Java dans le but fictif de vendre un outil pour les enseignants du département informatique de l'université afin d'aider à l'enseignement algorithmique des élèves.
 Projet réalisé en 2 semaines.
 
 **Comment ça marche ?**
